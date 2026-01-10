@@ -6,13 +6,13 @@
 }
 
 :root {
-    /* Colors - IRRBB.com inspired palette */
-    --color-forest: #1a3a2f;
-    --color-forest-light: #234a3d;
-    --color-cream: #f5f2eb;
-    --color-cream-dark: #ebe7dc;
-    --color-coral: #c94a4a;
-    --color-coral-dark: #b03e3e;
+    /* Colors - Navy & Gold professional palette */
+    --color-navy: #1a2b4a;
+    --color-navy-light: #2a3d5f;
+    --color-cream: #faf9f7;
+    --color-cream-dark: #f0eeea;
+    --color-gold: #c9a227;
+    --color-gold-dark: #a8871f;
     --color-text: #1a1a1a;
     --color-text-secondary: #4a4a4a;
     --color-text-light: #6a6a6a;
@@ -20,7 +20,7 @@
     --color-border: #e0ddd5;
 
     /* Typography */
-    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-serif: 'Fraunces', Georgia, serif;
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* Font sizes */
@@ -58,11 +58,11 @@
 [data-theme="dark"] {
     --color-cream: #1a1a1a;
     --color-cream-dark: #242424;
-    --color-text: #f5f2eb;
+    --color-text: #faf9f7;
     --color-text-secondary: #c4c4c4;
     --color-text-light: #999999;
     --color-border: #333333;
-    --color-forest: #234a3d;
+    --color-navy: #2a3d5f;
 }
 
 html {
@@ -108,7 +108,7 @@ a {
     top: 0;
     left: 0;
     right: 0;
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
     z-index: 1000;
 }
 
@@ -132,7 +132,7 @@ a {
 }
 
 .logo-deposit {
-    color: var(--color-coral);
+    color: var(--color-gold);
 }
 
 .logo-strategies {
@@ -144,7 +144,7 @@ a {
 }
 
 .logo--footer .logo-deposit {
-    color: var(--color-coral);
+    color: var(--color-gold);
 }
 
 .logo--footer .logo-strategies {
@@ -233,7 +233,7 @@ a {
 .nav-mobile {
     display: none;
     flex-direction: column;
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
     padding: var(--space-4) var(--space-6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -275,7 +275,7 @@ a {
     font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 0.1em;
-    color: var(--color-coral);
+    color: var(--color-gold);
     margin-bottom: var(--space-3);
 }
 
@@ -300,7 +300,7 @@ a {
     justify-content: center;
     width: 80px;
     height: 80px;
-    border: 2px solid var(--color-forest);
+    border: 2px solid var(--color-navy);
     border-radius: 50%;
     text-align: center;
 }
@@ -316,7 +316,7 @@ a {
     font-family: var(--font-serif);
     font-size: var(--text-2xl);
     font-weight: 400;
-    color: var(--color-forest);
+    color: var(--color-navy);
     line-height: 1;
 }
 
@@ -350,7 +350,7 @@ a {
 .section-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, var(--color-coral), transparent);
+    background: linear-gradient(to right, var(--color-gold), transparent);
 }
 
 /* ==========================================
@@ -358,7 +358,7 @@ a {
    ========================================== */
 .featured-card {
     display: block;
-    background-color: var(--color-coral);
+    background-color: var(--color-gold);
     color: var(--color-white);
     padding: var(--space-10);
     margin-bottom: var(--space-6);
@@ -366,7 +366,7 @@ a {
 }
 
 .featured-card:hover {
-    background-color: var(--color-coral-dark);
+    background-color: var(--color-gold-dark);
 }
 
 .featured-card .card-category {
@@ -405,16 +405,16 @@ a {
 }
 
 .article-card--dark {
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
     color: var(--color-white);
 }
 
 .article-card--dark:hover {
-    background-color: var(--color-forest-light);
+    background-color: var(--color-navy-light);
 }
 
 .article-card--dark .card-category {
-    color: var(--color-coral);
+    color: var(--color-gold);
 }
 
 .card-category {
@@ -422,7 +422,7 @@ a {
     font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 0.1em;
-    color: var(--color-coral);
+    color: var(--color-gold);
     margin-bottom: var(--space-3);
 }
 
@@ -468,7 +468,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
 }
 
 .placeholder-icon {
@@ -489,7 +489,7 @@ a {
 }
 
 .article-preview:hover .article-title {
-    color: var(--color-coral);
+    color: var(--color-gold);
 }
 
 .article-excerpt {
@@ -541,7 +541,7 @@ a {
     line-height: 0.8;
     padding-right: var(--space-3);
     padding-top: var(--space-2);
-    color: var(--color-coral);
+    color: var(--color-gold);
     font-style: italic;
 }
 
@@ -557,7 +557,7 @@ a {
 }
 
 .data-table thead {
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
     color: var(--color-white);
 }
 
@@ -607,18 +607,18 @@ a {
 }
 
 .text-link {
-    color: var(--color-coral);
+    color: var(--color-gold);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
 
 .text-link:hover {
-    color: var(--color-coral-dark);
+    color: var(--color-gold-dark);
 }
 
 /* CTA Card */
 .cta-card {
-    background-color: var(--color-forest);
+    background-color: var(--color-navy);
     color: var(--color-white);
     padding: var(--space-8);
 }
@@ -655,7 +655,7 @@ a {
 }
 
 .subscribe-input:focus {
-    outline: 2px solid var(--color-coral);
+    outline: 2px solid var(--color-gold);
     outline-offset: 0;
 }
 
@@ -664,7 +664,7 @@ a {
     font-size: var(--text-base);
     font-weight: 600;
     font-family: var(--font-sans);
-    background-color: var(--color-coral);
+    background-color: var(--color-gold);
     color: var(--color-white);
     border: none;
     cursor: pointer;
@@ -672,7 +672,7 @@ a {
 }
 
 .subscribe-button:hover {
-    background-color: var(--color-coral-dark);
+    background-color: var(--color-gold-dark);
 }
 
 /* ==========================================
@@ -728,7 +728,7 @@ a {
 }
 
 .footer-column a:hover {
-    color: var(--color-coral);
+    color: var(--color-gold);
 }
 
 .footer-bottom {
@@ -796,15 +796,15 @@ a {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    border-left: 4px solid var(--color-forest);
+    border-left: 4px solid var(--color-navy);
 }
 
 .notification-success .notification-content {
-    border-left-color: var(--color-forest);
+    border-left-color: var(--color-navy);
 }
 
 .notification-error .notification-content {
-    border-left-color: var(--color-coral);
+    border-left-color: var(--color-gold);
 }
 
 .notification-message {
