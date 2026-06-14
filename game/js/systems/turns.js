@@ -8,7 +8,7 @@ GAME.Systems.Simulation = (function() {
     var tickAccumulator = 0;
     var TICK_INTERVAL = 2000; // ms per game tick at 1x speed
     var lastQuipTime = 0;
-    var QUIP_INTERVAL = 60000; // advisor quip every 60 seconds real-time
+    var QUIP_INTERVAL = 25000; // advisor quip every 25 seconds real-time
 
     function update(dt) {
         var state = State.get();
@@ -63,7 +63,7 @@ GAME.Systems.Simulation = (function() {
     function calculateProduction() {
         var state = State.get();
         var production = {
-            money: 5, // base income
+            money: 2, // base income
             research: 0,
             compute: 0,
             power: 0,
@@ -83,7 +83,7 @@ GAME.Systems.Simulation = (function() {
         state.buildings.forEach(function(placed) {
             var bData = GAME.DATA.BUILDINGS[placed.type];
             if (!bData) return;
-            production.money -= bData.maintenance / 30; // daily maintenance
+            production.money -= (bData.maintenance * 1.5) / 30; // daily maintenance (increased)
             if (bData.produces) {
                 for (var key in bData.produces) {
                     if (production[key] !== undefined) {
@@ -100,7 +100,7 @@ GAME.Systems.Simulation = (function() {
         state.townBuildings.forEach(function(placed) {
             var bData = GAME.DATA.TOWN.buildings[placed.type];
             if (!bData) return;
-            production.money -= bData.maintenance / 30;
+            production.money -= (bData.maintenance * 1.5) / 30;
             if (bData.produces) {
                 for (var key in bData.produces) {
                     if (production[key] !== undefined) {
@@ -249,7 +249,7 @@ GAME.Systems.Simulation = (function() {
 
     function checkEventTriggers() {
         var state = State.get();
-        if (state.gameTime % 5 !== 0) return;
+        if (state.gameTime % 3 !== 0) return;
 
         // Check story events
         GAME.DATA.EVENTS.forEach(function(evt) {
@@ -278,7 +278,7 @@ GAME.Systems.Simulation = (function() {
 
     function checkCrisisTriggers() {
         var state = State.get();
-        if (state.gameTime % 60 !== 0) return; // check every ~2 months game time
+        if (state.gameTime % 30 !== 0) return;
 
         var baseChance = 0.15 + (state.phase - 1) * 0.05;
 

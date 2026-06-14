@@ -825,6 +825,7 @@ body {
 .toast.toast-danger { border-color: var(--text-danger); color: var(--text-danger); }
 .toast.toast-warning { border-color: var(--text-highlight); color: var(--text-highlight); }
 .toast.toast-info { border-color: var(--meter-banking); color: var(--meter-banking); }
+.toast.toast-town { border-color: #dd8844; color: #ffcc88; background: rgba(40, 30, 15, 0.95); }
 
 @keyframes toast-in {
     from { transform: translateX(100%); opacity: 0; }

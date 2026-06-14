@@ -6,12 +6,22 @@ GAME.Systems.AIOpponents = (function() {
 
     var State = GAME.Systems.State;
     var visitCooldown = 0;
+    var townsfolkCooldown = 0;
 
     function update(dt) {
+        var state = State.get();
+        if (!state || state.paused) return;
+
         visitCooldown -= dt;
         if (visitCooldown <= 0) {
-            visitCooldown = 30000 + Math.random() * 60000; // 30-90 seconds between visits
+            visitCooldown = 20000 + Math.random() * 40000;
             maybeVisit();
+        }
+
+        townsfolkCooldown -= dt;
+        if (townsfolkCooldown <= 0) {
+            townsfolkCooldown = 12000 + Math.random() * 18000;
+            maybeTownsfolkVisit();
         }
     }
 
@@ -22,17 +32,14 @@ GAME.Systems.AIOpponents = (function() {
         var competitors = Object.keys(state.competitors);
         if (competitors.length === 0) return;
 
-        // Random competitor visits
-        if (Math.random() > 0.4) return;
+        if (Math.random() > 0.5) return;
 
         var visitorId = competitors[Math.floor(Math.random() * competitors.length)];
         var comp = state.competitors[visitorId];
 
-        // Don't visit too frequently
-        if (state.gameTime - comp.lastVisit < 60) return;
+        if (state.gameTime - comp.lastVisit < 30) return;
         comp.lastVisit = state.gameTime;
 
-        // Try structured dialogue first
         var dialogueId = 'visit_' + visitorId;
         if (GAME.DATA.DIALOGUES[dialogueId] && !state.eventsTriggered['visit_' + visitorId + '_' + state.phase]) {
             state.eventsTriggered['visit_' + visitorId + '_' + state.phase] = true;
@@ -40,12 +47,60 @@ GAME.Systems.AIOpponents = (function() {
             return;
         }
 
-        // Otherwise use a random catchphrase
         var charData = GAME.DATA.CHARACTERS[visitorId];
         if (!charData) return;
 
         var quote = charData.catchphrases[Math.floor(Math.random() * charData.catchphrases.length)];
         showVisitToast(charData, quote);
+    }
+
+    function maybeTownsfolkVisit() {
+        var state = State.get();
+        if (!state || state.paused) return;
+
+        var townsfolk = GAME.DATA.TOWN.townsfolk;
+        var ids = Object.keys(townsfolk);
+        if (ids.length === 0) return;
+
+        var npcId = ids[Math.floor(Math.random() * ids.length)];
+        var npc = townsfolk[npcId];
+
+        var quote = npc.quotes[Math.floor(Math.random() * npc.quotes.length)];
+
+        var moodWord = '';
+        if (state.townMood >= 75) moodWord = 'happy';
+        else if (state.townMood >= 50) moodWord = 'neutral';
+        else if (state.townMood >= 25) moodWord = 'worried';
+        else moodWord = 'angry';
+
+        if (moodWord === 'angry' && npc.mood < 50) {
+            var angryQuotes = [
+                npc.name.split(' ')[0] + " isn't happy about how things are going around here.",
+                "\"This isn't what we were promised!\" — " + npc.name.split(' ')[0],
+                npc.name.split(' ')[0] + " has been organizing meetings. That can't be good."
+            ];
+            quote = angryQuotes[Math.floor(Math.random() * angryQuotes.length)];
+        }
+
+        showTownsfolkToast(npc, quote);
+    }
+
+    function showTownsfolkToast(npc, quote) {
+        var container = document.getElementById('toast-container');
+        var toast = document.createElement('div');
+        toast.className = 'toast toast-town';
+        var firstName = npc.name.split(' ')[0];
+        if (npc.name.indexOf('"') !== -1) {
+            firstName = npc.name.match(/"([^"]+)"/)[1];
+        }
+        toast.innerHTML = '<strong style="color:' + npc.color + '">' + firstName + ' (' + npc.role.split('—')[0].trim() + '):</strong> "' + quote + '"';
+
+        container.appendChild(toast);
+        setTimeout(function() {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 6000);
+
+        State.addLog(firstName + ': "' + quote.substring(0, 45) + '..."', 'town');
     }
 
     function showVisitToast(charData, quote) {

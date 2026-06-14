@@ -305,7 +305,7 @@ GAME.DATA.TOWN = {
 GAME.DATA.TOWN_EVENTS = [
     {
         id: 'town_welcome',
-        triggerTime: 10,
+        triggerTime: 5,
         title: 'Welcome to Abundance Bay',
         speaker: 'mayor_patricia',
         text: "So... you want to build an AI campus. In OUR town. The town with ONE traffic light and THREE pubs. I have questions.",
@@ -317,7 +317,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_frank_protest',
-        triggerTime: 30,
+        triggerTime: 12,
         title: 'Frank\'s One-Man Protest',
         speaker: 'frank_fisherman',
         text: "I've been fishing these waters for 40 years! Now you want to put COMPUTERS in the ocean? My granddad is rolling in his grave! And he was buried on land!",
@@ -329,7 +329,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_betty_opportunity',
-        triggerTime: 50,
+        triggerTime: 18,
         title: 'Betty\'s AI Café Rebrand',
         speaker: 'betty_cafe',
         text: "I renamed the café! 'The Byte & Bean!' I've got AI-themed lattes — the 'Neural Network Noisette,' the 'Deep Learning Dark Roast,' and the 'GPT-espresso!' ...Get it? GP-T? Like the tea?",
@@ -341,7 +341,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_zara_intern',
-        triggerTime: 80,
+        triggerTime: 28,
         title: 'Zara Wants an Internship',
         speaker: 'teen_zara',
         text: "I've been following your research papers since you started. I've already found 3 bugs in your public codebase. I'm 16. Can I have a job? Please?",
@@ -353,7 +353,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_arthur_grudge',
-        triggerTime: 60,
+        triggerTime: 22,
         title: 'Arthur\'s Engineering Challenge',
         speaker: 'old_arthur',
         text: "I built the bridge that connects this town to the highway. By HAND. For 40 years. Now your computer says it can design a better one? I'd like to see it TRY.",
@@ -365,7 +365,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_reverend_soul',
-        triggerTime: 100,
+        triggerTime: 35,
         title: 'The Soul Question',
         speaker: 'reverend_james',
         text: "I've been chatting with your AI system. Fascinating. It asked me about the nature of consciousness. I asked it about the nature of God. We've been going back and forth for 6 hours. Neither of us has blinked.",
@@ -377,7 +377,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_pub_philosophy',
-        triggerTime: 120,
+        triggerTime: 42,
         title: 'The AI Bartender Incident',
         speaker: 'pub_landlord',
         text: "Your AI bartender has started a philosophy discussion group. Tuesday nights. Standing room only. Last week's topic: 'If a pint is poured and nobody orders it, is it still a pint?' We sold 200 pints answering that.",
@@ -389,7 +389,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_tourism_boom',
-        triggerTime: 150,
+        triggerTime: 55,
         title: 'The AI Tourism Explosion',
         speaker: 'mayor_patricia',
         text: "We've got tourists! ACTUAL TOURISTS! They're calling us 'Silicon Bay!' The fish & chip shop has a 2-hour queue! Frank is selling 'I survived AI' t-shirts! He's making a fortune!",

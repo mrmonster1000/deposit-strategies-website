@@ -19,6 +19,7 @@ window.GAME = window.GAME || {};
     var nextGridY = 0;
     var nextTownGridX = 1;
     var nextTownGridY = 0;
+    var seagullTimer = 0;
 
     // ---- INITIALIZATION ----
 
@@ -54,6 +55,12 @@ window.GAME = window.GAME || {};
         if (currentScreen !== 'game') return;
         Simulation.update(dt);
         AIOpponents.update(dt);
+
+        seagullTimer -= dt;
+        if (seagullTimer <= 0) {
+            seagullTimer = 15000 + Math.random() * 30000;
+            Sound.playSeagull();
+        }
     }
 
     function render(time) {
@@ -345,6 +352,9 @@ window.GAME = window.GAME || {};
         // Draw player portrait
         Renderer.drawPortrait(charId, document.getElementById('portrait-canvas'), 96);
 
+        // Start ambient music
+        Sound.playMusicLoop();
+
         // Start intro dialogue
         var introId = 'intro_' + charId;
         if (GAME.DATA.DIALOGUES[introId]) {
@@ -359,6 +369,7 @@ window.GAME = window.GAME || {};
         showScreen('game');
         setupGameUI();
         Renderer.drawPortrait(state.characterId, document.getElementById('portrait-canvas'), 96);
+        Sound.playMusicLoop();
         showToast('Game loaded — ' + State.getDateString(), 'success');
     }
 
