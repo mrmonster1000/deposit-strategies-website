@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Radical Abundance</title>
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/dialogue.css">
+    <link rel="stylesheet" href="css/pixel-art.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Title Screen -->
+        <div id="title-screen" class="screen active">
+            <div class="scanlines"></div>
+            <div class="title-content">
+                <div class="title-logo">
+                    <div class="title-text-main">GAME OF</div>
+                    <div class="title-text-sub">RADICAL ABUNDANCE</div>
+                    <div class="title-tagline">A Conditions Strategy Adventure</div>
+                </div>
+                <div class="title-art" id="title-pixel-scene"></div>
+                <div class="title-menu">
+                    <button class="pixel-btn" id="btn-new-game">NEW GAME</button>
+                    <button class="pixel-btn" id="btn-continue" style="display:none">CONTINUE</button>
+                    <button class="pixel-btn" id="btn-about">ABOUT</button>
+                </div>
+                <div class="title-credit">A LucasArts-Inspired Production &bull; 2026</div>
+            </div>
+        </div>
+
+        <!-- Character Select Screen -->
+        <div id="character-select" class="screen">
+            <div class="scanlines"></div>
+            <h2 class="screen-title">CHOOSE YOUR AI LEADER</h2>
+            <div class="character-grid" id="character-grid"></div>
+            <div class="character-bio" id="character-bio">
+                <div class="bio-portrait" id="bio-portrait"></div>
+                <div class="bio-text" id="bio-text"></div>
+            </div>
+            <div class="char-select-actions">
+                <button class="pixel-btn" id="btn-start-game" disabled>BEGIN</button>
+                <button class="pixel-btn secondary" id="btn-back-title">BACK</button>
+            </div>
+        </div>
+
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="scanlines"></div>
+
+            <!-- Top Bar: Turn info and meters -->
+            <div id="top-bar">
+                <div class="turn-info">
+                    <span id="turn-display">Turn 1</span>
+                    <span id="year-display">2025</span>
+                    <span id="phase-display">Phase 1: Foundation</span>
+                </div>
+                <div class="global-meters">
+                    <div class="meter" data-meter="banking">
+                        <span class="meter-label">BANKING</span>
+                        <div class="meter-bar"><div class="meter-fill" id="meter-banking" style="width:75%"></div></div>
+                        <span class="meter-value" id="val-banking">75</span>
+                    </div>
+                    <div class="meter" data-meter="climate">
+                        <span class="meter-label">CLIMATE</span>
+                        <div class="meter-bar"><div class="meter-fill" id="meter-climate" style="width:60%"></div></div>
+                        <span class="meter-value" id="val-climate">60</span>
+                    </div>
+                    <div class="meter" data-meter="social">
+                        <span class="meter-label">SOCIAL</span>
+                        <div class="meter-bar"><div class="meter-fill" id="meter-social" style="width:70%"></div></div>
+                        <span class="meter-value" id="val-social">70</span>
+                    </div>
+                    <div class="meter" data-meter="international">
+                        <span class="meter-label">INT'L</span>
+                        <div class="meter-bar"><div class="meter-fill" id="meter-international" style="width:65%"></div></div>
+                        <span class="meter-value" id="val-international">65</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Scene Area -->
+            <div id="scene-area">
+                <canvas id="game-canvas" width="960" height="400"></canvas>
+                <div id="scene-overlay"></div>
+            </div>
+
+            <!-- Middle Panel: Character + Info -->
+            <div id="middle-panel">
+                <div id="player-portrait" class="portrait-frame">
+                    <canvas id="portrait-canvas" width="96" height="96"></canvas>
+                </div>
+                <div id="player-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">ADP</span>
+                        <span class="stat-value" id="stat-adp">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">SAFETY</span>
+                        <span class="stat-value" id="stat-safety">70</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">POL. CAPITAL</span>
+                        <span class="stat-value" id="stat-political">100</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">RESEARCH</span>
+                        <span class="stat-value" id="stat-research">0</span>
+                    </div>
+                </div>
+                <div id="action-log">
+                    <div class="log-title">EVENT LOG</div>
+                    <div class="log-entries" id="log-entries"></div>
+                </div>
+                <div id="competitor-panel">
+                    <div class="comp-title">RIVALS</div>
+                    <div id="competitor-list"></div>
+                </div>
+            </div>
+
+            <!-- LucasArts-style Verb Bar / Action Panel -->
+            <div id="verb-bar">
+                <div class="verb-row">
+                    <button class="verb-btn" data-action="research">RESEARCH</button>
+                    <button class="verb-btn" data-action="deploy">DEPLOY</button>
+                    <button class="verb-btn" data-action="cooperate">COOPERATE</button>
+                </div>
+                <div class="verb-row">
+                    <button class="verb-btn" data-action="regulate">REGULATE</button>
+                    <button class="verb-btn" data-action="ability">ABILITY</button>
+                    <button class="verb-btn" data-action="end-turn">END TURN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision Panel (overlay) -->
+        <div id="decision-panel" class="overlay-panel" style="display:none">
+            <div class="panel-frame">
+                <h3 id="decision-title"></h3>
+                <p id="decision-description"></p>
+                <div id="decision-options"></div>
+            </div>
+        </div>
+
+        <!-- Dialogue Panel (LucasArts style) -->
+        <div id="dialogue-panel" class="overlay-panel" style="display:none">
+            <div class="dialogue-frame">
+                <div class="dialogue-portraits">
+                    <div class="dlg-portrait left">
+                        <canvas id="dlg-portrait-left" width="80" height="80"></canvas>
+                        <span class="dlg-name" id="dlg-name-left"></span>
+                    </div>
+                    <div class="dlg-portrait right">
+                        <canvas id="dlg-portrait-right" width="80" height="80"></canvas>
+                        <span class="dlg-name" id="dlg-name-right"></span>
+                    </div>
+                </div>
+                <div class="dialogue-text" id="dialogue-text"></div>
+                <div class="dialogue-choices" id="dialogue-choices"></div>
+            </div>
+        </div>
+
+        <!-- Crisis Panel (overlay) -->
+        <div id="crisis-panel" class="overlay-panel" style="display:none">
+            <div class="panel-frame crisis-frame">
+                <div class="crisis-header">
+                    <span class="crisis-icon">⚠</span>
+                    <h3 id="crisis-title"></h3>
+                    <span class="crisis-tier" id="crisis-tier"></span>
+                </div>
+                <p id="crisis-description"></p>
+                <div class="crisis-effects" id="crisis-effects"></div>
+                <div id="crisis-options"></div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast-container"></div>
+
+        <!-- About Modal -->
+        <div id="about-modal" class="overlay-panel" style="display:none">
+            <div class="panel-frame about-frame">
+                <h3>ABOUT</h3>
+                <p>Game of Radical Abundance is a satirical strategy game about the AI development race toward post-scarcity abundance.</p>
+                <p>Navigate the speed-vs-safety tradeoff as real-world AI leaders. Every decision teaches real AI governance concepts through memorable, character-driven scenarios.</p>
+                <p class="about-style">Inspired by the classic LucasArts adventures of the 1990s.</p>
+                <p class="about-credits">Design: The Radical Abundance Team<br>Engine: HTML5 Canvas + Vanilla JS</p>
+                <button class="pixel-btn" id="btn-close-about">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Scripts — Data (loaded first) -->
+    <script src="js/data/characters.js"></script>
+    <script src="js/data/buildings.js"></script>
+    <script src="js/data/town.js"></script>
+    <script src="js/data/events.js"></script>
+    <script src="js/data/dialogue.js"></script>
+    <script src="js/data/crises.js"></script>
+    <!-- Systems (depend on data) -->
+    <script src="js/systems/renderer.js"></script>
+    <script src="js/systems/state.js"></script>
+    <script src="js/systems/sound.js"></script>
+    <script src="js/systems/crisis.js"></script>
+    <script src="js/systems/dialogue.js"></script>
+    <script src="js/systems/turns.js"></script>
+    <script src="js/systems/ai-opponents.js"></script>
+    <!-- Main game (depends on everything) -->
+    <script src="js/game.js"></script>
+</body>
+</html>

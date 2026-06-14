@@ -1,0 +1,135 @@
+/* ============================================
+   DIALOGUE SYSTEM — LucasArts Style
+   ============================================ */
+
+.dialogue-frame {
+    background: var(--bg-panel);
+    border: 3px solid var(--border-highlight);
+    padding: 0;
+    max-width: 700px;
+    width: 95%;
+    box-shadow: 0 0 30px rgba(138, 138, 255, 0.3);
+}
+
+.dialogue-portraits {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px 0;
+}
+
+.dlg-portrait {
+    text-align: center;
+}
+
+.dlg-portrait canvas {
+    image-rendering: pixelated;
+    border: 2px solid var(--border-light);
+    background: var(--bg-dark);
+}
+
+.dlg-portrait.speaking canvas {
+    border-color: var(--text-highlight);
+    box-shadow: 0 0 10px rgba(255, 221, 68, 0.4);
+}
+
+.dlg-name {
+    display: block;
+    font-size: 7px;
+    color: var(--text-highlight);
+    margin-top: 4px;
+}
+
+.dialogue-text {
+    padding: 16px 20px;
+    font-size: 10px;
+    line-height: 2;
+    color: var(--text-primary);
+    min-height: 60px;
+    text-align: center;
+}
+
+.dialogue-text .speaker-name {
+    color: var(--text-highlight);
+    font-weight: bold;
+}
+
+.dialogue-text .typewriter {
+    border-right: 2px solid var(--text-highlight);
+    animation: cursor-blink 0.6s infinite;
+}
+
+@keyframes cursor-blink {
+    0%, 100% { border-color: var(--text-highlight); }
+    50% { border-color: transparent; }
+}
+
+.dialogue-choices {
+    padding: 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dialogue-choice {
+    font-family: var(--pixel-font);
+    font-size: 9px;
+    color: var(--meter-banking);
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    gap: 8px;
+}
+
+.dialogue-choice:hover {
+    color: var(--text-highlight);
+    background: rgba(255, 221, 68, 0.1);
+}
+
+.dialogue-choice .choice-number {
+    color: var(--text-secondary);
+    min-width: 20px;
+}
+
+/* Dialogue continue indicator */
+.dialogue-continue {
+    font-family: var(--pixel-font);
+    font-size: 7px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.dialogue-continue:hover {
+    color: var(--text-highlight);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Character-specific dialogue colors */
+.dialogue-dario .dialogue-text { border-left: 3px solid #44aaff; }
+.dialogue-sam .dialogue-text { border-left: 3px solid #ff8844; }
+.dialogue-yann .dialogue-text { border-left: 3px solid #aa44ff; }
+.dialogue-elon .dialogue-text { border-left: 3px solid #ff4444; }
+.dialogue-demis .dialogue-text { border-left: 3px solid #44ffaa; }
+.dialogue-trump .dialogue-text { border-left: 3px solid #ff4444; }
+.dialogue-baltar .dialogue-text { border-left: 3px solid #ffaa44; }
+
+/* Notification banner for in-dialogue events */
+.dialogue-notification {
+    background: rgba(255, 221, 68, 0.15);
+    border: 1px solid var(--text-highlight);
+    padding: 8px 16px;
+    margin: 0 16px 12px;
+    font-size: 8px;
+    color: var(--text-highlight);
+    text-align: center;
+}
