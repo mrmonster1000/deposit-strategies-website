@@ -264,6 +264,7 @@ window.GAME = window.GAME || {};
             var card = document.createElement('div');
             card.className = 'char-card' + (ch.locked ? ' locked' : '');
             card.dataset.charId = id;
+            card.dataset.char = id;
 
             var portraitDiv = document.createElement('div');
             portraitDiv.className = 'char-card-portrait';

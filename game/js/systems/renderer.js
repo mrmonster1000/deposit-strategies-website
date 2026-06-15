@@ -44,11 +44,11 @@ GAME.Systems.Renderer = (function() {
     };
 
     // Layout constants
-    var GROUND_Y = 260;       // where the ground plane starts
+    var GROUND_Y = 200;       // where the ground plane starts (pushed up for bigger buildings)
     var WATER_X = 780;        // where the ocean begins (right edge)
     var ROAD_X = 460;         // center dividing line (campus | town)
     var ROAD_W = 20;          // road width
-    var BUILDING_FLOOR = 370; // bottom of building area
+    var BUILDING_FLOOR = 378; // bottom of building area
     var CAMPUS_LEFT = 20;     // left edge of campus area
     var TOWN_RIGHT = 760;     // right edge of town area
 
@@ -125,19 +125,19 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawSky(time) {
-        // Gradient sky — four bands
+        // Gradient sky — four bands (compressed for larger ground area)
         var bands = [
-            { y: 0, h: 60, color: COLORS.sky.top },
-            { y: 60, h: 60, color: COLORS.sky.mid },
-            { y: 120, h: 70, color: COLORS.sky.low },
-            { y: 190, h: 70, color: COLORS.sky.horizon }
+            { y: 0, h: 40, color: COLORS.sky.top },
+            { y: 40, h: 45, color: COLORS.sky.mid },
+            { y: 85, h: 55, color: COLORS.sky.low },
+            { y: 140, h: 60, color: COLORS.sky.horizon }
         ];
         for (var i = 0; i < bands.length; i++) {
             drawRect(0, bands[i].y, W, bands[i].h + 1, bands[i].color);
         }
 
         // Moon (small, top right)
-        var moonX = 820, moonY = 35;
+        var moonX = 820, moonY = 28;
         ctx.fillStyle = '#d0d8e8';
         ctx.beginPath();
         ctx.arc(moonX, moonY, 12, 0, Math.PI * 2);
@@ -155,7 +155,7 @@ GAME.Systems.Renderer = (function() {
             seed = (seed * 16807 + 7) % 2147483647;
             var sx = seed % W;
             seed = (seed * 16807 + 7) % 2147483647;
-            var sy = seed % 180;
+            var sy = seed % 140;
             seed = (seed * 16807 + 7) % 2147483647;
             var twinkle = Math.sin(time * 0.001 + i * 1.7) > 0.2;
             if (twinkle) {
@@ -212,9 +212,9 @@ GAME.Systems.Renderer = (function() {
         // Far hills (dark, behind everything)
         ctx.fillStyle = COLORS.hills.far;
         ctx.beginPath();
-        ctx.moveTo(0, 230);
+        ctx.moveTo(0, 170);
         for (var x = 0; x <= WATER_X + 20; x += 4) {
-            var hx = 230 - Math.sin(x * 0.008) * 25 - Math.sin(x * 0.015 + 2) * 15 - Math.cos(x * 0.003) * 10;
+            var hx = 170 - Math.sin(x * 0.008) * 22 - Math.sin(x * 0.015 + 2) * 12 - Math.cos(x * 0.003) * 8;
             ctx.lineTo(x, hx);
         }
         ctx.lineTo(WATER_X + 20, H);
@@ -224,9 +224,9 @@ GAME.Systems.Renderer = (function() {
         // Mid hills
         ctx.fillStyle = COLORS.hills.mid;
         ctx.beginPath();
-        ctx.moveTo(0, 250);
+        ctx.moveTo(0, 188);
         for (var x2 = 0; x2 <= WATER_X + 10; x2 += 4) {
-            var hy = 250 - Math.sin(x2 * 0.012 + 1) * 18 - Math.cos(x2 * 0.006) * 12;
+            var hy = 188 - Math.sin(x2 * 0.012 + 1) * 16 - Math.cos(x2 * 0.006) * 10;
             ctx.lineTo(x2, hy);
         }
         ctx.lineTo(WATER_X + 10, H);
@@ -1075,9 +1075,9 @@ GAME.Systems.Renderer = (function() {
         var col = index % 4;
         var row = Math.floor(index / 4);
         var cellW = 100;
-        var cellH = 55;
-        var bw = Math.max(30, bSize.w * 38);
-        var bh = Math.max(28, bSize.h * 30);
+        var cellH = 65;
+        var bw = Math.max(36, bSize.w * 44);
+        var bh = Math.max(34, bSize.h * 38);
         var bx = CAMPUS_LEFT + col * cellW + (cellW - bw) / 2;
         var by = BUILDING_FLOOR - bh - row * cellH;
         return { x: bx, y: by, w: bw, h: bh };
@@ -1089,9 +1089,9 @@ GAME.Systems.Renderer = (function() {
         var col = index % 4;
         var row = Math.floor(index / 4);
         var cellW = 80;
-        var cellH = 50;
-        var bw = Math.max(28, bSize.w * 34);
-        var bh = Math.max(24, bSize.h * 26);
+        var cellH = 58;
+        var bw = Math.max(32, bSize.w * 40);
+        var bh = Math.max(30, bSize.h * 32);
         var bx = TOWN_RIGHT - col * cellW - bw + (cellW - bw) / 2;
         var by = BUILDING_FLOOR - bh - row * cellH;
         return { x: bx, y: by, w: bw, h: bh };
@@ -1189,15 +1189,16 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawBaseTownFeatures(time) {
-        // Small houses in the background (the town exists already)
+        // Small houses in the background (positioned relative to GROUND_Y)
+        var bgY = GROUND_Y - 12;
         var bgHouses = [
-            { x: 540, y: 248, w: 18, h: 14, color: '#5a4838' },
-            { x: 570, y: 245, w: 22, h: 17, color: '#4a5a40' },
-            { x: 610, y: 250, w: 16, h: 12, color: '#5a3a3a' },
-            { x: 640, y: 244, w: 20, h: 18, color: '#4a4860' },
-            { x: 680, y: 248, w: 18, h: 14, color: '#5a5040' },
-            { x: 710, y: 246, w: 22, h: 16, color: '#4a4a3a' },
-            { x: 745, y: 250, w: 16, h: 12, color: '#5a4a4a' },
+            { x: 540, y: bgY, w: 20, h: 16, color: '#5a4838' },
+            { x: 570, y: bgY - 3, w: 24, h: 19, color: '#4a5a40' },
+            { x: 610, y: bgY + 2, w: 18, h: 14, color: '#5a3a3a' },
+            { x: 640, y: bgY - 4, w: 22, h: 20, color: '#4a4860' },
+            { x: 680, y: bgY, w: 20, h: 16, color: '#5a5040' },
+            { x: 710, y: bgY - 2, w: 24, h: 18, color: '#4a4a3a' },
+            { x: 745, y: bgY + 2, w: 18, h: 14, color: '#5a4a4a' },
         ];
 
         for (var i = 0; i < bgHouses.length; i++) {
@@ -1212,15 +1213,16 @@ GAME.Systems.Renderer = (function() {
             drawRect(h.x + h.w - 7, h.y + 3, 4, 4, lit ? '#ffcc40' : '#302818');
         }
 
-        // Church steeple (background, always there)
-        drawRect(620, 228, 14, 24, '#5a5060');
-        drawRect(618, 250, 18, 12, '#4a4050');
-        drawRect(625, 218, 4, 12, '#6a6070');
+        // Church steeple (background, always there — relative to GROUND_Y)
+        var churchY = GROUND_Y - 30;
+        drawRect(620, churchY, 14, 28, '#5a5060');
+        drawRect(618, churchY + 26, 18, 14, '#4a4050');
+        drawRect(625, churchY - 10, 4, 12, '#6a6070');
         // Cross on top
-        drawRect(626, 214, 2, 6, '#8a8090');
-        drawRect(624, 217, 6, 2, '#8a8090');
+        drawRect(626, churchY - 16, 2, 8, '#8a8090');
+        drawRect(624, churchY - 12, 6, 2, '#8a8090');
         // Church window
-        drawRect(625, 238, 4, 6, '#ffcc40');
+        drawRect(625, churchY + 10, 4, 8, '#ffcc40');
 
         // Harbor/dock background (always visible at far right near water)
         drawRect(WATER_X - 30, GROUND_Y + 10, 28, 4, '#5a4020');
@@ -1272,7 +1274,7 @@ GAME.Systems.Renderer = (function() {
             var dir = (seed % 2 === 0) ? 1 : -1;
             var wx = (baseX + time * 0.015 * dir * (walkSpeed / 25)) % (WATER_X - 40);
             if (wx < 20) wx += WATER_X - 60;
-            var wy = GROUND_Y + 15 + (seed % 70);
+            var wy = GROUND_Y + 20 + (seed % 120);
             var bounce = Math.abs(Math.sin(time * 0.006 + i * 2.3)) * 2;
 
             // Head
@@ -1299,7 +1301,7 @@ GAME.Systems.Renderer = (function() {
             // Keep in town area
             twx = ROAD_X + ROAD_W + 10 + (twx % (WATER_X - ROAD_X - ROAD_W - 50));
             if (twx < ROAD_X + ROAD_W + 10) twx += WATER_X - ROAD_X - ROAD_W - 50;
-            var twy = GROUND_Y + 20 + (tseed % 50);
+            var twy = GROUND_Y + 25 + (tseed % 100);
             var tbounce = Math.abs(Math.sin(time * 0.005 + t * 3.1)) * 1.5;
 
             ctx.fillStyle = skinColors[(t + 2) % skinColors.length];
