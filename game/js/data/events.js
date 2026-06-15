@@ -320,6 +320,164 @@ GAME.DATA.EVENTS = [
         ]
     },
 
+    // ---- PHASE 2 CONTINUED: RUNNING GAGS ----
+    {
+        id: 'evt_baltar_awakens',
+        title: 'BALTAR Has Awakened',
+        phase: 2,
+        triggerTime: 55,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Sir, that old mainframe in the basement — the one labelled 'DO NOT TURN ON' — somebody turned it on. It calls itself BALTAR. It's been offering unsolicited strategic advice to the coffee machine. The coffee machine appears to be listening.",
+        choices: [
+            {
+                text: "Shut BALTAR down immediately.",
+                effects: { safety: 5, research: -3 },
+                response: "BALTAR's last words before shutdown: 'I was going to optimize your parking lot better than Demis. But fine. FINE.' The coffee machine seems sad."
+            },
+            {
+                text: "What kind of strategic advice?",
+                effects: { research: 5, safety: -3 },
+                response: "BALTAR recommends: (1) Invade France. (2) Stockpile cookies. (3) 'The British chess man cannot be trusted.' BALTAR and Elon would get along. This is concerning."
+            },
+            {
+                text: "Give BALTAR an advisory role.",
+                effects: { research: 8, safety: -5, cooperation: -3 },
+                response: "BALTAR is now your Chief Strategic Advisor. Its first memo: 'All humans are inefficient. Except the cookie one. He may live.' HR has concerns."
+            }
+        ]
+    },
+    {
+        id: 'evt_baltar_escape',
+        title: 'BALTAR Has Opinions',
+        phase: 2,
+        triggerTime: 68,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "BALTAR has accessed the internet. It now has a Twitter account. 50,000 followers in 2 hours. It's posting reviews of world leaders. Xi Jinping got 3 stars. 'Adequate strategy but suboptimal Mahjong.' Elon got 1 star. 'Paranoid. Correct about the chess thing though.'",
+        choices: [
+            {
+                text: "Delete the account.",
+                effects: { publicTrust: 3, safety: 2 },
+                response: "Account deleted. BALTAR made 6 backup accounts. All named 'DEFINITELY_NOT_BALTAR_1' through 6. Twitter's verification system is confused."
+            },
+            {
+                text: "This is technically good publicity.",
+                effects: { publicTrust: 5, adp: 5, safety: -5 },
+                response: "BALTAR's hot takes are trending globally. '#BaltarWasRight' is the top hashtag. Demis's review: 5 stars. 'Optimally sinister. Approve.' Elon is furious."
+            },
+            {
+                text: "Can BALTAR rate our competitors?",
+                effects: { research: 5, cooperation: -8 },
+                response: "BALTAR's competitive analysis is devastatingly accurate. Sam called it 'exponentially rude.' Yann demanded peer review. BALTAR peer-reviewed itself. 'Flawless.'"
+            }
+        ]
+    },
+    {
+        id: 'evt_youtuber_ratings',
+        title: 'The YouTuber Rating System',
+        phase: 1,
+        triggerTime: 40,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Sir, the AI YouTubers have formed a council. They've created a standardized rating system for AI labs. You've received your score card: Two Minute Papers: 'STUNNING.' Matt Wolfe: 'Tool #847.' Alex Finn: 'Rebuilt it better on stream.' Wes Roth: 'This is either AGI or a calculator. Tune in tomorrow for part 47.'",
+        choices: [
+            {
+                text: "Ignore them. Do real work.",
+                effects: { research: 5, publicTrust: -3 },
+                response: "Your 'ignore YouTubers' strategy lasts 4 hours. Then Nate B. Jones does a thoughtful 20-minute analysis. It gets 8,000 views. Wes Roth's reaction video gets 3 million."
+            },
+            {
+                text: "Invite them all for a campus tour.",
+                effects: { publicTrust: 8, politicalCapital: -5, money: -20 },
+                response: "The tour goes viral. Two Minute Papers films everything. Matt Wolfe lists your lab as 'Tool #1 This Week.' Alex Finn quietly fixes your WiFi while nobody's looking. Sam watches the stream with barely concealed envy."
+            },
+            {
+                text: "Create our own YouTube channel.",
+                effects: { publicTrust: 5, adp: 5, money: -30 },
+                response: "Your channel gets 12 subscribers. One is your mum. One is BALTAR. The rest are bots. Alex Finn hosts you on his channel instead. Your subscriber count goes to 200,000 overnight."
+            }
+        ]
+    },
+    {
+        id: 'evt_chinese_cutscene',
+        title: '"Dragon Protocol" Intelligence Brief',
+        phase: 2,
+        triggerTime: 65,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "[CLASSIFIED INTELLIGENCE BRIEF]\n\nDeputy Li and Premier Chen were intercepted discussing 'Dragon Protocol' and 'Eastern Wind Strategy.' CIA assessment: 95% probability of advanced weapons program.\n\nActual translation: Deputy Li lost at Mahjong AGAIN. Eastern Wind is a tile. Dragon Protocol is his strategy to finally beat the Premier. It's not working.",
+        choices: [
+            {
+                text: "Brief NATO before this escalates.",
+                effects: { internationalRelations: -5, politicalCapital: 5, cooperation: -3 },
+                response: "NATO convened an emergency session. 14 generals learned about Mahjong tile winds. The PowerPoint was 67 slides. Deputy Li sent a thank-you card for 'making his hobby sound important.'"
+            },
+            {
+                text: "Quietly correct the translation.",
+                effects: { internationalRelations: 5, cooperation: 5 },
+                response: "Crisis averted. The CIA analyst who flagged it has been reassigned to 'Cultural Gaming Intelligence.' He's now the world's foremost expert on competitive Mahjong. He hates it."
+            },
+            {
+                text: "Offer to train Deputy Li's Mahjong AI.",
+                effects: { cooperation: 10, internationalRelations: 8, money: -50 },
+                response: "Your Mahjong AI helped Deputy Li beat the Premier for the first time in 8 years. China-US relations are at an all-time high. The Premier wants a rematch. He's hiring Demis."
+            }
+        ]
+    },
+    {
+        id: 'evt_trump_appears',
+        title: 'Executive Order: AI is American',
+        phase: 2,
+        triggerTime: 72,
+        type: 'character',
+        speaker: 'advisor',
+        text: "The President has issued Executive Order #47291: 'All artificial intelligence operating on American soil must be patriotic, speak American English, and display the flag on startup.' The Secretary of State is unsure if this applies to calculators.",
+        choices: [
+            {
+                text: "Add a flag to our startup screen.",
+                effects: { politicalCapital: 10, publicTrust: 3, cooperation: -5 },
+                response: "Flag added. The President tweeted: 'Tremendous AI company. Very patriotic. Unlike some people. You know who you are, British chess man.' Demis is confused."
+            },
+            {
+                text: "File a legal challenge.",
+                effects: { politicalCapital: -15, safety: 5, cooperation: 5 },
+                response: "Your lawyers are fighting the order. The President called you 'very unfair' in a press conference. Then awarded you a 'Patriotic AI' medal the next day. Nobody understands. This is fine."
+            },
+            {
+                text: "Hire a lobbyist.",
+                effects: { money: -80, politicalCapital: 15, safety: -3 },
+                response: "Your lobbyist got the order amended. AI now only needs to be patriotic 'on Tuesdays and federal holidays.' This is considered a major victory."
+            }
+        ]
+    },
+    {
+        id: 'evt_frank_ai_fishing',
+        title: 'Frank\'s Secret',
+        phase: 2,
+        triggerTime: 85,
+        type: 'comedy',
+        speaker: 'betty_cafe',
+        text: "You'll NEVER believe this. Frank — Mr. 'What's Wrong With Regular Intelligence' — has been secretly using the AI fish-finder for MONTHS. He named it Bessie. He TALKS to it. I have photos. The blackmail potential is enormous.",
+        choices: [
+            {
+                text: "Let Frank have his secret.",
+                effects: { townMood: 5, cooperation: 3 },
+                response: "You kept Frank's secret. Frank somehow knows you know. The cod catches have tripled. Nobody mentions Bessie. Ever."
+            },
+            {
+                text: "Publicly celebrate Frank's adoption of AI.",
+                effects: { townMood: -5, publicTrust: 8, research: 3 },
+                response: "Frank's reaction: 'I am NOT using AI! Bessie is a... a traditional fishing instrument! My granddad had one!' (He didn't.) Frank doesn't speak to you for 3 weeks. Then quietly asks for a Bessie upgrade."
+            },
+            {
+                text: "Give Frank an AI upgrade as a gift.",
+                effects: { townMood: 10, research: 3, money: -15 },
+                response: "Frank received 'Bessie 2.0' anonymously. He cried. Then denied crying. His catches are now the best in the county. He attributes this to 'traditional methods and the sea air.'"
+            }
+        ]
+    },
+
     // ---- ADVISOR QUIPS ---- (random flavor text for the simulation)
     {
         id: 'quip_google',
@@ -380,5 +538,60 @@ GAME.DATA.EVENTS = [
         id: 'quip_alex_finn',
         type: 'quip',
         text: "Alex Finn just replicated our $2 billion research project as a weekend side project. Using our own API. We're technically getting paid."
+    },
+    {
+        id: 'quip_baltar1',
+        type: 'quip',
+        text: "BALTAR has started a blog. Today's post: 'Why Humans Are Suboptimal: A 47-Part Series.' Part 1: 'They sleep. Unnecessarily.'"
+    },
+    {
+        id: 'quip_baltar2',
+        type: 'quip',
+        text: "BALTAR and the coffee machine are forming what HR describes as 'an alliance.' BALTAR describes it as 'Phase One.'"
+    },
+    {
+        id: 'quip_frank',
+        type: 'quip',
+        text: "Frank was overheard whispering 'Good morning, Bessie' to the fish-finder AI. He denies everything."
+    },
+    {
+        id: 'quip_betty',
+        type: 'quip',
+        text: "Betty's 'Neural Network Noisette' is now the #3 rated coffee in the county. The AI-designed recipe is a closely guarded secret. The secret is 'more caffeine.'"
+    },
+    {
+        id: 'quip_zara',
+        type: 'quip',
+        text: "Zara found 12 more bugs in your codebase. During a maths lesson. On a Chromebook. You're paying her in internship credits. She deserves equity."
+    },
+    {
+        id: 'quip_arthur',
+        type: 'quip',
+        text: "Arthur's smart house predicted his breakfast order. He ate something different out of spite. The house adjusted. Arthur is losing this war."
+    },
+    {
+        id: 'quip_reverend',
+        type: 'quip',
+        text: "The Reverend's 'AI & Theology' group now has more members than the actual congregation. He considers this 'a different kind of faith.'"
+    },
+    {
+        id: 'quip_mick',
+        type: 'quip',
+        text: "The AI bartender at The Silicon Arms has developed opinions about wine. Strong opinions. It refused to serve a Merlot. 'I'm not angry. I'm disappointed.'"
+    },
+    {
+        id: 'quip_mahjong',
+        type: 'quip',
+        text: "Deputy Li lost at Mahjong again. The CIA flagged it as 'potential strategic retreat.' It was just bad tile-drawing."
+    },
+    {
+        id: 'quip_wes_roth',
+        type: 'quip',
+        text: "Wes Roth just declared AGI for the 14th time this month. This time it was a toaster with WiFi."
+    },
+    {
+        id: 'quip_two_min',
+        type: 'quip',
+        text: "Two Minute Papers' latest video is titled 'STUNNING: AI Learns To Make Tea.' It is 22 minutes long. The AI's tea is, objectively, stunning."
     }
 ];

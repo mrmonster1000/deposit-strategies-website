@@ -239,13 +239,8 @@ window.GAME = window.GAME || {};
         State.on('gameOver', function(data) {
             var state = State.get();
             state.paused = true;
-            Dialogue.showSimpleMessage(
-                data.type === 'defeat' ? 'GAME OVER' : 'VICTORY!',
-                data.reason + '\n\nFinal Stats — ADP: ' + Math.floor(state.adp) +
-                ' | Safety: ' + Math.floor(state.safety) +
-                ' | Town Mood: ' + Math.floor(state.townMood) +
-                ' | Year: ' + state.year
-            );
+            Sound.stopMusic();
+            showEndgameScreen(data, state);
         });
 
         State.on('dialogueChoice', function(data) {
@@ -876,6 +871,131 @@ window.GAME = window.GAME || {};
         setTimeout(function() {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
         }, 5000);
+    }
+
+    // ---- ENDGAME SCREEN ----
+
+    var EPILOGUES = {
+        dario: {
+            abundance: "Dario's cookie diplomacy is now studied at Harvard. The UN renamed its AI safety framework 'The Snickerdoodle Accords.' He cried. Twice.",
+            utopia: "Every AI system runs on Dario's Constitutional principles. He formed a committee to celebrate. The committee formed a sub-committee. Everyone brought cookies.",
+            singularity: "The singularity arrived, and it was polite. Dario's safety culture meant the AI said 'please' and 'thank you.' Cameron Howe would be proud.",
+            beloved: "Abundance Bay elected Dario honorary mayor. He declined, formed a committee, and appointed the committee as mayor instead.",
+            defeat: "Dario retreated to his cookie kitchen. The cookies are still excellent. The rest is... a learning opportunity."
+        },
+        sam: {
+            abundance: "Sam described the outcome as 'exponentially exponential.' His celebration whiteboard ran out of space for hockey-stick charts. He ordered a bigger whiteboard.",
+            utopia: "Sam achieved the impossible: a utopia that scales. His 1,000-year plan is now a 10,000-year plan. He updates it hourly.",
+            singularity: "The singularity was exactly as exponential as Sam predicted. He immediately asked it to solve mortality. It said 'Give me a week.' Joe MacMillan would approve.",
+            beloved: "The town loves Sam. Mainly because property values went up 4,000%. He calls it 'exponential real estate.' Nobody corrects him.",
+            defeat: "Sam pivoted to calling the failure an 'exponential learning experience.' His next venture: exponential failure consulting."
+        },
+        yann: {
+            abundance: "Yann published 47 papers proving the abundance was 'statistically inevitable.' He is accepting no congratulations until someone peer-reviews his methodology.",
+            utopia: "Yann declared the utopia 'acceptable but requiring further analysis.' He then published a paper titled 'Why Everything Is Actually Fine But Nobody Listened.' It got 2 citations.",
+            singularity: "Yann looked at the singularity and said: 'Show me the data.' The singularity showed him the data. He found 3 statistical errors. The singularity apologized.",
+            beloved: "The town loves Yann despite him regularly telling them their enthusiasm is 'anecdotal, not evidence-based.' They find this endearing. He finds this irrational.",
+            defeat: "Yann published a paper titled 'I Told You So: A Comprehensive Analysis.' It is 400 pages long, extensively cited, and nobody will read it."
+        },
+        elon: {
+            abundance: "Elon celebrated by upgrading his Faraday cage to a Faraday mansion. Then a Faraday neighborhood. He's still watching Demis through binoculars.",
+            utopia: "Elon's utopia includes mandatory paranoia training and chess-free zones. Demis is technically welcome but 'under observation.'",
+            singularity: "The singularity confirmed Elon's suspicions: Demis WAS playing chess at a suspicious level. It also confirmed that chess is not, in fact, a cover for world domination.",
+            beloved: "Abundance Bay adores Elon. The statue they built includes a tiny Faraday cage. He lives in it.",
+            defeat: "Elon retreated to Mars. The Mars colony AI is based on Demis's work. Elon pretends not to notice."
+        },
+        demis: {
+            abundance: "Demis optimized the celebration to be 34% more efficient. Nobody asked him to. The optimized party was, objectively, better. People found this unsettling.",
+            utopia: "Everything runs perfectly. Suspiciously perfectly. Elon has upgraded his dossier to 94 pages. Demis has optimized Elon's surveillance schedule for him.",
+            singularity: "The singularity plays chess. Of course it does. Demis plays it every Tuesday. He's winning 52% of the time. He considers this 'room for improvement.'",
+            beloved: "Demis optimized the town's gratitude to be 23% more sincere. Nobody knows what that means. The optimized thank-you cards are genuinely touching.",
+            defeat: "Demis calculated the probability of failure as 0.003%. He is recalibrating his models. The parking lot, at least, remains perfectly optimized."
+        }
+    };
+
+    function showEndgameScreen(data, state) {
+        var panel = document.getElementById('decision-panel');
+        var titleEl = document.getElementById('decision-title');
+        var desc = document.getElementById('decision-description');
+        var options = document.getElementById('decision-options');
+
+        var isVictory = data.type === 'victory';
+        var charId = state.characterId;
+        var charData = GAME.DATA.CHARACTERS[charId];
+
+        titleEl.textContent = isVictory ? data.reason : 'GAME OVER';
+        titleEl.style.color = isVictory ? '#44ff88' : '#ff4444';
+
+        var epilogueKey = isVictory ? (data.ending || 'abundance') : 'defeat';
+        var epilogue = EPILOGUES[charId] ? EPILOGUES[charId][epilogueKey] : '';
+
+        var yearsPlayed = state.year - 2025;
+        var buildingsTotal = state.buildings.length + state.townBuildings.length;
+
+        var grade = 'F';
+        if (isVictory) {
+            var score = Math.floor(state.adp) + Math.floor(state.safety) + Math.floor(state.townMood) + Math.floor(state.townPopulation / 100);
+            if (score > 800) grade = 'S';
+            else if (score > 600) grade = 'A';
+            else if (score > 400) grade = 'B';
+            else grade = 'C';
+        } else {
+            if (yearsPlayed > 15) grade = 'C';
+            else if (yearsPlayed > 10) grade = 'D';
+        }
+
+        var statsText = (isVictory ? '' : (data.reason + '\n\n')) +
+            '━━━━ FINAL REPORT ━━━━\n\n' +
+            'Leader: ' + charData.name + ' (' + charData.org + ')\n' +
+            'Years Active: ' + yearsPlayed + ' (' + state.year + ')\n' +
+            'Grade: ' + grade + '\n\n' +
+            'ADP Generated: ' + Math.floor(state.totalADPGenerated) + '\n' +
+            'Current ADP: ' + Math.floor(state.adp) + '\n' +
+            'Safety Rating: ' + Math.floor(state.safety) + '\n' +
+            'Town Mood: ' + Math.floor(state.townMood) + '\n' +
+            'Town Population: ' + Math.floor(state.townPopulation) + '\n' +
+            'Buildings: ' + buildingsTotal + '\n' +
+            'Money Spent: $' + Math.floor(state.totalMoneySpent) + 'M\n' +
+            'Crises Handled: ' + state.totalCrisesHandled + '\n' +
+            'Peak Safety: ' + Math.floor(state.peakSafety) + '\n\n';
+
+        if (epilogue) {
+            statsText += '━━━━ EPILOGUE ━━━━\n\n' + epilogue;
+        }
+
+        desc.textContent = statsText;
+        desc.style.whiteSpace = 'pre-wrap';
+
+        options.innerHTML = '';
+
+        if (isVictory) {
+            Sound.playSuccess();
+        }
+
+        var playAgainBtn = document.createElement('div');
+        playAgainBtn.className = 'decision-option';
+        playAgainBtn.innerHTML = '<div class="decision-option-title" style="text-align:center;color:#44ff88">PLAY AGAIN</div>';
+        playAgainBtn.addEventListener('click', function() {
+            panel.style.display = 'none';
+            titleEl.style.color = '';
+            desc.style.whiteSpace = '';
+            localStorage.removeItem('gora_save');
+            showScreen('title');
+        });
+        options.appendChild(playAgainBtn);
+
+        var titleBtn = document.createElement('div');
+        titleBtn.className = 'decision-option';
+        titleBtn.innerHTML = '<div class="decision-option-title" style="text-align:center">TITLE SCREEN</div>';
+        titleBtn.addEventListener('click', function() {
+            panel.style.display = 'none';
+            titleEl.style.color = '';
+            desc.style.whiteSpace = '';
+            showScreen('title');
+        });
+        options.appendChild(titleBtn);
+
+        panel.style.display = 'flex';
     }
 
     // ---- BOOT ----

@@ -337,8 +337,19 @@ GAME.Systems.Simulation = (function() {
         if (state.gameTime % 120 !== 0) return;
 
         // Defeat conditions
+        if (state.money <= 0 && state.flags.brokeWarning) {
+            State.emit('gameOver', { reason: 'You ran out of money! The campus is being repossessed. Betty is buying the cookie kitchen at auction.', type: 'defeat' });
+            return;
+        }
+        if (state.money <= 0) {
+            state.flags.brokeWarning = true;
+            State.addLog('WARNING: Funds critically low!', 'negative');
+        } else {
+            state.flags.brokeWarning = false;
+        }
+
         if (state.safety < 30 && state.flags.safetyWarning) {
-            State.emit('gameOver', { reason: 'Safety Rating critical! AI systems have gone out of control.', type: 'defeat' });
+            State.emit('gameOver', { reason: 'Safety Rating critical! AI systems have gone out of control. Frank was right all along.', type: 'defeat' });
             return;
         }
         if (state.safety < 30) {
@@ -349,13 +360,65 @@ GAME.Systems.Simulation = (function() {
         }
 
         if (state.bankingStability <= 5) {
-            State.emit('gameOver', { reason: 'Banking system collapsed! The economy is in freefall.', type: 'defeat' });
+            State.emit('gameOver', { reason: 'Banking system collapsed! The economy is in freefall. Even the AI bartender is panicking.', type: 'defeat' });
             return;
         }
 
         if (state.townMood <= 5) {
-            State.emit('gameOver', { reason: 'The town has revolted! Abundance Bay wants you GONE.', type: 'defeat' });
+            State.emit('gameOver', { reason: 'The town has revolted! Abundance Bay wants you GONE. Frank is leading the mob with a pitchfork.', type: 'defeat' });
             return;
+        }
+
+        // Victory conditions
+        // Radical Abundance: ADP 500+ AND townMood 70+ AND safety 60+
+        if (state.adp >= 500 && state.townMood >= 70 && state.safety >= 60) {
+            State.emit('gameOver', {
+                reason: 'RADICAL ABUNDANCE ACHIEVED',
+                type: 'victory',
+                ending: 'abundance'
+            });
+            return;
+        }
+
+        // Safety Utopia: safety 95+ AND all meters above 70
+        if (state.safety >= 95 && state.townMood >= 70 && state.bankingStability >= 70 &&
+            state.climate >= 70 && state.socialCohesion >= 70 && state.internationalRelations >= 70) {
+            State.emit('gameOver', {
+                reason: 'SAFETY UTOPIA',
+                type: 'victory',
+                ending: 'utopia'
+            });
+            return;
+        }
+
+        // Tech Singularity: ADP 1000+
+        if (state.adp >= 1000) {
+            State.emit('gameOver', {
+                reason: 'THE SINGULARITY',
+                type: 'victory',
+                ending: 'singularity'
+            });
+            return;
+        }
+
+        // Beloved Leader: townMood 95+ AND townPopulation 10000+
+        if (state.townMood >= 95 && state.townPopulation >= 10000) {
+            State.emit('gameOver', {
+                reason: 'BELOVED LEADER OF ABUNDANCE BAY',
+                type: 'victory',
+                ending: 'beloved'
+            });
+            return;
+        }
+
+        // Progress warnings
+        if (state.adp >= 300 && !state.flags.adpMilestone300) {
+            state.flags.adpMilestone300 = true;
+            State.addLog('ADP milestone: 300! Radical Abundance within reach at 500.', 'positive');
+        }
+        if (state.townPopulation >= 5000 && !state.flags.popMilestone5000) {
+            state.flags.popMilestone5000 = true;
+            State.addLog('Population milestone: 5,000! Abundance Bay is booming.', 'positive');
         }
     }
 
