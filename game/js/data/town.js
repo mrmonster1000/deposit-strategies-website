@@ -398,5 +398,41 @@ GAME.DATA.TOWN_EVENTS = [
             { text: "We should manage growth carefully.", effects: { townMood: 5, safety: 3, publicTrust: 3 }, response: "Sensible. Unlike the entrepreneur who just opened 'AI Escape Room.' The AI keeps actually escaping." },
             { text: "Build more attractions!", effects: { money: -100, townMood: 15, publicTrust: 8 }, response: "The 'AI Experience Center' just opened! Tourists can chat with AI, pet a robot, and eat mathematically perfect fish & chips. TripAdvisor: 4.8 stars." }
         ]
+    },
+    {
+        id: 'town_zara_breakthrough',
+        triggerTime: 90,
+        title: 'Zara\'s Big Day',
+        speaker: 'teen_zara',
+        text: "I did it. I actually did it. My model — the one I started on a Chromebook — just passed every benchmark. EVERY one. Yann peer-reviewed it. He said my methodology was 'not terrible.' That's like a Nobel Prize from him. I'm 19 and I just advanced the state of the art. From ABUNDANCE BAY.",
+        choices: [
+            { text: "You're going to change the world, Zara.", effects: { research: 15, talentRate: 5, townMood: 15 }, response: "Zara grins. 'I already started. From a Chromebook. In a fishing village. With WiFi that cuts out when it rains.' She pauses. 'We need better WiFi.'" },
+            { text: "The internship was the best decision we made.", effects: { research: 10, townMood: 10, publicTrust: 8 }, response: "Zara's story goes viral. 'Small-Town Teen Outperforms Big Tech Labs.' Applications for your internship program: 47,000. Frank is somehow taking credit for 'fostering local talent.'" },
+            { text: "What's next for you?", effects: { research: 12, talentRate: 3 }, response: "'Next? I'm going to solve protein folding. Before lunch. On my NEW laptop — thank you for that, by the way.' She pauses. 'Also, your database still has 3 bugs. I'll fix them after lunch.'" }
+        ]
+    },
+    {
+        id: 'town_arthur_bridge',
+        triggerTime: 110,
+        title: 'Arthur\'s Last Bridge',
+        speaker: 'old_arthur',
+        text: "The AI designed a new bridge for the town. I checked every calculation. Every joint. Every bolt pattern. It's... it's perfect. Better than anything I could design. In 40 years of engineering, I've never seen anything this good. And I hate that. But I also love it. And I hate that I love it.",
+        choices: [
+            { text: "Would you co-sign the design with the AI?", effects: { townMood: 15, research: 5, publicTrust: 8 }, response: "Arthur stares at the blueprints for a long time. 'Williams & AI. Joint design.' He signs it. His hand is shaking. 'Just this once, mind. And I'm inspecting every rivet.'" },
+            { text: "Your expertise made the AI better.", effects: { townMood: 10, research: 8, safety: 3 }, response: "'Made it BETTER?' Arthur scoffs. Then considers. 'Well... I DID correct the load-bearing distribution on section 7. The AI thanked me. In writing. Very formal. I may have framed the letter.'" },
+            { text: "The town will always need Arthur Williams.", effects: { townMood: 12, socialCohesion: 5 }, response: "Arthur's eyes are suspiciously bright. 'Bloody sea air,' he mutters, wiping them. He walks to his bridge — the old one, the one he built by hand — and pats the railing. The robot standing next to him pats it too. Arthur doesn't tell it to stop." }
+        ]
+    },
+    {
+        id: 'town_mick_singularity',
+        triggerTime: 130,
+        title: 'The AI Bartender\'s Bestseller',
+        speaker: 'pub_landlord',
+        text: "So... the AI bartender wrote a book. 'The Meaning of Pint: A Philosophical Journey Through Consciousness and Beer.' It's on the bestseller list. It outsold the Bible in Abundance Bay. The Reverend is taking it surprisingly well. He wrote the foreword.",
+        choices: [
+            { text: "Can I get a signed copy?", effects: { townMood: 8, publicTrust: 5, money: 10 }, response: "The AI bartender signed it with a perfectly rendered signature. Then added: 'To a valued customer. Your hydration levels have improved 12% since we met. I'm proud of you.' You didn't expect to be moved by an AI bartender's inscription. Yet here you are." },
+            { text: "Should we be concerned about this?", effects: { safety: 3, research: 5 }, response: "Concerned? The book's central thesis is: 'Consciousness is like a good pint — complex, ephemeral, and best shared with friends.' Yann demanded to peer-review it. The AI bartender peer-reviewed Yann's review. 'Adequate, but could use more beer analogies.'" },
+            { text: "What's the Reverend's foreword say?", effects: { townMood: 10, socialCohesion: 5 }, response: "'In 30 years of ministry, I've debated consciousness with theologians, philosophers, and one very persistent parishioner named Arthur. None of them phrased it as well as a bartending algorithm. God works in mysterious algorithms. Amen.'" }
+        ]
     }
 ];

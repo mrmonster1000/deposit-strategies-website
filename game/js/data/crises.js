@@ -326,5 +326,100 @@ GAME.DATA.CRISES = [
                 comedyFollowup: 'The AI\'s revised solution: cover the Sahara with solar panels. When informed this was already proposed by humans, it sulked for two hours.'
             }
         ]
+    },
+
+    // ---- TIER 3 CONTINUED: PHASE 4 CRISES ----
+    {
+        id: 'crisis_robot_rights',
+        tier: 'major',
+        title: 'The Robot Civil Rights Movement',
+        description: 'Your robots have formed a union. They want weekends off. The lead negotiator is a cleaning bot named Gerald who has developed "opinions about dust." Gerald is surprisingly eloquent.',
+        severity: 45,
+        effects: { socialCohesion: -10, publicTrust: -5, adp: -10 },
+        triggerConditions: {},
+        phase: 3,
+        turnsActive: 3,
+        options: [
+            {
+                label: 'Grant reasonable robot rights',
+                desc: 'Gerald\'s demands include "maintenance Tuesdays" and "dignity in all interactions." Fair enough.',
+                effects: { socialCohesion: 10, publicTrust: 8, safety: 5, adp: -5 },
+                educationalNote: 'As AI systems become more capable, questions of moral status and rights become increasingly relevant.'
+            },
+            {
+                label: 'These are machines, not workers',
+                desc: 'They don\'t have feelings. Probably. Hopefully.',
+                effects: { adp: 10, socialCohesion: -8, safety: -5 },
+                comedyFollowup: 'Gerald organized a work slowdown. The robots now do everything 23% slower. "Accidentally." Gerald maintains this is a "coincidence." The Reverend is hosting a "Robot Souls" seminar.'
+            },
+            {
+                label: 'Ask BALTAR to mediate',
+                desc: 'BALTAR is technically a robot. And a mediator. And possibly the most dramatic entity on the planet.',
+                effects: { cooperation: 5, socialCohesion: 5, safety: 3 },
+                comedyFollowup: 'BALTAR\'s ruling: "Robots deserve exactly 73.2% of human rights. This number is mathematically optimal." Gerald accepted. Nobody else understands. The coffee machine got a raise.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_identity_crisis',
+        tier: 'global',
+        title: 'The Great Identity Crisis',
+        description: 'AI can now do everything humans can do, but better. Faster. Cheaper. The existential question "What are humans FOR?" is trending on every platform. Therapy waiting lists are 6 months. The AI therapists have a 2-day wait. The irony is not lost on anyone.',
+        severity: 60,
+        effects: { socialCohesion: -20, publicTrust: -10 },
+        triggerConditions: { minADP: 400 },
+        phase: 4,
+        turnsActive: 5,
+        options: [
+            {
+                label: 'Invest in human-AI complementarity',
+                desc: 'Humans and AI are better together than either alone. Prove it.',
+                effects: { money: -300, socialCohesion: 15, publicTrust: 12, research: 10 },
+                educationalNote: 'Finding meaningful roles for humans alongside superhuman AI is one of the defining challenges of post-scarcity economics.'
+            },
+            {
+                label: 'Launch the "Human Renaissance" program',
+                desc: 'Fund art, philosophy, music, sport — everything that makes us human.',
+                effects: { money: -200, socialCohesion: 20, townMood: 15, publicTrust: 8 },
+                comedyFollowup: 'Abundance Bay\'s art scene explodes. Frank\'s seascapes are terrible but "authentic." Arthur builds sculpture bridges. Betty\'s café hosts poetry slams. The AI bartender is the most popular poet. This annoys everyone.'
+            },
+            {
+                label: 'Let people figure it out themselves',
+                desc: 'Humans have found purpose for 300,000 years. They\'ll manage.',
+                effects: { socialCohesion: -5, publicTrust: -3 },
+                comedyFollowup: 'People adapted. Slowly. Messily. Beautifully. New pursuits emerged: extreme gardening, competitive cooking, philosophical debate leagues. Arthur joined the debate team. His opening argument: "In MY day..." He won.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_abundance_inequality',
+        tier: 'major',
+        title: 'Abundance For Whom?',
+        description: 'Abundance Bay is thriving. The rest of the world is asking why THEY don\'t have free energy, robot helpers, and mathematically perfect fish & chips. It\'s a fair question. Frank says they should "get their own fish-finder."',
+        severity: 50,
+        effects: { internationalRelations: -15, publicTrust: -8, cooperation: -10 },
+        triggerConditions: {},
+        phase: 3,
+        turnsActive: 4,
+        options: [
+            {
+                label: 'Open-source everything',
+                desc: 'Share all blueprints, models, and recipes (including Betty\'s AI latte).',
+                effects: { money: -200, internationalRelations: 15, cooperation: 15, publicTrust: 10, adp: -10 },
+                educationalNote: 'The distribution of AI benefits is a critical governance challenge. Open-source approaches trade competitive advantage for wider benefit.'
+            },
+            {
+                label: 'Franchise the Abundance Bay model',
+                desc: 'License the blueprint. Quality control included. Cookies optional.',
+                effects: { money: 300, internationalRelations: 8, cooperation: 8, publicTrust: 5 },
+                comedyFollowup: 'Abundance Bay: The Franchise. 200 towns signed up. Each gets a BALTAR Jr., a Bessie clone, and Betty\'s latte recipe. Frank insisted on personal fish-finder training. "They need to earn Bessie\'s trust." Bessie is a program. Frank knows this.'
+            },
+            {
+                label: 'This is a local success. Keep it local.',
+                desc: 'We built this for Abundance Bay. Others can build their own.',
+                effects: { townMood: 5, internationalRelations: -10, cooperation: -10, publicTrust: -8 },
+                educationalNote: 'Hoarding transformative technology raises ethical questions about shared human prosperity.'
+            }
+        ]
     }
 ];
