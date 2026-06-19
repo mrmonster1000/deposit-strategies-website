@@ -1294,18 +1294,366 @@ GAME.Systems.Renderer = (function() {
     //  PERMANENT TOWN FEATURES (always visible, even before player builds)
     // =========================================================================
 
+    // --- SEEDY STARTER BUILDINGS (the downmarket establishments) ---
+
+    function drawSeedyBar(x, time) {
+        var bw = 52, bh = 44;
+        var by = BUILDING_FLOOR - bh;
+        // Grubby brick walls
+        drawRect(x, by, bw, bh, '#4a2820');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#5a3828');
+        // Patchy brickwork texture
+        for (var br = 0; br < 4; br++) {
+            drawRect(x + 4 + br * 12, by + 4, 8, 3, '#503020');
+            drawRect(x + 10 + br * 10, by + 12, 6, 3, '#503020');
+        }
+        // Sagging roof
+        drawRect(x - 2, by - 3, bw + 4, 5, '#3a2018');
+        drawRect(x - 1, by - 1, bw + 2, 2, '#4a3028');
+        // Crooked "BAR" neon sign (flickering)
+        var neonOn = Math.sin(time * 0.007) > -0.3;
+        var neonFlicker = Math.sin(time * 0.023) > 0.8 ? 0 : 1;
+        if (neonOn && neonFlicker) {
+            drawRect(x + 8, by + 6, 20, 8, '#200808');
+            ctx.font = '6px "Press Start 2P", monospace';
+            ctx.fillStyle = '#ff2020';
+            ctx.textAlign = 'left';
+            ctx.fillText('BAR', x + 10, by + 8);
+            ctx.fillStyle = 'rgba(255, 40, 40, 0.15)';
+            ctx.fillRect(x + 4, by + 2, 28, 16);
+        } else {
+            drawRect(x + 8, by + 6, 20, 8, '#200808');
+            ctx.font = '6px "Press Start 2P", monospace';
+            ctx.fillStyle = '#401010';
+            ctx.textAlign = 'left';
+            ctx.fillText('BAR', x + 10, by + 8);
+        }
+        // Grimy windows
+        drawRect(x + 34, by + 8, 10, 12, '#1a1810');
+        drawRect(x + 35, by + 9, 8, 10, '#2a2818');
+        // Door (crooked)
+        drawRect(x + 16, by + bh - 16, 10, 16, '#2a1810');
+        drawRect(x + 17, by + bh - 14, 8, 14, '#3a2818');
+        drawRect(x + 24, by + bh - 9, 1, 2, '#806020');
+        // Puddle outside
+        drawRect(x + 6, BUILDING_FLOOR + 1, 14, 2, '#2a3838');
+        // Drunk person slumped outside
+        var slump = Math.sin(time * 0.001) * 0.5;
+        drawRect(x + 2, BUILDING_FLOOR - 6 + slump, 4, 4, '#d0a060');
+        drawRect(x + 1, BUILDING_FLOOR - 2 + slump, 6, 3, '#505060');
+        // Label
+        drawText('The Rusty Anchor', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#605040', align: 'center' });
+    }
+
+    function drawVideoShop(x, time) {
+        var bw = 48, bh = 38;
+        var by = BUILDING_FLOOR - bh;
+        // Faded blue shop front
+        drawRect(x, by, bw, bh, '#2a3050');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#3a4060');
+        // Flat roof with satellite dish
+        drawRect(x - 1, by - 2, bw + 2, 3, '#202838');
+        drawRect(x + bw - 14, by - 10, 2, 10, '#606868');
+        drawRect(x + bw - 18, by - 14, 10, 4, '#506060');
+        // Faded "VIDEO" sign
+        drawRect(x + 4, by + 4, 40, 10, '#181828');
+        ctx.font = '6px "Press Start 2P", monospace';
+        ctx.fillStyle = '#4a4a80';
+        ctx.textAlign = 'left';
+        ctx.fillText('VIDEO', x + 8, by + 6);
+        // VHS tape displays in window
+        var tapeColors = ['#cc4444', '#44aa44', '#4444cc', '#cccc44', '#cc44cc'];
+        for (var t = 0; t < 5; t++) {
+            drawRect(x + 6 + t * 7, by + 18, 5, 7, '#101018');
+            drawRect(x + 7 + t * 7, by + 19, 3, 5, tapeColors[t]);
+        }
+        // Door
+        drawRect(x + bw / 2 - 5, by + bh - 14, 10, 14, '#181828');
+        drawRect(x + bw / 2 - 4, by + bh - 12, 8, 12, '#202838');
+        // "CLOSING DOWN" banner
+        drawRect(x + 2, by + bh - 20, bw - 4, 6, '#cc2020');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('CLOSING DOWN SALE', x + bw / 2, by + bh - 19);
+        drawText('Blockblaster Video', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#4a4a70', align: 'center' });
+    }
+
+    function drawSeedyArcade(x, time) {
+        var bw = 56, bh = 42;
+        var by = BUILDING_FLOOR - bh;
+        // Dark building
+        drawRect(x, by, bw, bh, '#1a1a30');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#2a2a40');
+        // Roof with chasing lights
+        drawRect(x - 2, by - 3, bw + 4, 5, '#101028');
+        for (var li = 0; li < 8; li++) {
+            var lightOn = ((Math.floor(time * 0.005) + li) % 4) === 0;
+            var lightColor = lightOn ? ['#ff4040', '#40ff40', '#4040ff', '#ffff40'][li % 4] : '#201818';
+            drawRect(x + 4 + li * 6, by - 2, 3, 2, lightColor);
+        }
+        // "ARCADE" sign (multi-color letters)
+        drawRect(x + 4, by + 5, 48, 10, '#0a0a18');
+        var arcLetters = ['A', 'R', 'C', 'A', 'D', 'E'];
+        var arcColors = ['#ff4040', '#ffaa00', '#ffff00', '#40ff40', '#4040ff', '#ff40ff'];
+        for (var ai = 0; ai < 6; ai++) {
+            ctx.font = '6px "Press Start 2P", monospace';
+            ctx.fillStyle = arcColors[ai];
+            ctx.textAlign = 'left';
+            ctx.fillText(arcLetters[ai], x + 8 + ai * 7, by + 7);
+        }
+        // Arcade cabinets visible through window
+        for (var cab = 0; cab < 3; cab++) {
+            drawRect(x + 8 + cab * 14, by + 20, 10, 14, '#181828');
+            drawRect(x + 9 + cab * 14, by + 21, 8, 7, '#0a0a18');
+            // Screen glow
+            var screenCol = ['#20ff40', '#4080ff', '#ff8020'][cab];
+            var flicker = Math.sin(time * 0.005 + cab * 2) > -0.5;
+            drawRect(x + 10 + cab * 14, by + 22, 6, 5, flicker ? screenCol : '#0a0a18');
+        }
+        // Door
+        drawRect(x + bw / 2 - 5, by + bh - 14, 10, 14, '#0a0a18');
+        drawText('Galaxy Arcade', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#4a4a80', align: 'center' });
+    }
+
+    function drawStripClub(x, time) {
+        var bw = 50, bh = 40;
+        var by = BUILDING_FLOOR - bh;
+        // Dark exterior with pink accents
+        drawRect(x, by, bw, bh, '#2a1020');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#3a1830');
+        // Roof
+        drawRect(x - 1, by - 2, bw + 2, 4, '#1a0818');
+        // Flashing neon sign
+        var pinkNeon = Math.sin(time * 0.006) > 0;
+        drawRect(x + 4, by + 4, bw - 8, 10, '#100810');
+        ctx.font = '5px "Press Start 2P", monospace';
+        ctx.fillStyle = pinkNeon ? '#ff44aa' : '#401028';
+        ctx.textAlign = 'center';
+        ctx.fillText('GIRLS GIRLS', x + bw / 2, by + 7);
+        if (pinkNeon) {
+            ctx.fillStyle = 'rgba(255, 68, 170, 0.1)';
+            ctx.fillRect(x, by, bw, 16);
+        }
+        // Blacked-out windows
+        drawRect(x + 5, by + 18, 10, 8, '#0a0408');
+        drawRect(x + bw - 15, by + 18, 10, 8, '#0a0408');
+        // Heavy door with bouncer
+        drawRect(x + bw / 2 - 5, by + bh - 16, 10, 16, '#101010');
+        // Bouncer (big person)
+        drawRect(x + bw / 2 + 7, BUILDING_FLOOR - 14, 6, 5, '#d0a060');
+        drawRect(x + bw / 2 + 6, BUILDING_FLOOR - 9, 8, 7, '#101010');
+        drawRect(x + bw / 2 + 7, BUILDING_FLOOR - 2, 3, 3, '#101010');
+        drawRect(x + bw / 2 + 11, BUILDING_FLOOR - 2, 3, 3, '#101010');
+        drawText("Foxy's", x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#80305a', align: 'center' });
+    }
+
+    function drawSupermarket(x, time) {
+        var bw = 70, bh = 44;
+        var by = BUILDING_FLOOR - bh;
+        // Large boxy building, faded paint
+        drawRect(x, by, bw, bh, '#5a5a50');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#6a6a60');
+        // Flat roof with AC units
+        drawRect(x - 2, by - 3, bw + 4, 5, '#4a4a40');
+        drawRect(x + 10, by - 8, 10, 6, '#555550');
+        drawRect(x + 50, by - 8, 10, 6, '#555550');
+        // Faded sign
+        drawRect(x + 4, by + 4, bw - 8, 10, '#2a4a2a');
+        ctx.font = '5px "Press Start 2P", monospace';
+        ctx.fillStyle = '#80c080';
+        ctx.textAlign = 'center';
+        ctx.fillText('SPAR-MART', x + bw / 2, by + 7);
+        // Large windows showing shelves
+        for (var shelf = 0; shelf < 4; shelf++) {
+            drawRect(x + 6 + shelf * 15, by + 18, 12, 16, '#e8e8d0');
+            drawRect(x + 7 + shelf * 15, by + 19, 10, 3, '#cc4040');
+            drawRect(x + 7 + shelf * 15, by + 23, 10, 3, '#40a040');
+            drawRect(x + 7 + shelf * 15, by + 27, 10, 3, '#4060cc');
+        }
+        // Sliding doors
+        drawRect(x + bw / 2 - 8, by + bh - 18, 16, 18, '#a0c0c0');
+        drawRect(x + bw / 2 - 1, by + bh - 16, 2, 14, '#606868');
+        // Shopping trolley outside
+        drawRect(x + bw + 4, BUILDING_FLOOR - 6, 8, 5, '#808088');
+        drawRect(x + bw + 5, BUILDING_FLOOR - 1, 1, 2, '#606068');
+        drawRect(x + bw + 10, BUILDING_FLOOR - 1, 1, 2, '#606068');
+        drawText('Spar-Mart', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#506050', align: 'center' });
+    }
+
+    function drawGunShop(x, time) {
+        var bw = 44, bh = 36;
+        var by = BUILDING_FLOOR - bh;
+        // Military green / khaki
+        drawRect(x, by, bw, bh, '#3a3a28');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#4a4a38');
+        // Fortified look roof
+        drawRect(x - 1, by - 2, bw + 2, 4, '#2a2a20');
+        // Barred windows
+        drawRect(x + 4, by + 10, 10, 10, '#181818');
+        drawRect(x + 5, by + 10, 1, 10, '#606050');
+        drawRect(x + 8, by + 10, 1, 10, '#606050');
+        drawRect(x + 11, by + 10, 1, 10, '#606050');
+        drawRect(x + bw - 14, by + 10, 10, 10, '#181818');
+        drawRect(x + bw - 13, by + 10, 1, 10, '#606050');
+        drawRect(x + bw - 10, by + 10, 1, 10, '#606050');
+        drawRect(x + bw - 7, by + 10, 1, 10, '#606050');
+        // Sign
+        drawRect(x + 4, by + 3, bw - 8, 6, '#1a1a10');
+        ctx.font = '4px "Press Start 2P", monospace';
+        ctx.fillStyle = '#aa8830';
+        ctx.textAlign = 'center';
+        ctx.fillText('GUNS & AMMO', x + bw / 2, by + 5);
+        // Heavy metal door
+        drawRect(x + bw / 2 - 5, by + bh - 14, 10, 14, '#2a2a28');
+        drawRect(x + bw / 2 - 4, by + bh - 12, 8, 12, '#3a3a38');
+        // Target symbol
+        drawRect(x + bw / 2 - 2, by + 24, 4, 1, '#cc4444');
+        drawRect(x + bw / 2 - 1, by + 23, 1, 3, '#cc4444');
+        drawText('Guns & Ammo', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#5a5a40', align: 'center' });
+    }
+
+    function drawCarFactory(x, time) {
+        var bw = 80, bh = 50;
+        var by = BUILDING_FLOOR - bh;
+        // Large industrial building
+        drawRect(x, by, bw, bh, '#4a4a48');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#555558');
+        // Corrugated roof
+        drawRect(x - 3, by - 4, bw + 6, 6, '#3a3a38');
+        for (var ri = 0; ri < 10; ri++) {
+            drawRect(x + ri * 8, by - 3, 4, 4, '#424240');
+        }
+        // Smokestack
+        drawRect(x + bw - 12, by - 20, 6, 18, '#505050');
+        drawRect(x + bw - 13, by - 22, 8, 3, '#585858');
+        if (Math.random() < 0.05) spawnSmoke(x + bw - 9, by - 24);
+        // Large roller door (half open)
+        drawRect(x + 10, by + 14, 28, 26, '#2a2a28');
+        drawRect(x + 12, by + 14, 24, 4, '#404040');
+        // Car visible inside (half-built)
+        drawRect(x + 16, by + 28, 18, 8, '#6a3020');
+        drawRect(x + 18, by + 26, 12, 4, '#5a2818');
+        drawRect(x + 19, by + 27, 4, 2, '#8090a0');
+        drawRect(x + 27, by + 27, 4, 2, '#8090a0');
+        // Second door
+        drawRect(x + 48, by + 14, 24, 26, '#2a2a28');
+        drawRect(x + 50, by + 14, 20, 4, '#404040');
+        // Rusted cars in yard
+        drawRect(x + bw + 6, BUILDING_FLOOR - 8, 14, 6, '#6a4030');
+        drawRect(x + bw + 8, BUILDING_FLOOR - 10, 8, 4, '#5a3828');
+        drawRect(x + bw + 24, BUILDING_FLOOR - 7, 12, 5, '#4a5040');
+        // "MOTORS" sign (faded)
+        drawRect(x + 4, by + 3, 36, 8, '#303030');
+        ctx.font = '5px "Press Start 2P", monospace';
+        ctx.fillStyle = '#706860';
+        ctx.textAlign = 'left';
+        ctx.fillText('MOTORS', x + 8, by + 5);
+        drawText('Bay Motors', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#505050', align: 'center' });
+    }
+
+    function drawRundownMotel(x, time) {
+        var bw = 64, bh = 38;
+        var by = BUILDING_FLOOR - bh;
+        // Long low building, peeling paint
+        drawRect(x, by, bw, bh, '#5a4840');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#6a5850');
+        // Flat roof with gutter stains
+        drawRect(x - 1, by - 2, bw + 2, 4, '#4a3838');
+        drawRect(x + 20, by + 1, 3, 4, '#3a3030');
+        drawRect(x + 45, by + 1, 4, 5, '#3a3030');
+        // Row of doors (motel rooms)
+        for (var door = 0; door < 4; door++) {
+            var dx = x + 6 + door * 15;
+            drawRect(dx, by + bh - 14, 8, 14, '#3a2820');
+            drawRect(dx + 1, by + bh - 13, 6, 12, '#4a3830');
+            drawRect(dx + 5, by + bh - 8, 1, 1, '#806020');
+            // Room number
+            ctx.font = '3px "Press Start 2P", monospace';
+            ctx.fillStyle = '#807060';
+            ctx.textAlign = 'center';
+            ctx.fillText('' + (door + 1), dx + 4, by + bh - 15);
+            // Tiny window above door
+            var roomLit = Math.sin(time * 0.0008 + door * 3.7) > 0.5;
+            drawRect(dx + 1, by + 8, 6, 5, roomLit ? '#604820' : '#1a1810');
+        }
+        // "MOTEL" neon sign (half broken)
+        drawRect(x + 8, by + 3, 30, 7, '#201818');
+        ctx.font = '5px "Press Start 2P", monospace';
+        var motelFlicker = Math.sin(time * 0.004) > 0;
+        ctx.fillStyle = motelFlicker ? '#ff6644' : '#401a10';
+        ctx.textAlign = 'left';
+        ctx.fillText('MO', x + 10, by + 4);
+        ctx.fillStyle = '#401a10';
+        ctx.fillText('TEL', x + 24, by + 4);
+        // Vacancy sign
+        var vacancyOn = Math.sin(time * 0.003) > -0.5;
+        if (vacancyOn) {
+            drawRect(x + bw - 24, by + 4, 20, 5, '#100808');
+            ctx.font = '3px "Press Start 2P", monospace';
+            ctx.fillStyle = '#ff2020';
+            ctx.textAlign = 'center';
+            ctx.fillText('VACANCY', x + bw - 14, by + 5);
+        }
+        // Parked car
+        drawRect(x + bw + 4, BUILDING_FLOOR - 6, 14, 5, '#4a506a');
+        drawRect(x + bw + 6, BUILDING_FLOOR - 8, 8, 4, '#3a4058');
+        drawRect(x + bw + 7, BUILDING_FLOOR - 7, 3, 2, '#7088a0');
+        drawRect(x + bw + 12, BUILDING_FLOOR - 7, 3, 2, '#7088a0');
+        drawText('Seaside Motel', x + bw / 2, BUILDING_FLOOR + 4, { size: 4, color: '#605040', align: 'center' });
+    }
+
+    function drawDerelictShack(x, time) {
+        var bw = 30, bh = 24;
+        var by = BUILDING_FLOOR - bh;
+        // Rotting wood shack
+        drawRect(x, by, bw, bh, '#3a3020');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#4a4030');
+        // Slanted roof
+        drawRect(x - 2, by - 3, bw + 4, 4, '#2a2018');
+        drawRect(x, by - 5, bw - 4, 3, '#2a2018');
+        // Boarded window
+        drawRect(x + 5, by + 8, 8, 7, '#1a1810');
+        drawRect(x + 4, by + 9, 10, 1, '#5a4830');
+        drawRect(x + 4, by + 12, 10, 1, '#5a4830');
+        // Crooked door
+        drawRect(x + 18, by + bh - 12, 7, 12, '#2a2018');
+        // Weeds
+        drawRect(x - 4, BUILDING_FLOOR - 2, 2, 3, '#2a5020');
+        drawRect(x + bw + 2, BUILDING_FLOOR - 3, 2, 4, '#2a5020');
+        drawRect(x + bw - 3, BUILDING_FLOOR - 1, 1, 2, '#2a5020');
+    }
+
     function drawBaseTownFeatures(time) {
+        // Derelict shack in the wilderness
+        if (isVisible(350, 40)) {
+            drawDerelictShack(350, time);
+        }
+
+        // --- SEEDY TOWN ESTABLISHMENTS ---
+        // Town zone (3200-5500)
+        if (isVisible(3300, 60)) drawSeedyBar(3300, time);
+        if (isVisible(3600, 55)) drawVideoShop(3600, time);
+        if (isVisible(3900, 65)) drawSeedyArcade(3900, time);
+        if (isVisible(4500, 80)) drawSupermarket(4500, time);
+        if (isVisible(4850, 55)) drawStripClub(4850, time);
+
+        // Harbor zone (5500-7000)
+        if (isVisible(5650, 50)) drawGunShop(5650, time);
+        if (isVisible(5950, 100)) drawCarFactory(5950, time);
+        if (isVisible(6400, 80)) drawRundownMotel(6400, time);
+
         // Background houses scattered in the town zone
         var bgY = GROUND_Y - 12;
         var bgHouses = [
-            { x: 3400, y: bgY, w: 22, h: 18, color: '#5a4838' },
-            { x: 3600, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
-            { x: 3900, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
-            { x: 4100, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
-            { x: 4400, y: bgY, w: 22, h: 18, color: '#5a5040' },
-            { x: 4700, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
-            { x: 5000, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
-            { x: 5200, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
+            { x: 3450, y: bgY, w: 22, h: 18, color: '#5a4838' },
+            { x: 3700, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
+            { x: 4000, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
+            { x: 4200, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
+            { x: 4650, y: bgY, w: 22, h: 18, color: '#5a5040' },
+            { x: 4950, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
+            { x: 5100, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
+            { x: 5350, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
         ];
 
         for (var i = 0; i < bgHouses.length; i++) {
