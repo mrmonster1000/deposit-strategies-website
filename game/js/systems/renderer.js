@@ -2035,109 +2035,114 @@ GAME.Systems.Renderer = (function() {
         drawRect(x + bw - 3, BUILDING_FLOOR - 1, 1, 2, '#2a5020');
     }
 
+    var BLDG_SCALE = 2.0;
+
+    function drawScaledBuilding(drawFn, x, time) {
+        ctx.save();
+        ctx.translate(x, BUILDING_FLOOR);
+        ctx.scale(BLDG_SCALE, BLDG_SCALE);
+        ctx.translate(-x, -BUILDING_FLOOR);
+        drawFn(x, time);
+        ctx.restore();
+    }
+
     function drawBaseTownFeatures(time) {
-        // Derelict shack in the wilderness
-        if (isVisible(350, 40)) {
-            drawDerelictShack(350, time);
+        // Derelict shack in the wilderness (scaled)
+        if (isVisible(350, 70)) {
+            drawScaledBuilding(drawDerelictShack, 350, time);
         }
 
-        // --- SEEDY TOWN ESTABLISHMENTS (scaled up) ---
-        // Town zone (3200-5500) — spaced to avoid overlap with larger buildings
-        if (isVisible(3250, 100)) drawSeedyBar(3250, time);
-        if (isVisible(3450, 90)) drawVideoShop(3450, time);
-        if (isVisible(3650, 100)) drawSeedyArcade(3650, time);
-        if (isVisible(4050, 120)) drawSupermarket(4050, time);
-        if (isVisible(4750, 90)) drawStripClub(4750, time);
+        // --- SEEDY TOWN ESTABLISHMENTS at 2x scale ---
+        // Buildings grow upward and rightward from their origin
+        // Spacing accounts for 2x width: bar=160, video=144, arcade=168,
+        // super=200, strip=148, gun=132, factory=240, motel=200
+        if (isVisible(3240, 180)) drawScaledBuilding(drawSeedyBar, 3240, time);
+        if (isVisible(3500, 160)) drawScaledBuilding(drawVideoShop, 3500, time);
+        if (isVisible(3750, 180)) drawScaledBuilding(drawSeedyArcade, 3750, time);
+        if (isVisible(4050, 220)) drawScaledBuilding(drawSupermarket, 4050, time);
+        if (isVisible(4800, 160)) drawScaledBuilding(drawStripClub, 4800, time);
 
-        // Harbor zone (5500-7000)
-        if (isVisible(5600, 80)) drawGunShop(5600, time);
-        if (isVisible(5800, 180)) drawCarFactory(5800, time);
-        if (isVisible(6250, 140)) drawRundownMotel(6250, time);
+        // Harbor zone
+        if (isVisible(5580, 150)) drawScaledBuilding(drawGunShop, 5580, time);
+        if (isVisible(5850, 300)) drawScaledBuilding(drawCarFactory, 5850, time);
+        if (isVisible(6300, 240)) drawScaledBuilding(drawRundownMotel, 6300, time);
 
-        // Background houses scattered in the town zone (between major buildings)
+        // Background houses (these stay small — they're distant background)
         var bgY = GROUND_Y - 12;
         var bgHouses = [
-            { x: 3380, y: bgY, w: 22, h: 18, color: '#5a4838' },
-            { x: 3580, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
-            { x: 3800, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
-            { x: 4250, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
-            { x: 4450, y: bgY, w: 22, h: 18, color: '#5a5040' },
-            { x: 4650, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
-            { x: 4900, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
-            { x: 5200, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
-            { x: 5450, y: bgY, w: 22, h: 18, color: '#4a4a38' },
-            { x: 6100, y: bgY + 2, w: 20, h: 16, color: '#5a4a3a' },
+            { x: 3440, y: bgY, w: 22, h: 18, color: '#5a4838' },
+            { x: 3690, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
+            { x: 3950, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
+            { x: 4330, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
+            { x: 4550, y: bgY, w: 22, h: 18, color: '#5a5040' },
+            { x: 4700, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
+            { x: 5000, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
+            { x: 5250, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
+            { x: 5500, y: bgY, w: 22, h: 18, color: '#4a4a38' },
+            { x: 6180, y: bgY + 2, w: 20, h: 16, color: '#5a4a3a' },
         ];
 
         for (var i = 0; i < bgHouses.length; i++) {
             var h = bgHouses[i];
             if (!isVisible(h.x - 5, h.w + 10)) continue;
-            // Shadow
             drawRect(h.x + 2, h.y + 2, h.w, h.h, 'rgba(0,0,0,0.15)');
             drawRect(h.x, h.y, h.w, h.h, h.color);
             drawRect(h.x + 1, h.y + 1, h.w - 2, h.h - 2, lightenColor(h.color, 15));
             drawRect(h.x + h.w - 3, h.y, 3, h.h, darkenColor(h.color, 0.7));
-            // Roof with slight overhang
             drawRect(h.x - 2, h.y - 3, h.w + 4, 4, darkenColor(h.color, 0.6));
             drawRect(h.x - 1, h.y - 2, h.w + 2, 2, darkenColor(h.color, 0.7));
-            // Windows
             var lit = Math.sin(time * 0.001 + i * 2.7) > 0.1;
             drawRect(h.x + 3, h.y + 4, 5, 5, lit ? '#ffdd60' : '#302818');
             drawRect(h.x + h.w - 9, h.y + 4, 5, 5, lit ? '#ffcc40' : '#302818');
-            // Door
             drawRect(h.x + h.w / 2 - 2, h.y + h.h - 7, 4, 7, darkenColor(h.color, 0.4));
         }
 
-        // Church (scaled up)
-        var churchX = 4350;
-        if (isVisible(churchX - 15, 40)) {
+        // Church (also scaled via transform)
+        var churchX = 4400;
+        if (isVisible(churchX - 20, 80)) {
+            ctx.save();
+            ctx.translate(churchX, BUILDING_FLOOR);
+            ctx.scale(BLDG_SCALE, BLDG_SCALE);
+            ctx.translate(-churchX, -BUILDING_FLOOR);
+
             var churchY = GROUND_Y - 40;
             drawRect(churchX + 3, churchY + 3, 24, 44, 'rgba(0,0,0,0.2)');
             drawRect(churchX, churchY + 10, 24, 34, '#5a5060');
             drawRect(churchX + 1, churchY + 11, 22, 32, '#6a6070');
             drawRect(churchX - 3, churchY + 38, 30, 20, '#4a4050');
             drawRect(churchX - 2, churchY + 39, 28, 18, '#5a5060');
-            // Steeple
             drawRect(churchX + 7, churchY, 10, 14, '#6a6070');
             drawRect(churchX + 9, churchY - 8, 6, 10, '#7a7080');
             drawRect(churchX + 10, churchY - 14, 4, 8, '#8a8090');
-            // Cross
             drawRect(churchX + 11, churchY - 20, 2, 8, '#c0b890');
             drawRect(churchX + 9, churchY - 16, 6, 2, '#c0b890');
-            // Stained glass window
             drawRect(churchX + 8, churchY + 14, 8, 10, '#302040');
             drawRect(churchX + 9, churchY + 15, 6, 8, '#4040a0');
             drawRect(churchX + 11, churchY + 15, 2, 8, '#a04040');
-            // Church door
             drawRect(churchX + 7, churchY + 44, 10, 14, '#3a2820');
             drawRect(churchX + 8, churchY + 45, 8, 12, '#4a3830');
-            // Warm light from window
             ctx.fillStyle = 'rgba(255, 200, 100, 0.06)';
             ctx.fillRect(churchX + 6, churchY + 12, 12, 14);
+
+            ctx.restore();
         }
 
-        // Harbor/dock at the waterfront (enhanced)
+        // Harbor/dock at the waterfront
         if (isVisible(WATER_X - 80, 140)) {
-            // Dock structure
             drawRect(WATER_X - 80, GROUND_Y + 10, 75, 6, '#5a4020');
             drawRect(WATER_X - 80, GROUND_Y + 9, 75, 1, '#6a5030');
-            // Dock pilings
             for (var dp = 0; dp < 5; dp++) {
                 drawRect(WATER_X - 75 + dp * 16, GROUND_Y + 4, 4, 24, '#5a4020');
             }
-            // Bollards
             drawRect(WATER_X - 70, GROUND_Y + 6, 4, 4, '#505058');
             drawRect(WATER_X - 40, GROUND_Y + 6, 4, 4, '#505058');
-            // Fishing boat (bobbing)
             var boatBob = Math.sin(time * 0.0015) * 2;
             drawRect(WATER_X + 4, GROUND_Y + 10 + boatBob, 30, 8, '#6a3828');
             drawRect(WATER_X + 6, GROUND_Y + 8 + boatBob, 24, 4, '#7a4838');
             drawRect(WATER_X + 8, GROUND_Y + 6 + boatBob, 18, 3, '#8a5848');
-            // Mast and sail
             drawRect(WATER_X + 16, GROUND_Y - 8 + boatBob, 2, 18, '#8a7050');
             drawRect(WATER_X + 16, GROUND_Y - 8 + boatBob, 12, 7, '#e0d8d0');
             drawRect(WATER_X + 16, GROUND_Y - 6 + boatBob, 10, 5, '#d0c8c0');
-            // Rope from bollard to boat
             drawRect(WATER_X - 38, GROUND_Y + 8, 42, 1, '#8a7050');
         }
     }
