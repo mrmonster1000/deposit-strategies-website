@@ -7,8 +7,8 @@ GAME.Systems.Renderer = (function() {
     var canvas, ctx;
     var W = 960, H = 400;
 
-    // World dimensions — 8000px wide scrolling world
-    var WORLD_W = 8000;
+    // World dimensions — 12000px wide scrolling world
+    var WORLD_W = 12000;
 
     // Camera state
     var camera = {
@@ -65,16 +65,16 @@ GAME.Systems.Renderer = (function() {
     var BUILDING_FLOOR = 378;
     var ROAD_W = 24;
 
-    // Zone boundaries (world X coordinates) — 8000px world
+    // Zone boundaries (world X coordinates) — 12000px world
     var ZONES = {
         wilderness:  { left: 0,    right: 800,  name: 'Wilderness',    ground: '#1a3018', groundAlt: '#162a14' },
-        campus:      { left: 800,  right: 2800, name: 'AI Campus',     ground: '#1a3818', groundAlt: '#183416' },
-        road:        { left: 2800, right: 3200, name: '',               ground: '#3a3020', groundAlt: '#343020' },
-        town:        { left: 3200, right: 5500, name: 'Abundance Bay', ground: '#1e3418', groundAlt: '#1a3014' },
-        harbor:      { left: 5500, right: 7000, name: 'Harbor',        ground: '#2a2818', groundAlt: '#262416' },
-        ocean:       { left: 7000, right: 8000, name: '',               ground: '#0a1030', groundAlt: '#0a1030' }
+        campus:      { left: 800,  right: 3800, name: 'AI Campus',     ground: '#1a3818', groundAlt: '#183416' },
+        road:        { left: 3800, right: 4200, name: '',               ground: '#3a3020', groundAlt: '#343020' },
+        town:        { left: 4200, right: 7500, name: 'Abundance Bay', ground: '#1e3418', groundAlt: '#1a3014' },
+        harbor:      { left: 7500, right: 10000, name: 'Harbor',       ground: '#2a2818', groundAlt: '#262416' },
+        ocean:       { left: 10000, right: 12000, name: '',             ground: '#0a1030', groundAlt: '#0a1030' }
     };
-    var ROAD_X = 3000;
+    var ROAD_X = 4000;
     var WATER_X = ZONES.ocean.left;
     var CAMPUS_LEFT = ZONES.campus.left;
     var TOWN_RIGHT = ZONES.harbor.right;
@@ -85,6 +85,36 @@ GAME.Systems.Renderer = (function() {
 
     // Smoke particles
     var smokeParticles = [];
+
+    // Player character state
+    var player = {
+        x: 1400,
+        targetX: 1400,
+        walking: false,
+        direction: 1,
+        speed: 3.5,
+        characterId: null,
+        skinTone: '#e0c0a0',
+        hairColor: '#4a3020',
+        shirtColor: '#3a5a8a',
+        pantsColor: '#2a2a3a'
+    };
+    var cameraFollowPlayer = true;
+
+    // Permanent seedy building bounds (for overlap checks)
+    // These are the fixed town establishments at 2x scale
+    var PERMANENT_BUILDINGS = [
+        { x: 350, w: 140, name: 'Derelict Shack' },
+        { x: 4240, w: 320, name: 'Seedy Bar' },
+        { x: 4500, w: 290, name: 'Video Shop' },
+        { x: 4750, w: 340, name: 'Arcade' },
+        { x: 5050, w: 400, name: 'Supermarket' },
+        { x: 5400, w: 200, name: 'Church' },
+        { x: 5800, w: 300, name: 'Strip Club' },
+        { x: 7580, w: 270, name: 'Gun Shop' },
+        { x: 7850, w: 500, name: 'Car Factory' },
+        { x: 8300, w: 400, name: 'Motel' }
+    ];
 
     function init(canvasId) {
         canvas = document.getElementById(canvasId);
@@ -445,14 +475,16 @@ GAME.Systems.Renderer = (function() {
             { x: 50, s: 1.4 }, { x: 150, s: 1.1 }, { x: 280, s: 1.3 }, { x: 400, s: 0.9 },
             { x: 520, s: 1.2 }, { x: 650, s: 1.0 }, { x: 720, s: 1.5 },
             // Campus edges
-            { x: 840, s: 1.0 }, { x: 2700, s: 0.9 }, { x: 2760, s: 1.1 },
+            { x: 840, s: 1.0 }, { x: 3700, s: 0.9 }, { x: 3760, s: 1.1 },
             // Road area
-            { x: 2850, s: 0.8 }, { x: 3150, s: 0.9 },
+            { x: 3850, s: 0.8 }, { x: 4150, s: 0.9 },
             // Town
-            { x: 3300, s: 0.7 }, { x: 3800, s: 0.8 }, { x: 4200, s: 0.9 },
-            { x: 4600, s: 0.7 }, { x: 5000, s: 1.0 }, { x: 5300, s: 0.8 },
+            { x: 4300, s: 0.7 }, { x: 4800, s: 0.8 }, { x: 5200, s: 0.9 },
+            { x: 5600, s: 0.7 }, { x: 6000, s: 1.0 }, { x: 6300, s: 0.8 },
+            { x: 6600, s: 0.7 }, { x: 6900, s: 0.9 }, { x: 7200, s: 0.8 },
             // Harbor
-            { x: 5600, s: 0.7 }, { x: 6200, s: 0.8 }, { x: 6500, s: 0.6 },
+            { x: 7600, s: 0.7 }, { x: 8200, s: 0.8 }, { x: 8500, s: 0.6 },
+            { x: 8800, s: 0.7 }, { x: 9300, s: 0.8 },
         ];
 
         for (var ti = 0; ti < trees.length; ti++) {
@@ -464,7 +496,7 @@ GAME.Systems.Renderer = (function() {
 
         // Palm trees near the coast
         var palms = [
-            { x: 5800 }, { x: 6100 }, { x: 6400 }, { x: 6700 }, { x: 6900 }
+            { x: 7800 }, { x: 8100 }, { x: 8400 }, { x: 8700 }, { x: 9100 }, { x: 9500 }, { x: 9800 }
         ];
         for (var pi = 0; pi < palms.length; pi++) {
             if (isVisible(palms[pi].x - 15, 30)) {
@@ -557,29 +589,33 @@ GAME.Systems.Renderer = (function() {
     function drawEnvironmentProps(time) {
         var propY = SIDEWALK_Y + SIDEWALK_H;
 
-        // Town street props
+        // Town street props (shifted +1000 for expanded world)
         var props = [
-            { type: 'bench', x: 3260 },
-            { type: 'bin', x: 3370 },
-            { type: 'sign', x: 3500, text: 'HIGH ST' },
-            { type: 'bench', x: 3570 },
-            { type: 'phone', x: 3770 },
-            { type: 'bin', x: 3870 },
-            { type: 'bench', x: 4050 },
-            { type: 'post', x: 4180 },
-            { type: 'bus', x: 4250 },
-            { type: 'bin', x: 4420 },
-            { type: 'bench', x: 4620 },
-            { type: 'sign', x: 4780, text: 'DOCK RD' },
-            { type: 'bin', x: 4920 },
-            { type: 'bench', x: 5080 },
-            { type: 'phone', x: 5200 },
-            { type: 'bin', x: 5450 },
+            { type: 'bench', x: 4260 },
+            { type: 'bin', x: 4370 },
+            { type: 'sign', x: 4500, text: 'HIGH ST' },
+            { type: 'bench', x: 4570 },
+            { type: 'phone', x: 4770 },
+            { type: 'bin', x: 4870 },
+            { type: 'bench', x: 5050 },
+            { type: 'post', x: 5180 },
+            { type: 'bus', x: 5250 },
+            { type: 'bin', x: 5420 },
+            { type: 'bench', x: 5620 },
+            { type: 'sign', x: 5780, text: 'DOCK RD' },
+            { type: 'bin', x: 5920 },
+            { type: 'bench', x: 6080 },
+            { type: 'phone', x: 6200 },
+            { type: 'bin', x: 6450 },
+            { type: 'bench', x: 6800 },
+            { type: 'bin', x: 7100 },
             // Harbor
-            { type: 'sign', x: 5550, text: 'HARBOUR' },
-            { type: 'bin', x: 5800 },
-            { type: 'bench', x: 6100 },
-            { type: 'bin', x: 6350 },
+            { type: 'sign', x: 7550, text: 'HARBOUR' },
+            { type: 'bin', x: 7800 },
+            { type: 'bench', x: 8100 },
+            { type: 'bin', x: 8350 },
+            { type: 'bench', x: 8700 },
+            { type: 'bin', x: 9200 },
         ];
 
         for (var pi = 0; pi < props.length; pi++) {
@@ -597,13 +633,15 @@ GAME.Systems.Renderer = (function() {
 
         // Parked cars along the street
         var cars = [
-            { x: 3480, color: '#4a5a8a', f: 1 },
-            { x: 3820, color: '#8a4a3a', f: -1 },
-            { x: 4080, color: '#3a6a4a', f: 1 },
-            { x: 4700, color: '#6a6a6a', f: -1 },
-            { x: 5150, color: '#5a3a5a', f: 1 },
-            { x: 5700, color: '#7a5a3a', f: -1 },
-            { x: 6250, color: '#4a4a6a', f: 1 },
+            { x: 4480, color: '#4a5a8a', f: 1 },
+            { x: 4820, color: '#8a4a3a', f: -1 },
+            { x: 5180, color: '#3a6a4a', f: 1 },
+            { x: 5700, color: '#6a6a6a', f: -1 },
+            { x: 6150, color: '#5a3a5a', f: 1 },
+            { x: 6700, color: '#7a5a3a', f: -1 },
+            { x: 7250, color: '#4a4a6a', f: 1 },
+            { x: 8050, color: '#5a5a5a', f: -1 },
+            { x: 8500, color: '#8a6a4a', f: 1 },
         ];
 
         for (var ci = 0; ci < cars.length; ci++) {
@@ -614,7 +652,7 @@ GAME.Systems.Renderer = (function() {
         }
 
         // Puddles (scattered, subtle)
-        var puddles = [3290, 3750, 4150, 4900, 5400, 6000];
+        var puddles = [4290, 4750, 5150, 5900, 6400, 7000, 8200, 8800];
         for (var pdi = 0; pdi < puddles.length; pdi++) {
             var px = puddles[pdi];
             if (isVisible(px - 5, 20)) {
@@ -2048,38 +2086,40 @@ GAME.Systems.Renderer = (function() {
 
     function drawBaseTownFeatures(time) {
         // Derelict shack in the wilderness (scaled)
-        if (isVisible(350, 70)) {
+        if (isVisible(350, 140)) {
             drawScaledBuilding(drawDerelictShack, 350, time);
         }
 
         // --- SEEDY TOWN ESTABLISHMENTS at 2x scale ---
-        // Buildings grow upward and rightward from their origin
-        // Spacing accounts for 2x width: bar=160, video=144, arcade=168,
-        // super=200, strip=148, gun=132, factory=240, motel=200
-        if (isVisible(3240, 180)) drawScaledBuilding(drawSeedyBar, 3240, time);
-        if (isVisible(3500, 160)) drawScaledBuilding(drawVideoShop, 3500, time);
-        if (isVisible(3750, 180)) drawScaledBuilding(drawSeedyArcade, 3750, time);
-        if (isVisible(4050, 220)) drawScaledBuilding(drawSupermarket, 4050, time);
-        if (isVisible(4800, 160)) drawScaledBuilding(drawStripClub, 4800, time);
+        // Town zone shifted: now starts at 4200
+        // Spacing accounts for 2x width with gaps for player-placed buildings
+        if (isVisible(4240, 320)) drawScaledBuilding(drawSeedyBar, 4240, time);
+        if (isVisible(4500, 290)) drawScaledBuilding(drawVideoShop, 4500, time);
+        if (isVisible(4750, 340)) drawScaledBuilding(drawSeedyArcade, 4750, time);
+        if (isVisible(5050, 400)) drawScaledBuilding(drawSupermarket, 5050, time);
+        if (isVisible(5800, 300)) drawScaledBuilding(drawStripClub, 5800, time);
 
         // Harbor zone
-        if (isVisible(5580, 150)) drawScaledBuilding(drawGunShop, 5580, time);
-        if (isVisible(5850, 300)) drawScaledBuilding(drawCarFactory, 5850, time);
-        if (isVisible(6300, 240)) drawScaledBuilding(drawRundownMotel, 6300, time);
+        if (isVisible(7580, 270)) drawScaledBuilding(drawGunShop, 7580, time);
+        if (isVisible(7850, 500)) drawScaledBuilding(drawCarFactory, 7850, time);
+        if (isVisible(8300, 400)) drawScaledBuilding(drawRundownMotel, 8300, time);
 
         // Background houses (these stay small — they're distant background)
         var bgY = GROUND_Y - 12;
         var bgHouses = [
-            { x: 3440, y: bgY, w: 22, h: 18, color: '#5a4838' },
-            { x: 3690, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
-            { x: 3950, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
-            { x: 4330, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
-            { x: 4550, y: bgY, w: 22, h: 18, color: '#5a5040' },
-            { x: 4700, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
-            { x: 5000, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
-            { x: 5250, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
-            { x: 5500, y: bgY, w: 22, h: 18, color: '#4a4a38' },
-            { x: 6180, y: bgY + 2, w: 20, h: 16, color: '#5a4a3a' },
+            { x: 4440, y: bgY, w: 22, h: 18, color: '#5a4838' },
+            { x: 4690, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
+            { x: 4950, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
+            { x: 5330, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
+            { x: 5550, y: bgY, w: 22, h: 18, color: '#5a5040' },
+            { x: 5700, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
+            { x: 6000, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
+            { x: 6250, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
+            { x: 6500, y: bgY, w: 22, h: 18, color: '#4a4a38' },
+            { x: 7200, y: bgY + 2, w: 20, h: 16, color: '#5a4a3a' },
+            { x: 8600, y: bgY - 1, w: 22, h: 18, color: '#5a4838' },
+            { x: 8900, y: bgY + 1, w: 24, h: 20, color: '#4a4a38' },
+            { x: 9200, y: bgY - 3, w: 20, h: 16, color: '#5a4a4a' },
         ];
 
         for (var i = 0; i < bgHouses.length; i++) {
@@ -2098,8 +2138,8 @@ GAME.Systems.Renderer = (function() {
         }
 
         // Church (also scaled via transform)
-        var churchX = 4400;
-        if (isVisible(churchX - 20, 80)) {
+        var churchX = 5400;
+        if (isVisible(churchX - 20, 200)) {
             ctx.save();
             ctx.translate(churchX, BUILDING_FLOOR);
             ctx.scale(BLDG_SCALE, BLDG_SCALE);
@@ -2295,14 +2335,124 @@ GAME.Systems.Renderer = (function() {
 
     // Named NPC positions and data
     var TOWN_NPCS = [
-        { id: 'betty_cafe', x: 3400, name: 'Betty', portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#a03030', glasses: false, beard: false } },
-        { id: 'pub_landlord', x: 3320, name: 'Mick', portrait: { skinTone: '#e8c090', hairColor: '#604020', hairStyle: 'short', shirtColor: '#a06030', glasses: false, beard: true } },
-        { id: 'teen_zara', x: 3740, name: 'Zara', portrait: { skinTone: '#a07040', hairColor: '#202020', hairStyle: 'short', shirtColor: '#3060a0', glasses: false, beard: false } },
-        { id: 'mayor_patricia', x: 4200, name: 'Mayor', portrait: { skinTone: '#e8c890', hairColor: '#885530', hairStyle: 'short', shirtColor: '#304080', glasses: true, beard: false } },
-        { id: 'reverend_james', x: 4400, name: 'Rev. James', portrait: { skinTone: '#f0d0a0', hairColor: '#505050', hairStyle: 'short', shirtColor: '#202020', glasses: true, beard: false } },
-        { id: 'old_arthur', x: 5700, name: 'Arthur', portrait: { skinTone: '#e8c090', hairColor: '#c0c0c0', hairStyle: 'receding', shirtColor: '#606040', glasses: true, beard: true } },
-        { id: 'frank_fisherman', x: 6800, name: 'Frank', portrait: { skinTone: '#d0a060', hairColor: '#888888', hairStyle: 'receding', shirtColor: '#404060', glasses: false, beard: true } },
+        { id: 'betty_cafe', x: 4400, name: 'Betty', portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#a03030', glasses: false, beard: false } },
+        { id: 'pub_landlord', x: 4320, name: 'Mick', portrait: { skinTone: '#e8c090', hairColor: '#604020', hairStyle: 'short', shirtColor: '#a06030', glasses: false, beard: true } },
+        { id: 'teen_zara', x: 4740, name: 'Zara', portrait: { skinTone: '#a07040', hairColor: '#202020', hairStyle: 'short', shirtColor: '#3060a0', glasses: false, beard: false } },
+        { id: 'mayor_patricia', x: 5200, name: 'Mayor', portrait: { skinTone: '#e8c890', hairColor: '#885530', hairStyle: 'short', shirtColor: '#304080', glasses: true, beard: false } },
+        { id: 'reverend_james', x: 5450, name: 'Rev. James', portrait: { skinTone: '#f0d0a0', hairColor: '#505050', hairStyle: 'short', shirtColor: '#202020', glasses: true, beard: false } },
+        { id: 'old_arthur', x: 7700, name: 'Arthur', portrait: { skinTone: '#e8c090', hairColor: '#c0c0c0', hairStyle: 'receding', shirtColor: '#606040', glasses: true, beard: true } },
+        { id: 'frank_fisherman', x: 9800, name: 'Frank', portrait: { skinTone: '#d0a060', hairColor: '#888888', hairStyle: 'receding', shirtColor: '#404060', glasses: false, beard: true } },
     ];
+
+    // =========================================================================
+    //  PLAYER CHARACTER
+    // =========================================================================
+
+    function initPlayer(characterId) {
+        player.characterId = characterId;
+        player.x = ZONES.campus.left + 200;
+        player.targetX = player.x;
+        player.walking = false;
+
+        var charColors = {
+            dario:  { skin: '#e0c0a0', hair: '#4a3020', shirt: '#3a5a8a', pants: '#2a2a3a' },
+            sam:    { skin: '#f0d0a0', hair: '#604020', shirt: '#8a5a3a', pants: '#2a2a3a' },
+            yann:   { skin: '#f0d0a0', hair: '#303030', shirt: '#5a3a8a', pants: '#2a2a4a' },
+            elon:   { skin: '#e8c8a0', hair: '#303030', shirt: '#2a2a2a', pants: '#2a2a3a' },
+            demis:  { skin: '#e0c090', hair: '#202020', shirt: '#3a7a5a', pants: '#2a3a3a' }
+        };
+        var c = charColors[characterId] || charColors.dario;
+        player.skinTone = c.skin;
+        player.hairColor = c.hair;
+        player.shirtColor = c.shirt;
+        player.pantsColor = c.pants;
+    }
+
+    function updatePlayer(dt) {
+        if (!player.walking) return;
+        var dx = player.targetX - player.x;
+        var dist = Math.abs(dx);
+        if (dist < 2) {
+            player.x = player.targetX;
+            player.walking = false;
+            return;
+        }
+        player.direction = dx > 0 ? 1 : -1;
+        player.x += player.direction * player.speed * (dt / 16);
+        player.x = Math.max(20, Math.min(WORLD_W - 20, player.x));
+    }
+
+    function drawPlayer(time) {
+        var sz = 2.8;
+        var px = Math.floor(player.x);
+        var baseY = SIDEWALK_Y + SIDEWALK_H + 2;
+        var headW = Math.floor(6 * sz);
+        var headH = Math.floor(6 * sz);
+        var bodyW = Math.floor(7 * sz);
+        var bodyH = Math.floor(9 * sz);
+        var legW = Math.floor(3 * sz);
+        var legH = Math.floor(5 * sz);
+        var armW = Math.floor(3 * sz);
+        var armH = Math.floor(6 * sz);
+        var totalH = headH + bodyH + legH;
+
+        var walkAnim = player.walking ? Math.sin(time * 0.012) : 0;
+        var bob = player.walking ? Math.abs(walkAnim) * 2 : Math.sin(time * 0.003) * 0.5;
+        var drawX = player.direction < 0 ? px - bodyW : px;
+
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.25)';
+        ctx.fillRect(drawX - 2, baseY + legH, bodyW + 4, 3);
+
+        // Legs (walk animation)
+        var legFrame = Math.floor(walkAnim * 3);
+        ctx.fillStyle = player.pantsColor;
+        ctx.fillRect(drawX + 2, baseY - legH + legFrame, legW, legH - legFrame);
+        ctx.fillRect(drawX + bodyW - legW - 2, baseY - legH - legFrame, legW, legH + legFrame);
+
+        // Shoes
+        ctx.fillStyle = '#1a1a20';
+        ctx.fillRect(drawX + 1, baseY, legW + 2, Math.floor(2 * sz));
+        ctx.fillRect(drawX + bodyW - legW - 2, baseY + (player.walking ? -legFrame : 0), legW + 2, Math.floor(2 * sz));
+
+        // Body
+        ctx.fillStyle = player.shirtColor;
+        ctx.fillRect(drawX, baseY - legH - bodyH - bob, bodyW, bodyH);
+        // Collar/detail
+        ctx.fillStyle = lightenColor(player.shirtColor, 20);
+        ctx.fillRect(drawX + bodyW / 2 - 2, baseY - legH - bodyH - bob, 4, 3);
+
+        // Arms (swing with walk)
+        var armSwing = Math.floor(walkAnim * 3);
+        ctx.fillStyle = player.shirtColor;
+        ctx.fillRect(drawX - armW, baseY - legH - bodyH + 2 + armSwing - bob, armW, armH);
+        ctx.fillRect(drawX + bodyW, baseY - legH - bodyH + 2 - armSwing - bob, armW, armH);
+        // Hands
+        ctx.fillStyle = player.skinTone;
+        ctx.fillRect(drawX - armW, baseY - legH - bodyH + armH + 1 + armSwing - bob, armW, Math.floor(2.5 * sz));
+        ctx.fillRect(drawX + bodyW, baseY - legH - bodyH + armH + 1 - armSwing - bob, armW, Math.floor(2.5 * sz));
+
+        // Head
+        ctx.fillStyle = player.skinTone;
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, headH);
+        // Eyes (facing direction)
+        var eyeOffset = player.direction > 0 ? 2 : -2;
+        ctx.fillStyle = '#202020';
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + 3 + eyeOffset, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + headW - 5 + eyeOffset, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
+        // Hair
+        ctx.fillStyle = player.hairColor;
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, Math.floor(3 * sz));
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) - 1, baseY - totalH + Math.floor(2 * sz) - bob, 1, Math.floor(2 * sz));
+        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + headW, baseY - totalH + Math.floor(2 * sz) - bob, 1, Math.floor(2 * sz));
+
+        // Name label
+        var charName = player.characterId ? player.characterId.charAt(0).toUpperCase() + player.characterId.slice(1) : 'You';
+        ctx.font = '5px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffdd44';
+        ctx.textAlign = 'center';
+        ctx.fillText(charName, drawX + bodyW / 2, baseY - totalH - 10 - bob);
+    }
 
     function drawWorkers(state, time) {
         if (!state) return;
@@ -2398,6 +2548,10 @@ GAME.Systems.Renderer = (function() {
             }
         }
 
+        // Player dot on minimap
+        ctx.fillStyle = '#ffdd44';
+        ctx.fillRect(mx + player.x * scale - 1, my + 2, 3, mh - 4);
+
         // Viewport indicator
         ctx.strokeStyle = '#ffdd44';
         ctx.lineWidth = 1;
@@ -2411,6 +2565,14 @@ GAME.Systems.Renderer = (function() {
 
     function drawGameScene(state, time) {
         clear();
+
+        // Update player movement
+        updatePlayer(16);
+
+        // Camera follows player
+        if (cameraFollowPlayer && !camera.isDragging) {
+            camera.targetX = player.x - W / 2;
+        }
         updateCamera();
 
         // PASS 1: Background (screen-relative, no translate)
@@ -2431,6 +2593,7 @@ GAME.Systems.Renderer = (function() {
         drawSceneryDetails(time);
         drawEnvironmentProps(time);
         drawWorkers(state, time);
+        drawPlayer(time);
         drawSeagulls(time);
         updateAndDrawSmoke(time);
 
@@ -2801,6 +2964,21 @@ GAME.Systems.Renderer = (function() {
         },
 
         // Get NPC list for external use
-        getTownNPCs: function() { return TOWN_NPCS; }
+        getTownNPCs: function() { return TOWN_NPCS; },
+
+        // Player API
+        initPlayer: initPlayer,
+        setPlayerTarget: function(worldX) {
+            player.targetX = Math.max(20, Math.min(WORLD_W - 20, worldX));
+            player.walking = true;
+            cameraFollowPlayer = true;
+        },
+        getPlayerX: function() { return player.x; },
+        isPlayerWalking: function() { return player.walking; },
+        stopCameraFollow: function() { cameraFollowPlayer = false; },
+        resumeCameraFollow: function() { cameraFollowPlayer = true; },
+
+        // Permanent building bounds for overlap checking
+        getPermanentBuildings: function() { return PERMANENT_BUILDINGS; }
     };
 })();

@@ -214,9 +214,10 @@ window.GAME = window.GAME || {};
             if (currentScreen !== 'game') return;
             var c = getCanvasCoords(e);
 
-            // Check minimap click
+            // Check minimap click — stop following player
             var mm = Renderer.getMinimapBounds();
             if (c.x >= mm.x && c.x <= mm.x + mm.w && c.y >= mm.y && c.y <= mm.y + mm.h) {
+                Renderer.stopCameraFollow();
                 var ratio = (c.x - mm.x) / mm.w;
                 Renderer.setCameraTarget(ratio * Renderer.WORLD_W - 480);
                 return;
@@ -237,6 +238,12 @@ window.GAME = window.GAME || {};
             var npcId = Renderer.hitTestNPC(world.x, world.y);
             if (npcId) {
                 handleNPCClick(npcId);
+                return;
+            }
+
+            // Click on ground area → walk player there
+            if (c.y > 180 && c.y < 420) {
+                Renderer.setPlayerTarget(world.x);
                 return;
             }
 
@@ -320,6 +327,13 @@ window.GAME = window.GAME || {};
             var eDims = Renderer.getBuildingDimensions(eData, existing.isTown);
             var eX = existing.worldX || 0;
             if (worldX < eX + eDims.w + 5 && worldX + bw + 5 > eX) return false;
+        }
+
+        // Check overlap with permanent seedy buildings
+        var permanent = Renderer.getPermanentBuildings();
+        for (var p = 0; p < permanent.length; p++) {
+            var pb = permanent[p];
+            if (worldX < pb.x + pb.w + 5 && worldX + bw + 5 > pb.x) return false;
         }
         return true;
     }
@@ -482,6 +496,9 @@ window.GAME = window.GAME || {};
         showScreen('game');
         setupGameUI();
 
+        // Init player character
+        Renderer.initPlayer(charId);
+
         // Draw player portrait
         Renderer.drawPortrait(charId, document.getElementById('portrait-canvas'), 96);
 
@@ -501,6 +518,7 @@ window.GAME = window.GAME || {};
         var state = State.get();
         showScreen('game');
         setupGameUI();
+        Renderer.initPlayer(state.characterId);
         Renderer.drawPortrait(state.characterId, document.getElementById('portrait-canvas'), 96);
         Sound.playMusicLoop();
         showToast('Game loaded — ' + State.getDateString(), 'success');
