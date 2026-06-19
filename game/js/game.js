@@ -232,6 +232,14 @@ window.GAME = window.GAME || {};
                 return;
             }
 
+            // Check NPC click
+            var world = Renderer.screenToWorld(c.x, c.y);
+            var npcId = Renderer.hitTestNPC(world.x, world.y);
+            if (npcId) {
+                handleNPCClick(npcId);
+                return;
+            }
+
             Renderer.onMouseDown(c.x, c.y);
         });
 
@@ -698,6 +706,32 @@ window.GAME = window.GAME || {};
 
     function placeBuilding(buildingId, worldX, isTown) {
         State.addBuilding(buildingId, worldX, isTown);
+    }
+
+    function handleNPCClick(npcId) {
+        var townsfolk = GAME.DATA.TOWN && GAME.DATA.TOWN.townsfolk ? GAME.DATA.TOWN.townsfolk[npcId] : null;
+        if (!townsfolk) return;
+
+        // Check if there's a specific dialogue for this character
+        var dialogueMap = {
+            'frank_fisherman': 'frank_protest',
+            'betty_cafe': 'betty_opportunity',
+            'teen_zara': 'zara_internship',
+            'old_arthur': 'arthur_challenge',
+            'reverend_james': 'reverend_soul',
+            'pub_landlord': 'pub_philosophy',
+            'mayor_patricia': 'frank_protest'
+        };
+
+        var dialogueId = dialogueMap[npcId];
+        if (dialogueId && GAME.DATA.DIALOGUES && GAME.DATA.DIALOGUES[dialogueId] && Dialogue) {
+            Dialogue.startDialogue(dialogueId);
+        } else {
+            // Show a random quote from the townsfolk
+            var quotes = townsfolk.quotes || [];
+            var quote = quotes[Math.floor(Math.random() * quotes.length)] || 'Hello there.';
+            showToast(townsfolk.name + ': "' + quote + '"', 'info');
+        }
     }
 
     function showAbilityMenu() {
