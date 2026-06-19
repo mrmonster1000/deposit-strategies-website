@@ -147,7 +147,7 @@ GAME.Systems.State = (function() {
         });
     }
 
-    function addBuilding(buildingId, gridX, gridY, isTown) {
+    function addBuilding(buildingId, worldX, isTown) {
         var source = isTown ? GAME.DATA.TOWN.buildings : GAME.DATA.BUILDINGS;
         var bData = source[buildingId];
         if (!bData) return false;
@@ -159,8 +159,7 @@ GAME.Systems.State = (function() {
 
         var placed = {
             type: buildingId,
-            gridX: gridX,
-            gridY: gridY,
+            worldX: worldX,
             isTown: !!isTown,
             builtDay: state.day,
             builtYear: state.year,

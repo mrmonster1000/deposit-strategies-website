@@ -7,6 +7,23 @@ GAME.Systems.Renderer = (function() {
     var canvas, ctx;
     var W = 960, H = 400;
 
+    // World dimensions — 8000px wide scrolling world
+    var WORLD_W = 8000;
+
+    // Camera state
+    var camera = {
+        x: 800,
+        targetX: 800,
+        isDragging: false,
+        dragStartX: 0,
+        dragStartCamX: 0,
+        mouseX: 0,
+        mouseY: 0
+    };
+
+    // Placement mode state
+    var placementMode = null;
+
     // Monkey Island inspired palette
     var COLORS = {
         sky: {
@@ -43,14 +60,24 @@ GAME.Systems.Renderer = (function() {
         }
     };
 
-    // Layout constants
-    var GROUND_Y = 200;       // where the ground plane starts (pushed up for bigger buildings)
-    var WATER_X = 780;        // where the ocean begins (right edge)
-    var ROAD_X = 460;         // center dividing line (campus | town)
-    var ROAD_W = 20;          // road width
-    var BUILDING_FLOOR = 378; // bottom of building area
-    var CAMPUS_LEFT = 20;     // left edge of campus area
-    var TOWN_RIGHT = 760;     // right edge of town area
+    // Layout constants (Y axis unchanged, X axis now world coordinates)
+    var GROUND_Y = 200;
+    var BUILDING_FLOOR = 378;
+    var ROAD_W = 24;
+
+    // Zone boundaries (world X coordinates) — 8000px world
+    var ZONES = {
+        wilderness:  { left: 0,    right: 800,  name: 'Wilderness',    ground: '#1a3018', groundAlt: '#162a14' },
+        campus:      { left: 800,  right: 2800, name: 'AI Campus',     ground: '#1a3818', groundAlt: '#183416' },
+        road:        { left: 2800, right: 3200, name: '',               ground: '#3a3020', groundAlt: '#343020' },
+        town:        { left: 3200, right: 5500, name: 'Abundance Bay', ground: '#1e3418', groundAlt: '#1a3014' },
+        harbor:      { left: 5500, right: 7000, name: 'Harbor',        ground: '#2a2818', groundAlt: '#262416' },
+        ocean:       { left: 7000, right: 8000, name: '',               ground: '#0a1030', groundAlt: '#0a1030' }
+    };
+    var ROAD_X = 3000;
+    var WATER_X = ZONES.ocean.left;
+    var CAMPUS_LEFT = ZONES.campus.left;
+    var TOWN_RIGHT = ZONES.harbor.right;
 
     // Seagull state (persistent between frames)
     var seagulls = [];
@@ -120,6 +147,22 @@ GAME.Systems.Renderer = (function() {
         return x - Math.floor(x);
     }
 
+    // Viewport culling — skip off-screen world objects
+    function isVisible(worldX, width) {
+        return (worldX + width > camera.x) && (worldX < camera.x + W);
+    }
+
+    function clampCamera() {
+        camera.x = Math.max(0, Math.min(WORLD_W - W, camera.x));
+        camera.targetX = Math.max(0, Math.min(WORLD_W - W, camera.targetX));
+    }
+
+    function updateCamera() {
+        camera.x += (camera.targetX - camera.x) * 0.12;
+        if (Math.abs(camera.x - camera.targetX) < 0.5) camera.x = camera.targetX;
+        clampCamera();
+    }
+
     // =========================================================================
     //  SKY, STARS, ATMOSPHERE
     // =========================================================================
@@ -172,25 +215,21 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawOcean(time) {
-        // Ocean fills the right edge of the scene behind/beside the town
+        if (!isVisible(WATER_X - 10, WORLD_W - WATER_X + 10)) return;
         var oceanLeft = WATER_X;
-        var oceanTop = 180; // starts at the horizon
+        var oceanTop = 160;
 
-        // Deep water base
-        drawRect(oceanLeft, oceanTop, W - oceanLeft, H - oceanTop, COLORS.sea.deep);
+        drawRect(oceanLeft, oceanTop, WORLD_W - oceanLeft, H - oceanTop, COLORS.sea.deep);
 
-        // Animated wave bands
-        for (var row = 0; row < 30; row++) {
+        for (var row = 0; row < 35; row++) {
             var y = oceanTop + row * 7;
             if (y > H) break;
             var waveOffset = Math.sin(time * 0.0015 + row * 0.8) * 3;
             var alpha = 0.08 + Math.sin(time * 0.001 + row * 0.5) * 0.04;
 
-            // Wave highlight line
             ctx.fillStyle = 'rgba(48, 72, 120, ' + alpha + ')';
-            ctx.fillRect(oceanLeft + waveOffset, y, W - oceanLeft, 2);
+            ctx.fillRect(oceanLeft + waveOffset, y, WORLD_W - oceanLeft, 2);
 
-            // Occasional foam
             if (row % 4 === 0) {
                 var foamX = oceanLeft + 5 + Math.sin(time * 0.001 + row) * 8;
                 ctx.fillStyle = 'rgba(80, 110, 160, ' + (alpha * 1.5) + ')';
@@ -198,7 +237,6 @@ GAME.Systems.Renderer = (function() {
             }
         }
 
-        // Shore line where water meets land
         var shoreWave = Math.sin(time * 0.002) * 2;
         ctx.fillStyle = COLORS.sea.foam;
         ctx.fillRect(oceanLeft - 2 + shoreWave, GROUND_Y, 4, H - GROUND_Y);
@@ -209,73 +247,92 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawHills(time) {
-        // Far hills (dark, behind everything)
+        var startX = Math.max(0, Math.floor(camera.x / 4) * 4 - 20);
+        var endX = Math.min(WATER_X + 20, camera.x + W + 20);
+
+        // Far hills with parallax (slower scroll)
         ctx.fillStyle = COLORS.hills.far;
         ctx.beginPath();
-        ctx.moveTo(0, 170);
-        for (var x = 0; x <= WATER_X + 20; x += 4) {
-            var hx = 170 - Math.sin(x * 0.008) * 22 - Math.sin(x * 0.015 + 2) * 12 - Math.cos(x * 0.003) * 8;
+        ctx.moveTo(startX, 170);
+        for (var x = startX; x <= endX; x += 4) {
+            var hx = 170 - Math.sin(x * 0.004) * 22 - Math.sin(x * 0.007 + 2) * 12 - Math.cos(x * 0.002) * 8;
             ctx.lineTo(x, hx);
         }
-        ctx.lineTo(WATER_X + 20, H);
-        ctx.lineTo(0, H);
+        ctx.lineTo(endX, H);
+        ctx.lineTo(startX, H);
         ctx.fill();
 
         // Mid hills
         ctx.fillStyle = COLORS.hills.mid;
         ctx.beginPath();
-        ctx.moveTo(0, 188);
-        for (var x2 = 0; x2 <= WATER_X + 10; x2 += 4) {
-            var hy = 188 - Math.sin(x2 * 0.012 + 1) * 16 - Math.cos(x2 * 0.006) * 10;
+        ctx.moveTo(startX, 188);
+        for (var x2 = startX; x2 <= endX; x2 += 4) {
+            var hy = 188 - Math.sin(x2 * 0.006 + 1) * 16 - Math.cos(x2 * 0.003) * 10;
             ctx.lineTo(x2, hy);
         }
-        ctx.lineTo(WATER_X + 10, H);
-        ctx.lineTo(0, H);
+        ctx.lineTo(endX, H);
+        ctx.lineTo(startX, H);
         ctx.fill();
 
         // Near hills / ground level
         ctx.fillStyle = COLORS.hills.near;
         ctx.beginPath();
-        ctx.moveTo(0, GROUND_Y);
-        for (var x3 = 0; x3 <= WATER_X + 5; x3 += 4) {
-            var gy = GROUND_Y - Math.sin(x3 * 0.02 + 3) * 6 - Math.cos(x3 * 0.01) * 4;
+        ctx.moveTo(startX, GROUND_Y);
+        for (var x3 = startX; x3 <= endX; x3 += 4) {
+            var gy = GROUND_Y - Math.sin(x3 * 0.01 + 3) * 6 - Math.cos(x3 * 0.005) * 4;
             ctx.lineTo(x3, gy);
         }
-        ctx.lineTo(WATER_X + 5, H);
-        ctx.lineTo(0, H);
+        ctx.lineTo(endX, H);
+        ctx.lineTo(startX, H);
         ctx.fill();
     }
 
     function drawGround(time) {
-        // Main ground plane
-        drawRect(0, GROUND_Y, WATER_X, H - GROUND_Y, COLORS.ground.grass);
-
-        // Grass texture strips
-        for (var i = 0; i < 30; i++) {
-            var gx = seededRandom(i * 37) * WATER_X;
-            var gy = GROUND_Y + 5 + seededRandom(i * 53) * (H - GROUND_Y - 10);
-            ctx.fillStyle = 'rgba(40, 90, 40, 0.3)';
-            ctx.fillRect(gx, gy, 8 + seededRandom(i * 71) * 12, 1);
+        // Draw zone-colored ground bands
+        var zoneKeys = ['wilderness', 'campus', 'road', 'town', 'harbor'];
+        for (var zi = 0; zi < zoneKeys.length; zi++) {
+            var zone = ZONES[zoneKeys[zi]];
+            if (!isVisible(zone.left, zone.right - zone.left)) continue;
+            drawRect(zone.left, GROUND_Y, zone.right - zone.left, H - GROUND_Y, zone.ground);
+            // Subtle alternating strips for texture
+            for (var sx = zone.left; sx < zone.right; sx += 80) {
+                if ((sx / 80) % 2 === 0) {
+                    drawRect(sx, GROUND_Y, 40, H - GROUND_Y, zone.groundAlt);
+                }
+            }
         }
 
-        // Dirt patches
-        for (var j = 0; j < 8; j++) {
-            var dx = seededRandom(j * 97 + 200) * WATER_X;
-            var dy = GROUND_Y + 20 + seededRandom(j * 113 + 200) * 80;
-            ctx.fillStyle = 'rgba(42, 40, 24, 0.25)';
-            ctx.fillRect(dx, dy, 15 + seededRandom(j * 127) * 20, 3);
+        // Grass texture strips (scattered across visible world)
+        var visStart = Math.floor(camera.x / 200) * 200;
+        for (var chunk = visStart; chunk < camera.x + W + 200; chunk += 200) {
+            for (var i = 0; i < 5; i++) {
+                var seed = chunk * 7 + i * 37;
+                var gx = chunk + seededRandom(seed) * 200;
+                var gy = GROUND_Y + 5 + seededRandom(seed + 53) * (H - GROUND_Y - 10);
+                if (gx < WATER_X) {
+                    ctx.fillStyle = 'rgba(40, 90, 40, 0.3)';
+                    ctx.fillRect(gx, gy, 8 + seededRandom(seed + 71) * 12, 1);
+                }
+            }
+        }
+
+        // Zone labels (drawn at ground level)
+        for (var zl = 0; zl < zoneKeys.length; zl++) {
+            var zn = ZONES[zoneKeys[zl]];
+            if (!zn.name) continue;
+            var labelX = (zn.left + zn.right) / 2;
+            if (isVisible(labelX - 60, 120)) {
+                drawText(zn.name, labelX, GROUND_Y + 4, { size: 6, color: 'rgba(255,255,255,0.15)', align: 'center' });
+            }
         }
     }
 
     function drawRoad(time) {
-        // Vertical road separating campus from town
+        if (!isVisible(ROAD_X - 10, ROAD_W + 20)) return;
         var rx = ROAD_X;
-        // Main road surface
         drawRect(rx, GROUND_Y, ROAD_W, H - GROUND_Y, COLORS.ground.path);
-        // Road edges
         drawRect(rx, GROUND_Y, 2, H - GROUND_Y, COLORS.ground.pathLight);
         drawRect(rx + ROAD_W - 2, GROUND_Y, 2, H - GROUND_Y, COLORS.ground.pathLight);
-        // Center dashes
         for (var dy = GROUND_Y + 5; dy < H; dy += 16) {
             drawRect(rx + ROAD_W / 2 - 1, dy, 2, 8, '#5a5030');
         }
@@ -340,24 +397,50 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawSceneryDetails(time) {
-        // Trees scattered around
-        drawTree(40, BUILDING_FLOOR, 1.2);
-        drawTree(100, BUILDING_FLOOR + 5, 0.9);
-        drawTree(440, BUILDING_FLOOR, 1.0);
-        drawTree(500, BUILDING_FLOOR + 3, 0.8);
-        drawTree(690, BUILDING_FLOOR - 2, 1.1);
-        drawTree(750, BUILDING_FLOOR + 5, 0.7);
+        // Procedural trees across the world
+        var trees = [
+            // Wilderness
+            { x: 50, s: 1.4 }, { x: 150, s: 1.1 }, { x: 280, s: 1.3 }, { x: 400, s: 0.9 },
+            { x: 520, s: 1.2 }, { x: 650, s: 1.0 }, { x: 720, s: 1.5 },
+            // Campus edges
+            { x: 840, s: 1.0 }, { x: 2700, s: 0.9 }, { x: 2760, s: 1.1 },
+            // Road area
+            { x: 2850, s: 0.8 }, { x: 3150, s: 0.9 },
+            // Town
+            { x: 3300, s: 0.7 }, { x: 3800, s: 0.8 }, { x: 4200, s: 0.9 },
+            { x: 4600, s: 0.7 }, { x: 5000, s: 1.0 }, { x: 5300, s: 0.8 },
+            // Harbor
+            { x: 5600, s: 0.7 }, { x: 6200, s: 0.8 }, { x: 6500, s: 0.6 },
+        ];
+
+        for (var ti = 0; ti < trees.length; ti++) {
+            var t = trees[ti];
+            if (isVisible(t.x - 20, 40)) {
+                drawTree(t.x, BUILDING_FLOOR, t.s);
+            }
+        }
 
         // Palm trees near the coast
-        drawPalmTree(770, BUILDING_FLOOR - 5);
+        var palms = [
+            { x: 5800 }, { x: 6100 }, { x: 6400 }, { x: 6700 }, { x: 6900 }
+        ];
+        for (var pi = 0; pi < palms.length; pi++) {
+            if (isVisible(palms[pi].x - 15, 30)) {
+                drawPalmTree(palms[pi].x, BUILDING_FLOOR - 5);
+            }
+        }
 
-        // Lampposts
-        drawLamppost(200, BUILDING_FLOOR, time);
-        drawLamppost(ROAD_X + ROAD_W / 2, BUILDING_FLOOR, time);
-        drawLamppost(600, BUILDING_FLOOR, time);
+        // Lampposts along developed areas
+        for (var lx = ZONES.campus.left + 100; lx < ZONES.harbor.right; lx += 300) {
+            if (isVisible(lx - 10, 20)) {
+                drawLamppost(lx, BUILDING_FLOOR, time);
+            }
+        }
 
-        // Welcome sign near the road
-        drawWelcomeSign(ROAD_X - 25, BUILDING_FLOOR + 15);
+        // Welcome sign at the road
+        if (isVisible(ROAD_X - 25, 80)) {
+            drawWelcomeSign(ROAD_X - 25, BUILDING_FLOOR + 15);
+        }
     }
 
     // =========================================================================
@@ -366,9 +449,9 @@ GAME.Systems.Renderer = (function() {
 
     function initSeagulls() {
         seagulls = [];
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 12; i++) {
             seagulls.push({
-                x: seededRandom(i * 311) * W,
+                x: seededRandom(i * 311) * WORLD_W,
                 y: 30 + seededRandom(i * 419) * 120,
                 speed: 0.3 + seededRandom(i * 523) * 0.5,
                 wingPhase: seededRandom(i * 631) * Math.PI * 2,
@@ -386,18 +469,17 @@ GAME.Systems.Renderer = (function() {
             sg.x += sg.speed * sg.dir;
             sg.y += Math.sin(time * 0.001 + i * 2) * 0.15;
 
-            // Wrap around
-            if (sg.x > W + 20) { sg.x = -20; sg.y = 30 + seededRandom(time * 0.001 + i) * 100; }
-            if (sg.x < -20) { sg.x = W + 20; sg.y = 30 + seededRandom(time * 0.001 + i) * 100; }
+            if (sg.x > WORLD_W + 20) { sg.x = -20; sg.y = 30 + seededRandom(time * 0.001 + i) * 100; }
+            if (sg.x < -20) { sg.x = WORLD_W + 20; sg.y = 30 + seededRandom(time * 0.001 + i) * 100; }
+
+            if (!isVisible(sg.x - 5, 10)) continue;
 
             var wing = Math.sin(time * 0.008 + sg.wingPhase) * 3;
             var bx = Math.floor(sg.x);
             var by = Math.floor(sg.y);
 
-            // Body
             ctx.fillStyle = '#d0d0d8';
             ctx.fillRect(bx, by, 3, 1);
-            // Wings
             ctx.fillRect(bx - 2, by - 1 + Math.floor(wing * 0.5), 2, 1);
             ctx.fillRect(bx + 3, by - 1 - Math.floor(wing * 0.5), 2, 1);
         }
@@ -1125,63 +1207,87 @@ GAME.Systems.Renderer = (function() {
     //  RENDER ALL BUILDINGS
     // =========================================================================
 
+    function getBuildingDimensions(buildingData, isTown) {
+        var bSize = buildingData && buildingData.size ? buildingData.size : { w: 1, h: 1 };
+        if (isTown) {
+            return { w: Math.max(32, bSize.w * 40), h: Math.max(30, bSize.h * 32) };
+        }
+        return { w: Math.max(36, bSize.w * 44), h: Math.max(34, bSize.h * 38) };
+    }
+
     function drawAllBuildings(state, time) {
         if (!state) return;
 
-        // --- Campus buildings (left side) ---
-        if (state.buildings && state.buildings.length > 0) {
-            for (var ci = 0; ci < state.buildings.length; ci++) {
-                var placed = state.buildings[ci];
-                var bData = null;
-                if (GAME.DATA && GAME.DATA.BUILDINGS) {
-                    bData = GAME.DATA.BUILDINGS[placed.type];
-                }
-                var pos = campusBuildingPos(ci, bData);
+        var allBuildings = [];
+        var i;
 
-                var drawFn = CAMPUS_DRAW[placed.type];
-                if (drawFn) {
-                    drawFn(pos.x, pos.y, pos.w, pos.h, time);
-                } else {
-                    drawGenericBuilding(pos.x, pos.y, pos.w, pos.h, time, bData);
+        if (state.buildings) {
+            for (i = 0; i < state.buildings.length; i++) {
+                var cb = state.buildings[i];
+                // Support both old grid-based and new worldX-based placement
+                var bData = (GAME.DATA && GAME.DATA.BUILDINGS) ? GAME.DATA.BUILDINGS[cb.type] : null;
+                var wx = cb.worldX;
+                if (wx === undefined) {
+                    var pos = campusBuildingPos(i, bData);
+                    wx = pos.x;
                 }
-
-                // Building label below
-                var label = bData ? bData.name : placed.type;
-                if (label.length > 10) label = label.substring(0, 10);
-                drawText(label, pos.x + pos.w / 2, pos.y + pos.h + 2, {
-                    size: 5,
-                    color: '#8080a0',
-                    align: 'center'
-                });
+                allBuildings.push({ placed: cb, data: bData, worldX: wx, isTown: false });
             }
         }
 
-        // --- Town buildings (right side) ---
-        if (state.townBuildings && state.townBuildings.length > 0) {
-            for (var ti = 0; ti < state.townBuildings.length; ti++) {
-                var tPlaced = state.townBuildings[ti];
-                var tData = null;
-                if (GAME.DATA && GAME.DATA.TOWN && GAME.DATA.TOWN.buildings) {
-                    tData = GAME.DATA.TOWN.buildings[tPlaced.type];
+        if (state.townBuildings) {
+            for (i = 0; i < state.townBuildings.length; i++) {
+                var tb = state.townBuildings[i];
+                var tData = (GAME.DATA && GAME.DATA.TOWN && GAME.DATA.TOWN.buildings) ? GAME.DATA.TOWN.buildings[tb.type] : null;
+                var twx = tb.worldX;
+                if (twx === undefined) {
+                    var tPos = townBuildingPos(i, tData);
+                    twx = tPos.x;
                 }
-                var tPos = townBuildingPos(ti, tData);
-
-                var tDrawFn = TOWN_DRAW[tPlaced.type];
-                if (tDrawFn) {
-                    tDrawFn(tPos.x, tPos.y, tPos.w, tPos.h, time);
-                } else {
-                    drawGenericBuilding(tPos.x, tPos.y, tPos.w, tPos.h, time, tData);
-                }
-
-                var tLabel = tData ? tData.name : tPlaced.type;
-                if (tLabel.length > 10) tLabel = tLabel.substring(0, 10);
-                drawText(tLabel, tPos.x + tPos.w / 2, tPos.y + tPos.h + 2, {
-                    size: 5,
-                    color: '#8080a0',
-                    align: 'center'
-                });
+                allBuildings.push({ placed: tb, data: tData, worldX: twx, isTown: true });
             }
         }
+
+        for (i = 0; i < allBuildings.length; i++) {
+            var entry = allBuildings[i];
+            var dims = getBuildingDimensions(entry.data, entry.isTown);
+            var bx = entry.worldX;
+            var by = BUILDING_FLOOR - dims.h;
+
+            if (!isVisible(bx - 5, dims.w + 10)) continue;
+
+            var drawFn = entry.isTown ? TOWN_DRAW[entry.placed.type] : CAMPUS_DRAW[entry.placed.type];
+            if (drawFn) {
+                drawFn(bx, by, dims.w, dims.h, time);
+            } else {
+                drawGenericBuilding(bx, by, dims.w, dims.h, time, entry.data);
+            }
+
+            var label = entry.data ? entry.data.name : entry.placed.type;
+            if (label.length > 12) label = label.substring(0, 12);
+            drawText(label, bx + dims.w / 2, by + dims.h + 2, {
+                size: 5, color: '#8080a0', align: 'center'
+            });
+        }
+    }
+
+    function drawPlacementGhost(pm, time) {
+        if (!pm || pm.worldX === undefined) return;
+        var bData = pm.isTown
+            ? (GAME.DATA.TOWN && GAME.DATA.TOWN.buildings ? GAME.DATA.TOWN.buildings[pm.buildingId] : null)
+            : (GAME.DATA.BUILDINGS ? GAME.DATA.BUILDINGS[pm.buildingId] : null);
+        var dims = getBuildingDimensions(bData, pm.isTown);
+        var bx = pm.worldX;
+        var by = BUILDING_FLOOR - dims.h;
+
+        ctx.globalAlpha = 0.5;
+        var drawFn = pm.isTown ? TOWN_DRAW[pm.buildingId] : CAMPUS_DRAW[pm.buildingId];
+        if (drawFn) drawFn(bx, by, dims.w, dims.h, time);
+        else drawGenericBuilding(bx, by, dims.w, dims.h, time, bData);
+        ctx.globalAlpha = 1.0;
+
+        var color = pm.canPlace ? '#44ff88' : '#ff4444';
+        drawOutline(bx - 1, by - 1, dims.w + 2, dims.h + 2, color, 2);
     }
 
     // =========================================================================
@@ -1189,50 +1295,53 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawBaseTownFeatures(time) {
-        // Small houses in the background (positioned relative to GROUND_Y)
+        // Background houses scattered in the town zone
         var bgY = GROUND_Y - 12;
         var bgHouses = [
-            { x: 540, y: bgY, w: 20, h: 16, color: '#5a4838' },
-            { x: 570, y: bgY - 3, w: 24, h: 19, color: '#4a5a40' },
-            { x: 610, y: bgY + 2, w: 18, h: 14, color: '#5a3a3a' },
-            { x: 640, y: bgY - 4, w: 22, h: 20, color: '#4a4860' },
-            { x: 680, y: bgY, w: 20, h: 16, color: '#5a5040' },
-            { x: 710, y: bgY - 2, w: 24, h: 18, color: '#4a4a3a' },
-            { x: 745, y: bgY + 2, w: 18, h: 14, color: '#5a4a4a' },
+            { x: 3400, y: bgY, w: 22, h: 18, color: '#5a4838' },
+            { x: 3600, y: bgY - 3, w: 26, h: 21, color: '#4a5a40' },
+            { x: 3900, y: bgY + 2, w: 20, h: 16, color: '#5a3a3a' },
+            { x: 4100, y: bgY - 4, w: 24, h: 22, color: '#4a4860' },
+            { x: 4400, y: bgY, w: 22, h: 18, color: '#5a5040' },
+            { x: 4700, y: bgY - 2, w: 26, h: 20, color: '#4a4a3a' },
+            { x: 5000, y: bgY + 2, w: 20, h: 16, color: '#5a4a4a' },
+            { x: 5200, y: bgY - 1, w: 24, h: 18, color: '#5a4040' },
         ];
 
         for (var i = 0; i < bgHouses.length; i++) {
             var h = bgHouses[i];
+            if (!isVisible(h.x - 5, h.w + 10)) continue;
             drawRect(h.x, h.y, h.w, h.h, h.color);
             drawRect(h.x + 1, h.y + 1, h.w - 2, h.h - 2, lightenColor(h.color, 15));
-            // Roof
             drawRect(h.x - 1, h.y - 2, h.w + 2, 3, darkenColor(h.color, 0.7));
-            // Window
             var lit = Math.sin(time * 0.001 + i * 2.7) > 0.1;
             drawRect(h.x + 3, h.y + 3, 4, 4, lit ? '#ffdd60' : '#302818');
             drawRect(h.x + h.w - 7, h.y + 3, 4, 4, lit ? '#ffcc40' : '#302818');
         }
 
-        // Church steeple (background, always there — relative to GROUND_Y)
-        var churchY = GROUND_Y - 30;
-        drawRect(620, churchY, 14, 28, '#5a5060');
-        drawRect(618, churchY + 26, 18, 14, '#4a4050');
-        drawRect(625, churchY - 10, 4, 12, '#6a6070');
-        // Cross on top
-        drawRect(626, churchY - 16, 2, 8, '#8a8090');
-        drawRect(624, churchY - 12, 6, 2, '#8a8090');
-        // Church window
-        drawRect(625, churchY + 10, 4, 8, '#ffcc40');
+        // Church steeple in town center
+        var churchX = 4300;
+        if (isVisible(churchX - 10, 30)) {
+            var churchY = GROUND_Y - 30;
+            drawRect(churchX, churchY, 16, 30, '#5a5060');
+            drawRect(churchX - 2, churchY + 28, 20, 16, '#4a4050');
+            drawRect(churchX + 5, churchY - 12, 4, 14, '#6a6070');
+            drawRect(churchX + 6, churchY - 18, 2, 8, '#8a8090');
+            drawRect(churchX + 4, churchY - 14, 6, 2, '#8a8090');
+            drawRect(churchX + 5, churchY + 12, 5, 8, '#ffcc40');
+        }
 
-        // Harbor/dock background (always visible at far right near water)
-        drawRect(WATER_X - 30, GROUND_Y + 10, 28, 4, '#5a4020');
-        drawRect(WATER_X - 10, GROUND_Y + 4, 4, 20, '#5a4020');
-        // Small boat at rest
-        var boatBob = Math.sin(time * 0.0015) * 1.5;
-        drawRect(WATER_X + 5, GROUND_Y + 8 + boatBob, 20, 5, '#6a3828');
-        drawRect(WATER_X + 8, GROUND_Y + 6 + boatBob, 14, 3, '#7a4838');
-        drawRect(WATER_X + 14, GROUND_Y - 2 + boatBob, 2, 10, '#8a7050');
-        drawRect(WATER_X + 14, GROUND_Y - 2 + boatBob, 8, 4, '#e0d8d0');
+        // Harbor/dock at the waterfront
+        if (isVisible(WATER_X - 60, 100)) {
+            drawRect(WATER_X - 60, GROUND_Y + 10, 55, 5, '#5a4020');
+            drawRect(WATER_X - 15, GROUND_Y + 4, 5, 22, '#5a4020');
+            drawRect(WATER_X - 50, GROUND_Y + 4, 5, 22, '#5a4020');
+            var boatBob = Math.sin(time * 0.0015) * 1.5;
+            drawRect(WATER_X + 8, GROUND_Y + 8 + boatBob, 24, 6, '#6a3828');
+            drawRect(WATER_X + 12, GROUND_Y + 6 + boatBob, 16, 4, '#7a4838');
+            drawRect(WATER_X + 18, GROUND_Y - 4 + boatBob, 2, 12, '#8a7050');
+            drawRect(WATER_X + 18, GROUND_Y - 4 + boatBob, 10, 5, '#e0d8d0');
+        }
     }
 
     // =========================================================================
@@ -1240,77 +1349,84 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawBaseCampus(time) {
-        // Perimeter fence on the left campus side
-        for (var fx = CAMPUS_LEFT; fx < ROAD_X - 10; fx += 12) {
-            drawRect(fx, GROUND_Y - 2, 1, 6, '#404850');
+        var campusLeft = ZONES.campus.left;
+        var campusRight = ZONES.campus.right;
+
+        // Perimeter fence
+        if (isVisible(campusLeft, campusRight - campusLeft)) {
+            var fStart = Math.max(campusLeft, camera.x - 20);
+            var fEnd = Math.min(campusRight, camera.x + W + 20);
+            for (var fx = fStart; fx < fEnd; fx += 12) {
+                drawRect(fx, GROUND_Y - 2, 1, 6, '#404850');
+            }
+            drawRect(Math.max(campusLeft, camera.x - 5), GROUND_Y, Math.min(campusRight, camera.x + W + 5) - Math.max(campusLeft, camera.x - 5), 1, '#404850');
         }
-        drawRect(CAMPUS_LEFT, GROUND_Y, ROAD_X - CAMPUS_LEFT - 10, 1, '#404850');
 
         // "AI CAMPUS" sign
-        drawRect(CAMPUS_LEFT + 4, GROUND_Y - 8, 60, 8, '#1a2040');
-        ctx.font = '5px "Press Start 2P", monospace';
-        ctx.fillStyle = '#6688ff';
-        ctx.textAlign = 'left';
-        ctx.fillText('AI CAMPUS', CAMPUS_LEFT + 8, GROUND_Y - 6);
+        if (isVisible(campusLeft, 80)) {
+            drawRect(campusLeft + 10, GROUND_Y - 8, 68, 8, '#1a2040');
+            ctx.font = '5px "Press Start 2P", monospace';
+            ctx.fillStyle = '#6688ff';
+            ctx.textAlign = 'left';
+            ctx.fillText('AI CAMPUS', campusLeft + 14, GROUND_Y - 6);
+        }
     }
 
     // =========================================================================
     //  WALKING PEOPLE
     // =========================================================================
 
+    function drawPerson(wx, wy, bounce, skinColor, shirtColor, time, idx, large) {
+        var sz = large ? 1.4 : 1;
+        var headH = Math.floor(4 * sz);
+        var bodyH = Math.floor(6 * sz);
+        var legH = Math.floor(3 * sz);
+        ctx.fillStyle = skinColor;
+        ctx.fillRect(Math.floor(wx), Math.floor(wy - (headH + bodyH) - bounce), Math.floor(4 * sz), headH);
+        ctx.fillStyle = shirtColor;
+        ctx.fillRect(Math.floor(wx) - 1, Math.floor(wy - bodyH - bounce), Math.floor(6 * sz), bodyH);
+        ctx.fillStyle = '#2a2a3a';
+        var legFrame = Math.sin(time * 0.01 + idx) > 0;
+        ctx.fillRect(Math.floor(wx), Math.floor(wy - bounce), Math.floor(2 * sz), legH);
+        ctx.fillRect(Math.floor(wx) + Math.floor(2 * sz), Math.floor(wy - bounce) + (legFrame ? 1 : 0), Math.floor(2 * sz), legH);
+    }
+
     function drawWorkers(state, time) {
         if (!state) return;
         var talentCount = state.totalTalent || 5;
-        var workerCount = Math.min(25, Math.floor(talentCount / 2) + 3);
+        var workerCount = Math.min(30, Math.floor(talentCount / 2) + 3);
 
         var skinColors = ['#f0c890', '#d0a060', '#a07030', '#e8c090', '#c08850'];
         var shirtColors = ['#3060a0', '#a03030', '#30a060', '#606060', '#a06030',
                            '#6030a0', '#30a0a0', '#a06060', '#606030'];
 
+        // Campus workers
+        var campusW = ZONES.campus.right - ZONES.campus.left;
         for (var i = 0; i < workerCount; i++) {
             var seed = i * 7919;
-            var baseX = (seed * 13) % (WATER_X - 40);
             var walkSpeed = 15 + (seed % 25);
             var dir = (seed % 2 === 0) ? 1 : -1;
-            var wx = (baseX + time * 0.015 * dir * (walkSpeed / 25)) % (WATER_X - 40);
-            if (wx < 20) wx += WATER_X - 60;
-            var wy = GROUND_Y + 20 + (seed % 120);
+            var wx = ZONES.campus.left + ((seed * 13 + time * 0.015 * dir * (walkSpeed / 25)) % campusW);
+            if (wx < ZONES.campus.left) wx += campusW;
+            var wy = GROUND_Y + 25 + (seed % 140);
+            if (!isVisible(wx - 5, 10)) continue;
             var bounce = Math.abs(Math.sin(time * 0.006 + i * 2.3)) * 2;
-
-            // Head
-            ctx.fillStyle = skinColors[i % skinColors.length];
-            ctx.fillRect(Math.floor(wx), Math.floor(wy - 8 - bounce), 4, 4);
-            // Body
-            ctx.fillStyle = shirtColors[i % shirtColors.length];
-            ctx.fillRect(Math.floor(wx) - 1, Math.floor(wy - 4 - bounce), 6, 6);
-            // Legs
-            ctx.fillStyle = '#2a2a3a';
-            var legFrame = Math.sin(time * 0.01 + i) > 0;
-            ctx.fillRect(Math.floor(wx), Math.floor(wy + 2 - bounce), 2, 3);
-            ctx.fillRect(Math.floor(wx) + 2, Math.floor(wy + 2 - bounce) + (legFrame ? 1 : 0), 2, 3);
+            drawPerson(wx, wy, bounce, skinColors[i % skinColors.length], shirtColors[i % shirtColors.length], time, i, false);
         }
 
-        // Town people (separate, right side)
+        // Town people
         var townPop = state.townPopulation || 100;
-        var townPeopleCount = Math.min(10, Math.floor(townPop / 30) + 2);
+        var townPeopleCount = Math.min(15, Math.floor(townPop / 25) + 3);
+        var townW = ZONES.harbor.right - ZONES.town.left;
         for (var t = 0; t < townPeopleCount; t++) {
             var tseed = t * 3571 + 50000;
-            var tbx = ROAD_X + ROAD_W + 20 + (tseed * 11) % (WATER_X - ROAD_X - ROAD_W - 60);
             var tDir = (tseed % 2 === 0) ? 1 : -1;
-            var twx = (tbx + time * 0.01 * tDir * 0.8);
-            // Keep in town area
-            twx = ROAD_X + ROAD_W + 10 + (twx % (WATER_X - ROAD_X - ROAD_W - 50));
-            if (twx < ROAD_X + ROAD_W + 10) twx += WATER_X - ROAD_X - ROAD_W - 50;
-            var twy = GROUND_Y + 25 + (tseed % 100);
+            var twx = ZONES.town.left + ((tseed * 11 + time * 0.01 * tDir * 0.8) % townW);
+            if (twx < ZONES.town.left) twx += townW;
+            var twy = GROUND_Y + 30 + (tseed % 120);
+            if (!isVisible(twx - 5, 10)) continue;
             var tbounce = Math.abs(Math.sin(time * 0.005 + t * 3.1)) * 1.5;
-
-            ctx.fillStyle = skinColors[(t + 2) % skinColors.length];
-            ctx.fillRect(Math.floor(twx), Math.floor(twy - 7 - tbounce), 3, 3);
-            ctx.fillStyle = shirtColors[(t + 3) % shirtColors.length];
-            ctx.fillRect(Math.floor(twx) - 1, Math.floor(twy - 4 - tbounce), 5, 5);
-            ctx.fillStyle = '#2a2a3a';
-            ctx.fillRect(Math.floor(twx), Math.floor(twy + 1 - tbounce), 2, 2);
-            ctx.fillRect(Math.floor(twx) + 2, Math.floor(twy + 1 - tbounce), 2, 2);
+            drawPerson(twx, twy, tbounce, skinColors[(t + 2) % skinColors.length], shirtColors[(t + 3) % shirtColors.length], time, t + 100, false);
         }
     }
 
@@ -1334,48 +1450,79 @@ GAME.Systems.Renderer = (function() {
     //  MAIN GAME SCENE — THE BIG ONE
     // =========================================================================
 
+    function drawMinimap(state, time) {
+        var mw = 200, mh = 30;
+        var mx = W - mw - 8, my = H - mh - 8;
+        var scale = mw / WORLD_W;
+
+        // Background
+        ctx.fillStyle = 'rgba(10, 10, 26, 0.8)';
+        ctx.fillRect(mx - 2, my - 2, mw + 4, mh + 4);
+
+        // Zone colors
+        var zoneKeys = ['wilderness', 'campus', 'road', 'town', 'harbor', 'ocean'];
+        for (var zi = 0; zi < zoneKeys.length; zi++) {
+            var zone = ZONES[zoneKeys[zi]];
+            ctx.fillStyle = zone.ground;
+            ctx.fillRect(mx + zone.left * scale, my, (zone.right - zone.left) * scale, mh);
+        }
+
+        // Buildings as dots
+        if (state) {
+            var allB = (state.buildings || []).concat(state.townBuildings || []);
+            for (var bi = 0; bi < allB.length; bi++) {
+                var b = allB[bi];
+                var bx = b.worldX || (b.isTown ? ZONES.town.left + bi * 50 : ZONES.campus.left + bi * 50);
+                ctx.fillStyle = b.isTown ? '#ffaa44' : '#44aaff';
+                ctx.fillRect(mx + bx * scale, my + 5, 3, mh - 10);
+            }
+        }
+
+        // Viewport indicator
+        ctx.strokeStyle = '#ffdd44';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(mx + camera.x * scale, my, W * scale, mh);
+
+        // Border
+        ctx.strokeStyle = '#5a5a8a';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(mx - 2, my - 2, mw + 4, mh + 4);
+    }
+
     function drawGameScene(state, time) {
         clear();
+        updateCamera();
 
-        // 1. Sky + stars
+        // PASS 1: Background (screen-relative, no translate)
         drawSky(time);
         drawStars(time);
 
-        // 2. Ocean (behind hills and buildings on the right)
+        // PASS 2: World layer (translated by camera)
+        ctx.save();
+        ctx.translate(-camera.x, 0);
+
         drawOcean(time);
-
-        // 3. Hills and terrain
         drawHills(time);
-
-        // 4. Ground plane
         drawGround(time);
-
-        // 5. Base town features (always visible background buildings)
         drawBaseTownFeatures(time);
-
-        // 6. Base campus features
         drawBaseCampus(time);
-
-        // 7. Road dividing campus from town
         drawRoad(time);
-
-        // 8. Player-placed buildings (campus + town)
         drawAllBuildings(state, time);
-
-        // 9. Scenery details (trees, lampposts, sign)
         drawSceneryDetails(time);
-
-        // 10. Walking people
         drawWorkers(state, time);
-
-        // 11. Seagulls
         drawSeagulls(time);
-
-        // 12. Smoke / steam particles
         updateAndDrawSmoke(time);
 
-        // 13. UI overlay (year, status)
+        // Placement preview
+        if (placementMode) {
+            drawPlacementGhost(placementMode, time);
+        }
+
+        ctx.restore();
+
+        // PASS 3: HUD (screen-relative, no translate)
         drawOverlay(state, time);
+        drawMinimap(state, time);
     }
 
     // =========================================================================
@@ -1665,7 +1812,57 @@ GAME.Systems.Renderer = (function() {
         drawCampusGround: drawGround,
         darkenColor: darkenColor,
         COLORS: COLORS,
+        ZONES: ZONES,
+        WORLD_W: WORLD_W,
+        BUILDING_FLOOR: BUILDING_FLOOR,
         getCanvas: function() { return canvas; },
-        getCtx: function() { return ctx; }
+        getCtx: function() { return ctx; },
+
+        // Camera API
+        getCameraX: function() { return camera.x; },
+        setCameraX: function(x) { camera.x = Math.max(0, Math.min(WORLD_W - W, x)); camera.targetX = camera.x; },
+        setCameraTarget: function(x) { camera.targetX = Math.max(0, Math.min(WORLD_W - W, x)); },
+        screenToWorld: function(sx, sy) { return { x: sx + camera.x, y: sy }; },
+        worldToScreen: function(wx, wy) { return { x: wx - camera.x, y: wy }; },
+
+        // Camera input handlers (call from game.js)
+        onMouseDown: function(sx, sy) {
+            camera.isDragging = true;
+            camera.dragStartX = sx;
+            camera.dragStartCamX = camera.x;
+        },
+        onMouseMove: function(sx, sy) {
+            camera.mouseX = sx;
+            camera.mouseY = sy;
+            if (camera.isDragging) {
+                var dx = camera.dragStartX - sx;
+                camera.targetX = camera.dragStartCamX + dx;
+                camera.x = camera.targetX;
+                clampCamera();
+            }
+        },
+        onMouseUp: function() {
+            camera.isDragging = false;
+        },
+
+        // Placement mode API
+        setPlacementMode: function(buildingId, isTown) {
+            placementMode = { buildingId: buildingId, isTown: isTown, worldX: camera.x + W / 2, canPlace: false };
+        },
+        updatePlacementCursor: function(worldX, canPlace) {
+            if (placementMode) {
+                placementMode.worldX = worldX;
+                placementMode.canPlace = canPlace;
+            }
+        },
+        clearPlacementMode: function() { placementMode = null; },
+        getPlacementMode: function() { return placementMode; },
+        isInPlacementMode: function() { return !!placementMode; },
+        getBuildingDimensions: getBuildingDimensions,
+
+        // Minimap hit test
+        getMinimapBounds: function() {
+            return { x: W - 208, y: H - 38, w: 200, h: 30 };
+        }
     };
 })();

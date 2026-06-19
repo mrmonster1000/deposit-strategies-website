@@ -28,6 +28,7 @@ window.GAME = window.GAME || {};
         Sound.init();
 
         setupEventListeners();
+        setupCanvasInput();
         setupStateListeners();
         setupCharacterSelect();
 
@@ -185,6 +186,134 @@ window.GAME = window.GAME || {};
                 handleAction(btn.dataset.action);
             });
         });
+    }
+
+    function setupCanvasInput() {
+        var canvas = document.getElementById('game-canvas');
+        if (!canvas) return;
+
+        function getCanvasCoords(e) {
+            var rect = canvas.getBoundingClientRect();
+            var scaleX = canvas.width / rect.width;
+            var scaleY = canvas.height / rect.height;
+            var clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            if (currentScreen !== 'game') return;
+            var c = getCanvasCoords(e);
+
+            // Check minimap click
+            var mm = Renderer.getMinimapBounds();
+            if (c.x >= mm.x && c.x <= mm.x + mm.w && c.y >= mm.y && c.y <= mm.y + mm.h) {
+                var ratio = (c.x - mm.x) / mm.w;
+                Renderer.setCameraTarget(ratio * Renderer.WORLD_W - 480);
+                return;
+            }
+
+            // Check placement mode click
+            if (Renderer.isInPlacementMode()) {
+                var pm = Renderer.getPlacementMode();
+                if (pm && pm.canPlace) {
+                    placeBuilding(pm.buildingId, pm.worldX, pm.isTown);
+                    Renderer.clearPlacementMode();
+                }
+                return;
+            }
+
+            Renderer.onMouseDown(c.x, c.y);
+        });
+
+        canvas.addEventListener('mousemove', function(e) {
+            if (currentScreen !== 'game') return;
+            var c = getCanvasCoords(e);
+            Renderer.onMouseMove(c.x, c.y);
+
+            // Update placement preview
+            if (Renderer.isInPlacementMode()) {
+                var world = Renderer.screenToWorld(c.x, c.y);
+                var pm = Renderer.getPlacementMode();
+                var canPlace = canPlaceBuilding(pm.buildingId, world.x, pm.isTown);
+                Renderer.updatePlacementCursor(world.x, canPlace);
+            }
+        });
+
+        canvas.addEventListener('mouseup', function() {
+            Renderer.onMouseUp();
+        });
+
+        canvas.addEventListener('mouseleave', function() {
+            Renderer.onMouseUp();
+        });
+
+        // Touch support for mobile
+        canvas.addEventListener('touchstart', function(e) {
+            if (currentScreen !== 'game') return;
+            var c = getCanvasCoords(e);
+            Renderer.onMouseDown(c.x, c.y);
+            e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', function(e) {
+            if (currentScreen !== 'game') return;
+            var c = getCanvasCoords({ touches: e.touches, clientX: e.touches[0].clientX, clientY: e.touches[0].clientY });
+            Renderer.onMouseMove(c.x, c.y);
+            e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', function() {
+            Renderer.onMouseUp();
+        });
+
+        // Keyboard scrolling
+        document.addEventListener('keydown', function(e) {
+            if (currentScreen !== 'game') return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
+                Renderer.setCameraTarget(Renderer.getCameraX() - 200);
+            } else if (e.key === 'ArrowRight' || e.key === 'd') {
+                Renderer.setCameraTarget(Renderer.getCameraX() + 200);
+            } else if (e.key === 'Escape' && Renderer.isInPlacementMode()) {
+                Renderer.clearPlacementMode();
+            }
+        });
+    }
+
+    function canPlaceBuilding(buildingId, worldX, isTown) {
+        var bData = isTown
+            ? (GAME.DATA.TOWN && GAME.DATA.TOWN.buildings ? GAME.DATA.TOWN.buildings[buildingId] : null)
+            : (GAME.DATA.BUILDINGS ? GAME.DATA.BUILDINGS[buildingId] : null);
+        var dims = Renderer.getBuildingDimensions(bData, isTown);
+        var bw = dims.w;
+
+        // Check zone restriction
+        var zone = isTown ? GAME.Systems.Renderer.ZONES.town : GAME.Systems.Renderer.ZONES.campus;
+        var zoneEnd = isTown ? GAME.Systems.Renderer.ZONES.harbor.right : GAME.Systems.Renderer.ZONES.campus.right;
+        if (worldX < zone.left || worldX + bw > zoneEnd) return false;
+
+        // Check overlap with existing buildings
+        var state = State.get();
+        var allB = (state.buildings || []).concat(state.townBuildings || []);
+        for (var i = 0; i < allB.length; i++) {
+            var existing = allB[i];
+            var eData = existing.isTown
+                ? (GAME.DATA.TOWN && GAME.DATA.TOWN.buildings ? GAME.DATA.TOWN.buildings[existing.type] : null)
+                : (GAME.DATA.BUILDINGS ? GAME.DATA.BUILDINGS[existing.type] : null);
+            var eDims = Renderer.getBuildingDimensions(eData, existing.isTown);
+            var eX = existing.worldX || 0;
+            if (worldX < eX + eDims.w + 5 && worldX + bw + 5 > eX) return false;
+        }
+        return true;
     }
 
     function setupStateListeners() {
@@ -542,9 +671,10 @@ window.GAME = window.GAME || {};
 
                 if (canBuild && meetsReqs) {
                     optEl.addEventListener('click', function() {
-                        placeBuilding(b.id, isTown);
                         panel.style.display = 'none';
                         state.paused = false;
+                        Renderer.setPlacementMode(b.id, isTown);
+                        showToast('Click on the ground to place ' + b.name, 'info');
                     });
                 }
 
@@ -566,27 +696,8 @@ window.GAME = window.GAME || {};
         panel.style.display = 'flex';
     }
 
-    function placeBuilding(buildingId, isTown) {
-        var gridX, gridY;
-        if (isTown) {
-            gridX = nextTownGridX;
-            gridY = nextTownGridY;
-            nextTownGridX += 3;
-            if (nextTownGridX > 20) {
-                nextTownGridX = 1;
-                nextTownGridY += 2;
-            }
-        } else {
-            gridX = nextGridX;
-            gridY = nextGridY;
-            nextGridX += 3;
-            if (nextGridX > 18) {
-                nextGridX = 1;
-                nextGridY += 2;
-            }
-        }
-
-        State.addBuilding(buildingId, gridX, gridY, isTown);
+    function placeBuilding(buildingId, worldX, isTown) {
+        State.addBuilding(buildingId, worldX, isTown);
     }
 
     function showAbilityMenu() {
