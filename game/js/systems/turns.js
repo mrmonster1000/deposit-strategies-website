@@ -193,6 +193,14 @@ GAME.Systems.Simulation = (function() {
             state.insightTokens++;
             State.addLog('Insight Token gained from basic research!', 'positive');
         }
+
+        // Trump rally energy: extra political capital, lower safety awareness
+        if (state.characterId === 'trump') {
+            State.adjust('politicalCapital', 3);
+            if (Math.random() < 0.15) {
+                State.adjust('safety', -1);
+            }
+        }
     }
 
     function yearlyEffects() {

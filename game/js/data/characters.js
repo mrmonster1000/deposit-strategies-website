@@ -283,7 +283,7 @@ GAME.DATA.CHARACTERS = {
         ],
         comedyTraits: ['tremendous_everything', 'nationalist_ai', 'executive_orders', 'patriotic_robots'],
         bio: 'President of the United States. Demands all robots be painted in patriotic colors. Issues executive orders about AI he doesn\'t fully understand. Political capital is always tremendous.',
-        locked: true,
-        lockMessage: 'Coming in the Character Expansion Pack!'
+        unlockCondition: 'Win a game with any character',
+        unlockHint: 'Complete a victory to unlock The Tremendous Disruptor!'
     }
 };

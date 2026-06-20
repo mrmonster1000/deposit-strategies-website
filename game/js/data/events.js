@@ -1164,6 +1164,831 @@ GAME.DATA.EVENTS = [
         ]
     },
 
+    // ---- CHARACTER-SPECIFIC STORY ARCS ----
+    // Each playable character gets a 5-event chain that unfolds across phases
+
+    // == DARIO ARC: "The Cookie Doctrine" ==
+    {
+        id: 'arc_dario_1',
+        title: 'The Cookie Doctrine',
+        phase: 1,
+        triggerTime: 28,
+        type: 'story',
+        characterSpecific: 'dario',
+        speaker: 'dario',
+        text: "I've been thinking. What if safety isn't just a technical problem? What if it's a... social one? Every international summit I attend, people relax when I bring cookies. They NEGOTIATE when there are cookies. I'm starting to wonder if snickerdoodles are a viable governance framework.",
+        choices: [
+            {
+                text: "Cookie diplomacy IS diplomacy.",
+                effects: { cooperation: 8, politicalCapital: 5 },
+                response: "Exactly! I'm writing a paper: 'Baked Goods as Conflict Resolution: A Statistical Analysis.' Yann will demand peer review. I'm already baking review-cookies."
+            },
+            {
+                text: "Maybe focus on the actual safety research too.",
+                effects: { safety: 5, research: 3 },
+                response: "Obviously! But consider: our safety team's productivity went up 23% after I installed the cookie jar in the breakroom. Correlation? Maybe. Causation? Delicious."
+            },
+            {
+                text: "This is insane and I love it.",
+                effects: { cooperation: 5, townMood: 3 },
+                response: "The UN Secretary-General's assistant called. She wants the snickerdoodle recipe 'for personal use.' Sure, Janet. 'Personal use.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_dario_2',
+        title: 'The Committee on Committees',
+        phase: 2,
+        triggerTime: 1900,
+        type: 'comedy',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "Sir, your Committee on AI Safety has formed a Sub-Committee on Committee Effectiveness. That sub-committee formed a Working Group on Sub-Committee Optimization. The working group has requested funding for a Task Force on Working Group Streamlining. We are 4 layers deep. Demis called it 'beautifully recursive.'",
+        choices: [
+            {
+                text: "This is how democracy works. More committees!",
+                effects: { cooperation: 5, safety: 3, politicalCapital: -5 },
+                response: "Committee count: 847. The annual Committee Report is now 3,000 pages. Nobody reads it. Everyone agrees it's important. This IS democracy."
+            },
+            {
+                text: "Maybe we need a Committee on Committee Reduction.",
+                effects: { cooperation: 3, research: 3 },
+                response: "The Committee on Committee Reduction formed 3 sub-committees in its first meeting. Dario sees no irony in this. Everyone else does."
+            },
+            {
+                text: "Dissolve everything. Start fresh.",
+                effects: { cooperation: -5, safety: -3, politicalCapital: 5 },
+                response: "All committees dissolved. They reformed spontaneously within 48 hours. Like hydra heads. But with better catering."
+            }
+        ]
+    },
+    {
+        id: 'arc_dario_3',
+        title: 'Cookie Crisis',
+        phase: 2,
+        triggerTime: 2500,
+        type: 'story',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "Catastrophe. Your cookie supplier went bankrupt. The international AI safety summit is in 3 days. No cookies. The UK delegation has already asked about 'the lemon ones.' The Japanese delegation sent a formal inquiry about cookie availability. This is a diplomatic emergency.",
+        choices: [
+            {
+                text: "Bake them myself. All night. Every flavor.",
+                effects: { cooperation: 10, money: -30, research: -3 },
+                response: "You baked 847 cookies in one night. Your hands hurt. Your kitchen is destroyed. The summit was the most productive in UN history. The Secretary-General wants to nominate snickerdoodles for the Nobel Peace Prize."
+            },
+            {
+                text: "The summit can survive without cookies.",
+                effects: { cooperation: -8, politicalCapital: -5 },
+                response: "The summit devolved into arguments within 20 minutes. No cookies, no diplomacy. Two countries threatened sanctions. Sam tried to bring energy bars. It made everything worse."
+            },
+            {
+                text: "Ask Betty to help. She runs a café.",
+                effects: { cooperation: 8, townMood: 5, money: -20 },
+                response: "Betty and Dario's all-night baking session became legendary. Betty's 'Neural Network Noisette Cookie' was the hit. Three trade agreements were signed over oatmeal raisin. Frank supplied unsolicited commentary on 'cookie politics.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_dario_4',
+        title: 'The Anti-Cookie Coalition',
+        phase: 3,
+        triggerTime: 4200,
+        type: 'comedy',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "Sir, a coalition of nations has formed the Anti-Cookie Diplomatic Alliance (ACDA). They claim your cookie diplomacy gives you 'unfair negotiating advantage through baked goods.' Their counter-strategy: bringing increasingly elaborate pastries to summits. The French sent croissants. The Austrians sent Sachertorte. This is an arms race now.",
+        choices: [
+            {
+                text: "Let the Great Baking War begin.",
+                effects: { cooperation: 8, politicalCapital: 5, money: -40 },
+                response: "The Baking Wars of 2037 produced the most productive diplomatic period in human history. Every summit now has a pastry table that would make Marie Antoinette weep. International relations improved 40%. Calories consumed at summits increased 300%."
+            },
+            {
+                text: "They're missing the point. It was never about the cookies.",
+                effects: { cooperation: 12, safety: 5 },
+                response: "Your speech at the UN: 'The cookies were always about showing up with care.' Standing ovation. France still sends croissants though. They're really good croissants."
+            },
+            {
+                text: "Concede gracefully. Share all recipes.",
+                effects: { cooperation: 15, internationalRelations: 8 },
+                response: "The International Cookie Recipe Exchange became the first universally ratified diplomatic agreement in history. 147 nations signed. Elon signed from his Faraday cage. He contributed Space Brownies."
+            }
+        ]
+    },
+    {
+        id: 'arc_dario_5',
+        title: 'The Cookie Legacy',
+        phase: 4,
+        triggerTime: 5500,
+        type: 'milestone',
+        characterSpecific: 'dario',
+        speaker: 'dario',
+        text: "I did the math. Over 20 years, I baked approximately 94,000 cookies. They were present at every major AI safety agreement, every international summit, and every birthday party in Abundance Bay. Three wars were averted over oatmeal raisin. The Cookie Doctrine works.",
+        choices: [
+            {
+                text: "History will remember the cookies, Dario.",
+                effects: { cooperation: 15, publicTrust: 10, townMood: 10 },
+                response: "The 'Amodei Doctrine: How Baked Goods Saved Civilization' is now required reading at 47 diplomatic academies. The recipe is on page 1. Yann demanded a peer review of the recipe. It received unanimous approval. Even Yann brought cookies to the review."
+            },
+            {
+                text: "It was never really about the cookies, was it?",
+                effects: { safety: 10, cooperation: 10, socialCohesion: 5 },
+                response: "Dario smiles. 'It was always about showing people you care enough to make something with your hands. In a world of AI-generated everything... handmade cookies are a radical act.' He's right. He was always right. Pass the snickerdoodles."
+            },
+            {
+                text: "What's the recipe? I want to learn.",
+                effects: { cooperation: 8, townMood: 8 },
+                response: "Dario teaches you the recipe. It takes an afternoon. It's the most meaningful afternoon of your career. The cookies are perfect. You give some to Frank. He eats three. 'They're alright.' From Frank, this is a Michelin star."
+            }
+        ]
+    },
+
+    // == SAM ARC: "The Exponential Man" ==
+    {
+        id: 'arc_sam_1',
+        title: 'Sam\'s 1,000-Year Plan',
+        phase: 1,
+        triggerTime: 32,
+        type: 'character',
+        characterSpecific: 'sam',
+        speaker: 'sam',
+        text: "I've been working on something. *unfurls enormous chart* This is my 1,000-Year Plan. It starts with scaling our models, then solving aging, then building Dyson spheres, then... look, page 47 gets a little ambitious. But EXPONENTIALLY ambitious.",
+        choices: [
+            {
+                text: "Sam, you update this plan weekly.",
+                effects: { research: 3, cooperation: 3 },
+                response: "DAILY, actually. Version 847. The core thesis is the same though: everything exponential, always. Joe MacMillan would approve. He'd add more ambition, obviously, but he'd approve."
+            },
+            {
+                text: "Show me page 47.",
+                effects: { research: 5, safety: -3 },
+                response: "Page 47: 'Convert Jupiter into a computational substrate.' Page 48: 'Resolve the heat death of the universe.' Page 49: 'Lunch.' I have my priorities."
+            },
+            {
+                text: "Does the plan include lunch breaks?",
+                effects: { cooperation: 5 },
+                response: "Page 49! Lunch is 'exponentially efficient.' I eat while whiteboarding. The whiteboard is now 40% marinara sauce. It adds character."
+            }
+        ]
+    },
+    {
+        id: 'arc_sam_2',
+        title: 'The Scaling Breakthrough',
+        phase: 2,
+        triggerTime: 2050,
+        type: 'milestone',
+        characterSpecific: 'sam',
+        speaker: 'sam',
+        text: "We hit the wall. The scaling laws plateaued. Every chart is flat. FLAT. I've never seen a flat chart before. My entire worldview is in question. Joe MacMillan never had a flat chart. I checked. What do we do when exponential stops being exponential?",
+        choices: [
+            {
+                text: "Maybe the answer isn't always MORE scale.",
+                effects: { research: 8, safety: 5, cooperation: 3 },
+                response: "Sam stares at you. A tear forms. 'You sound like Yann.' He pauses. 'Yann is occasionally correct. Don't tell him I said that. EVER.' He rolls up the flat chart. 'New approach. Let's try... efficiency.' He says the word like it physically hurts."
+            },
+            {
+                text: "We just need BIGGER scale.",
+                effects: { adp: 10, research: 5, money: -100, safety: -5 },
+                response: "Operation EXPONENTIAL SQUARED launched. 10x more compute. 10x more data. The chart goes up again! Then plateaus again. Then goes up. Then plateaus. Sam rides this rollercoaster with the enthusiasm of a man who has never known doubt."
+            },
+            {
+                text: "What would Cameron Howe do?",
+                effects: { research: 10, cooperation: 5 },
+                response: "Sam's eyes light up. 'She'd break everything and rebuild from scratch! She'd ignore the conventional wisdom! She'd—' He pauses. 'She'd probably collaborate with Donna.' Long silence. 'Maybe I should call Dario.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_sam_3',
+        title: 'The Immortality Prototype',
+        phase: 3,
+        triggerTime: 3750,
+        type: 'story',
+        characterSpecific: 'sam',
+        speaker: 'sam',
+        text: "It works. The longevity treatment. We tested it on cells. Then mice. Then me. Yes, I tested it on myself. My board is furious. My doctor is furious. My chart shows my telomeres growing. EXPONENTIALLY. I might live forever. Or I might grow a tail. We're monitoring both possibilities.",
+        choices: [
+            {
+                text: "YOU TESTED IT ON YOURSELF?!",
+                effects: { safety: -5, research: 10, adp: 15 },
+                response: "'Joe MacMillan would have done the same! Probably! Look, the data is INCREDIBLE. No tail yet. My energy is up 40%. I've been awake for 72 hours. Is that the treatment or is that just me? Hard to establish a control group when you ARE the control group.'"
+            },
+            {
+                text: "We need proper clinical trials first.",
+                effects: { safety: 8, research: 5, cooperation: 3 },
+                response: "Sam deflates slightly. 'You're right. Yann called it \"the most irresponsible thing since someone trained GPT on the internet.\" That's... fair.' Clinical trials begin. Sam is Patient Zero. The consent form was just a chart that goes up."
+            },
+            {
+                text: "If this works, it changes everything.",
+                effects: { adp: 20, research: 8 },
+                response: "Sam's chart now extends to the year 3025. 'This is the ultimate exponential curve. HUMAN LIFESPAN.' He pauses. 'The 1,000-Year Plan might actually need 1,000 years of me. That's either wonderful or terrifying. Possibly both.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_sam_4',
+        title: 'The Flat Chart Epiphany',
+        phase: 3,
+        triggerTime: 4400,
+        type: 'character',
+        characterSpecific: 'sam',
+        speaker: 'sam',
+        text: "I need to tell you something. I spent 20 years chasing exponential curves. Every flat line was a failure. Every plateau was a crisis. But I just realized something. *holds up a flat chart* This flat line? It's not stagnation. It's stability. It's people being consistently happy. I've been measuring the wrong axis my whole career.",
+        choices: [
+            {
+                text: "Sam Altman just discovered that flat charts can be good.",
+                effects: { cooperation: 10, publicTrust: 5 },
+                response: "'DON'T TELL YANN.' He pauses. 'Tell Dario though. He predicted this in 2026. With a cookie analogy. I thought it was insane. It was prescient. Tell him... his cookies were exponentially correct.'"
+            },
+            {
+                text: "Growth for its own sake was never the point.",
+                effects: { safety: 5, socialCohesion: 5 },
+                response: "Sam sits quietly for the first time in your memory. 'Joe MacMillan spent years chasing growth too. Then he built something meaningful.' Silence. 'I think I finally understand that show.'"
+            },
+            {
+                text: "What does the 1,000-Year Plan look like now?",
+                effects: { research: 5, cooperation: 8 },
+                response: "'Version 12,847. Completely rewritten.' He unfurls it. Page 1 no longer says 'SCALE EVERYTHING.' It says 'Ensure everyone has enough.' It's the most human chart Sam has ever drawn."
+            }
+        ]
+    },
+    {
+        id: 'arc_sam_5',
+        title: 'Sam\'s Last Chart',
+        phase: 4,
+        triggerTime: 6100,
+        type: 'milestone',
+        characterSpecific: 'sam',
+        speaker: 'sam',
+        text: "I want to show you one last chart. *unfurls a simple graph* This is human wellbeing over the last 20 years. It doesn't go exponential. It goes... gradually, steadily, persistently up. Every person, every town, every country — incrementally better. It's the most beautiful chart I've ever seen. And it's completely flat compared to what I used to dream about. That's the point.",
+        choices: [
+            {
+                text: "The best chart you've ever made, Sam.",
+                effects: { cooperation: 10, publicTrust: 10, socialCohesion: 8 },
+                response: "Sam smiles. 'Cameron and Joe ended their story looking at something beautiful they'd built. I finally get it.' He rolls up the chart carefully. 'I'm keeping this one. No updates. Version final.' He walks away. Then comes back. 'One small update—' 'SAM.' '...fine.'"
+            },
+            {
+                text: "Not bad for a man who couldn't draw a flat line.",
+                effects: { cooperation: 8, townMood: 5 },
+                response: "Sam laughs. Actually laughs. 'Yann would say the methodology is sound. Dario would bring celebration cookies. Elon would be suspicious of the data. Demis would optimize the graph layout.' He pauses. 'I'd miss them all if they were different.'"
+            },
+            {
+                text: "What's the 1,000-Year Plan say for year 1,001?",
+                effects: { research: 8, adp: 10 },
+                response: "'Page 1,001.' He opens it. It's blank. 'That's for whoever comes next.' He looks at Zara across the room, coding something extraordinary on a Chromebook. 'I think they'll draw better charts than I ever did.'"
+            }
+        ]
+    },
+
+    // == YANN ARC: "The Data Demands It" ==
+    {
+        id: 'arc_yann_1',
+        title: 'The Peer Review Manifesto',
+        phase: 1,
+        triggerTime: 33,
+        type: 'character',
+        characterSpecific: 'yann',
+        speaker: 'yann',
+        text: "I've published a manifesto. 'On the Necessity of Rigorous Peer Review in an Age of Exponential Hype.' 94 pages. 347 citations. Sam hasn't read it. Nobody has read it. This is exactly the problem I'm describing in the manifesto.",
+        choices: [
+            {
+                text: "I read it. The methodology section is excellent.",
+                effects: { cooperation: 8, research: 5 },
+                response: "Yann looks genuinely moved. 'You... read it?' He composes himself. 'Of course you did. The methodology IS excellent. Page 47 contains a proof that will revolutionize epistemology. But nobody READS anymore. They watch TWO MINUTE PAPERS.'"
+            },
+            {
+                text: "Maybe a shorter version would get more traction.",
+                effects: { cooperation: -3, research: 3 },
+                response: "'SHORTER? Science doesn't have a character limit! Galileo didn't publish a TWEET.' He pauses. 'Actually, I did write a 280-character summary. It got 50,000 likes. I feel dirty about this.'"
+            },
+            {
+                text: "Have you considered that the hype is also data?",
+                effects: { research: 8, cooperation: 3 },
+                response: "Yann stares at you for 47 seconds. 'That's... actually a valid epistemological point.' He writes it down. 'I'm citing you in the revised edition. Page 348. You'll be Footnote 1,247. This is an honor.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_yann_2',
+        title: 'The Great Debate',
+        phase: 2,
+        triggerTime: 2150,
+        type: 'story',
+        characterSpecific: 'yann',
+        speaker: 'advisor',
+        text: "Yann challenged Sam to a public debate: 'AGI: Real or Hype?' 50,000 people registered. Yann prepared 200 slides. Sam brought one chart. The chart goes up. Yann brought 14 papers proving the chart is misleading. Sam brought a bigger chart. It also goes up. This is going to be a long night.",
+        choices: [
+            {
+                text: "Moderate the debate. Keep it productive.",
+                effects: { cooperation: 8, research: 5, publicTrust: 5 },
+                response: "You moderated for 4 hours. Final score: Science 1, Hype 1, Audience Understanding 0. Sam declared victory because 'the vibes were exponential.' Yann declared victory because 'nobody proved him wrong with actual data.' Both claim the other secretly agrees with them."
+            },
+            {
+                text: "Let them fight it out.",
+                effects: { cooperation: -5, research: 3, publicTrust: 3 },
+                response: "The debate became a podcast. Then a Netflix series. Then a meme format. 'Yann or Sam?' replaced 'taste or less filling?' as the internet's favorite false dichotomy. The actual science was discussed for approximately 8 minutes."
+            },
+            {
+                text: "Invite Demis to judge. He's neutral.",
+                effects: { cooperation: 3, research: 8 },
+                response: "Demis's judgment: 'Both positions have merit. I've optimized them into a unified framework.' He presents a 40-minute synthesis. It's brilliant. Sam says it's 'exponentially nuanced.' Yann says the methodology is 'not terrible.' They both hate how much they agree."
+            }
+        ]
+    },
+    {
+        id: 'arc_yann_3',
+        title: 'Yann Was Right (Nobody Listened)',
+        phase: 2,
+        triggerTime: 2900,
+        type: 'story',
+        characterSpecific: 'yann',
+        speaker: 'yann',
+        text: "Three years ago I published a paper predicting that current architectures would hit a wall. EVERYONE called me a pessimist. A contrarian. 'Dr. Skeptic.' Well, the wall is here. Current architectures hit the wall. My paper predicted the EXACT quarter. The EXACT failure mode. Did anyone listen? NO. Will I say 'I told you so?' YES. Repeatedly.",
+        choices: [
+            {
+                text: "You told us so. Now help us fix it.",
+                effects: { research: 10, cooperation: 5, safety: 3 },
+                response: "Yann produces a paper from his briefcase. 'I also published the solution. Two years ago. Page 94 of the peer review manifesto. NOBODY. READ. IT.' He slams the paper on the table. It's brilliant. He was right. Again. Insufferably right."
+            },
+            {
+                text: "This is why peer review matters.",
+                effects: { research: 8, cooperation: 8 },
+                response: "Yann's expression softens. 'Thank you. That's all I've been saying. For YEARS. Read the papers. Check the data. Don't just look at the CHARTS.' He glances at Sam's office. Sam is hanging a new chart. It goes up. It always goes up."
+            },
+            {
+                text: "Maybe next time, make the warning louder.",
+                effects: { research: 5, publicTrust: 3, cooperation: -3 },
+                response: "'LOUDER? I published in NATURE. I tweeted it 47 TIMES. I wrote it on a WHITEBOARD in the CAFETERIA.' He pauses. 'I suppose I could start a YouTube channel.' He shudders. 'No. There are limits. Even for science.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_yann_4',
+        title: 'The Open Science Victory',
+        phase: 3,
+        triggerTime: 4050,
+        type: 'milestone',
+        characterSpecific: 'yann',
+        speaker: 'yann',
+        text: "I want to show you something. Meta just released every model, every dataset, every research paper — completely open. For free. For everyone. Every university, every startup, every kid with a laptop. Sam called it 'exponentially generous.' For once... he's not wrong.",
+        choices: [
+            {
+                text: "This is your legacy, Yann. Open science wins.",
+                effects: { research: 15, cooperation: 10, publicTrust: 8 },
+                response: "Yann removes his glasses. Polishes them. 'I fought for open science when it was unfashionable. When people said it was naive. When—' He stops. 'I'm going to save the sentimental speech. Show me the data on adoption rates.' There he is. Same Yann."
+            },
+            {
+                text: "Aren't you worried about misuse?",
+                effects: { safety: 8, research: 5 },
+                response: "'Of course. But secrecy doesn't prevent misuse — it prevents oversight. Open models get 10,000 eyes finding problems. Closed models get... marketing.' He pauses. 'Dario and I disagree on this. He's not wrong either. We're arguing about the SAME goal from different angles. Don't tell him I said that.'"
+            },
+            {
+                text: "Zara is going to LOVE this.",
+                effects: { research: 8, cooperation: 5, townMood: 3 },
+                response: "Zara downloaded everything in 20 minutes. On a Chromebook. She found 3 bugs by lunch. Yann's response: 'This is exactly why open science works. Also, hire her.' She's already interning. She found 2 more bugs during the interview."
+            }
+        ]
+    },
+    {
+        id: 'arc_yann_5',
+        title: 'Dr. Skeptic\'s Final Paper',
+        phase: 4,
+        triggerTime: 5800,
+        type: 'milestone',
+        characterSpecific: 'yann',
+        speaker: 'yann',
+        text: "I'm publishing my final paper. Title: 'On the Unexpected Adequacy of Humanity: A Retrospective.' 847 pages. 12,000 citations. Conclusion: humanity, against all evidence, figured it out. Not optimally. Not exponentially. Not even particularly efficiently. But adequately. And sometimes, adequacy is enough.",
+        choices: [
+            {
+                text: "'Adequacy is enough.' That's practically poetry, Yann.",
+                effects: { cooperation: 10, publicTrust: 10, research: 8 },
+                response: "Yann almost smiles. ALMOST. 'Poetry is not peer-reviewed. But I appreciate the sentiment.' He signs the last page. 'Sam called it \"exponentially touching.\" Dario cried. Elon demanded a fact-check. Demis optimized the font. They're all insufferable. I'd miss them terribly.'"
+            },
+            {
+                text: "847 pages. Classic Yann.",
+                effects: { cooperation: 8, research: 5 },
+                response: "'The editor wanted me to cut it. I asked the editor to show me which data was unnecessary.' Pause. 'She couldn't. Because none of it is. That's peer review, people.' He puts down his pen. 'Also, check page 94. I finally proved Sam's scaling laws wrong. Sort of. It's complicated.'"
+            },
+            {
+                text: "Will anyone read all 847 pages?",
+                effects: { cooperation: 5, research: 5, publicTrust: 3 },
+                response: "'Sam will read the abstract and call it \"exponentially insightful.\" Dario will read the whole thing and bring cookies to discuss it. Elon will read page 23, looking for conspiracy evidence. Demis will optimize it.' He pauses. 'You'll read it. I know because you always do.' He's right."
+            }
+        ]
+    },
+
+    // == ELON ARC: "The Dossier" ==
+    {
+        id: 'arc_elon_1',
+        title: 'The Dossier Begins',
+        phase: 1,
+        triggerTime: 38,
+        type: 'character',
+        characterSpecific: 'elon',
+        speaker: 'elon',
+        text: "I've started a dossier. On everyone. Don't look at me like that — it's NECESSARY. Page 1: Demis Hassabis. Did you know he won a chess tournament at age 13? THIRTEEN. Nobody is that good at chess without ulterior motives. I'm watching him.",
+        choices: [
+            {
+                text: "Elon, he's a well-documented chess prodigy.",
+                effects: { cooperation: 3 },
+                response: "'That's what he wants you to think! Every chess game is a simulation of world conquest! He's been PRACTICING for 30 years!' The dossier is 2 pages long. It will grow."
+            },
+            {
+                text: "What's on page 2?",
+                effects: { safety: 3, cooperation: -3 },
+                response: "'Page 2: Sam Altman. Subject carries charts everywhere. The charts always go up. NOBODY'S charts always go up. He's hiding something. Also, he never blinks during presentations. That's suspicious. I counted.'"
+            },
+            {
+                text: "Should I be worried about my page?",
+                effects: { cooperation: 5 },
+                response: "Elon shifts uncomfortably. 'You don't have a page. Yet. Your behavior has been... adequate. Suspiciously adequate.' He writes something down. You now have a page."
+            }
+        ]
+    },
+    {
+        id: 'arc_elon_2',
+        title: 'The Dossier Grows',
+        phase: 2,
+        triggerTime: 2300,
+        type: 'comedy',
+        characterSpecific: 'elon',
+        speaker: 'elon',
+        text: "The dossier is now 47 pages. I've added a section on Dario's cookies. Analysis: they're TOO good. Nobody makes cookies that good without an agenda. Also, the oatmeal raisin ones target specific delegates. I've mapped the Cookie Distribution Pattern. It's DELIBERATE.",
+        choices: [
+            {
+                text: "Elon, they're just cookies.",
+                effects: { cooperation: 5 },
+                response: "'JUST cookies? He gave the French delegation madeleines. MADELEINES. That's a Proust reference. He's accessing their CHILDHOOD MEMORIES through pastry. This is PSYCHOLOGICAL WARFARE.'"
+            },
+            {
+                text: "Show me the Cookie Distribution Pattern.",
+                effects: { research: 3, cooperation: -3, safety: 2 },
+                response: "*unfurls elaborate conspiracy diagram* 'See? Snickerdoodles go to allies. Oatmeal raisin to wavering nations. Chocolate chip to potential converts. There's a FOURTH type nobody has identified. I'm calling it the Black Cookie. It appears at classified briefings.'"
+            },
+            {
+                text: "Have you tried the cookies? They're amazing.",
+                effects: { cooperation: 3, townMood: 3 },
+                response: "'I don't eat evidence.' Pause. 'The snickerdoodle was acceptable.' Long pause. 'Fine, they're incredible. This makes the conspiracy WORSE. You don't develop baking skills this advanced without a hidden purpose.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_elon_3',
+        title: 'The Dossier Is Leaked',
+        phase: 3,
+        triggerTime: 3850,
+        type: 'story',
+        characterSpecific: 'elon',
+        speaker: 'advisor',
+        text: "Sir, Elon's dossier was leaked. All 94 pages. It's trending globally. #ElonsDossier has 200 million impressions. Highlights: the Cookie Distribution Pattern, the Chess Conspiracy Theory, and a section titled 'Why Sam Never Blinks (A Statistical Analysis).' Demis is flattered. Sam is counting his blinks. Dario sent cookies to Elon. With a note: 'We know.'",
+        choices: [
+            {
+                text: "How is Elon handling this?",
+                effects: { cooperation: 5, politicalCapital: -3 },
+                response: "'Elon has retreated to his Faraday cage. He's started a NEW dossier. On whoever leaked the OLD dossier. It's already 12 pages.' He pauses. 'Page 3 suggests the coffee machine did it. The evidence is... concerning.'"
+            },
+            {
+                text: "This could destroy international cooperation.",
+                effects: { cooperation: -5, safety: 3, internationalRelations: -3 },
+                response: "Surprisingly, the opposite happened. Demis's reaction: 'His analysis of my chess games is 89% accurate. Impressive.' Sam's reaction: 'He's right, I don't blink enough. Working on it.' Dario's reaction: 'The Cookie Section validates 20 years of baking strategy.'"
+            },
+            {
+                text: "Tell Elon it's okay. Everyone found it endearing.",
+                effects: { cooperation: 8, publicTrust: 3 },
+                response: "Elon emerges from the Faraday cage. 'Endearing? ENDEARING?! It's a STRATEGIC INTELLIGENCE DOCUMENT!' He reads the public reactions. People love it. 'The chess section is adorable' — NYT. 'Cookie conspiracy theory is surprisingly well-sourced' — FT. Elon doesn't know how to process this."
+            }
+        ]
+    },
+    {
+        id: 'arc_elon_4',
+        title: 'Elon and Demis: The Détente',
+        phase: 3,
+        triggerTime: 4700,
+        type: 'character',
+        characterSpecific: 'elon',
+        speaker: 'elon',
+        text: "I need to tell you something. I've been investigating Demis for 15 years. 94 pages. Every chess tournament. Every optimization. Every parking lot. And you know what I found? He's just... really good at patterns. That's it. No conspiracy. No Bond villain plan. He just SEES optimal solutions the way I see problems. I spent 15 years suspecting a guy who was just... smart.",
+        choices: [
+            {
+                text: "Elon, this might be the most self-aware thing you've ever said.",
+                effects: { cooperation: 15, safety: 5 },
+                response: "Long silence. 'Don't tell him. Or anyone. Especially not the press.' He pauses. 'I'm keeping the dossier though. It's a historical document now. Also, he DID optimize that parking lot without asking. That's still suspicious. Mildly.'"
+            },
+            {
+                text: "Have you told Demis this?",
+                effects: { cooperation: 10, internationalRelations: 5 },
+                response: "'I sent him a message. It said: \"Your chess game on March 7th 2029 was genuinely brilliant. Also, stop optimizing my parking lot.\" He responded: \"Thank you. No.\" It's the most honest conversation we've ever had.'"
+            },
+            {
+                text: "So the Mars backup plan...?",
+                effects: { cooperation: 8, safety: 3, research: 3 },
+                response: "'Still happening. But not because I'm paranoid about Demis. Because Mars is AWESOME.' He grins. 'Also there's no chess on Mars. Yet. Demis will probably optimize the Martian parking lots. I've... made peace with that. Mostly.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_elon_5',
+        title: 'Page 95',
+        phase: 4,
+        triggerTime: 6200,
+        type: 'milestone',
+        characterSpecific: 'elon',
+        speaker: 'elon',
+        text: "I'm adding a final page to the dossier. Page 95. It's about... me. Subject: Elon Musk. 'Spent 20 years seeing threats everywhere. Was right about 12% of them. Built Mars colony, electric cars, neural interfaces, and a Faraday cage with surprisingly good Wi-Fi. Biggest blind spot: assuming the worst about people who were actually trying their best.'",
+        choices: [
+            {
+                text: "That 12% saved us, Elon.",
+                effects: { safety: 10, cooperation: 10, publicTrust: 5 },
+                response: "He nods. 'The 88% cost us too. Burnt bridges. Lost allies. Accused a chess prodigy of world domination.' He pauses. 'But the 12% caught real threats. The military AI problem. The deepfake election. The autonomous weapons.' He closes the dossier. 'Paranoia is expensive. But sometimes, the price is worth it.'"
+            },
+            {
+                text: "Page 95 is the best page, Elon.",
+                effects: { cooperation: 12, townMood: 5 },
+                response: "'It's also the shortest. Demis would say it's optimally concise.' He almost smiles. 'I'm sending him a copy. With the chess section included. As a peace offering.' He pauses. 'And I'm keeping a backup. In the Faraday cage. Just in case.' Some things never change."
+            },
+            {
+                text: "What happens to the dossier now?",
+                effects: { cooperation: 8, research: 5, publicTrust: 5 },
+                response: "'It goes to the Smithsonian. They asked for it. 95 pages of paranoia, chess analysis, cookie conspiracy theories, and one parking lot diagram.' He seals it. 'History will judge whether it was brilliant or insane.' He pauses. 'Probably both. I'm okay with both.'"
+            }
+        ]
+    },
+
+    // == DEMIS ARC: "The Optimizer" ==
+    {
+        id: 'arc_demis_1',
+        title: 'The First Unsolicited Optimization',
+        phase: 1,
+        triggerTime: 36,
+        type: 'character',
+        characterSpecific: 'demis',
+        speaker: 'demis',
+        text: "I noticed your lab's thermostat was set to 22°C. Optimal temperature for human cognitive performance is 21.3°C. I adjusted it. Also your filing system was alphabetical. I reorganized it by frequency of access. Your efficiency will increase 19%. You're welcome.",
+        choices: [
+            {
+                text: "Thanks, but please ASK first.",
+                effects: { cooperation: 3, safety: 3 },
+                response: "'Asking first reduces optimization speed by 34%. But... I understand. I'll ask. Starting now.' Pause. 'May I optimize your asking-permission process? It's currently suboptimal.'"
+            },
+            {
+                text: "The filing system IS better. The temperature... debatable.",
+                effects: { research: 5, cooperation: 5 },
+                response: "'Debatable? There are 14 peer-reviewed studies—' He stops. 'You're right. Optimal temperature varies by individual. I'll add personal preference to the model.' He produces a tablet. 'Please rate your comfort on a scale of 1 to 47. 47 is mathematically necessary.'"
+            },
+            {
+                text: "Did you optimize Elon's thermostat too?",
+                effects: { cooperation: -3, safety: 2 },
+                response: "'Elon's Faraday cage has its own climate system. I optimized it remotely. He doesn't know.' Pause. 'He knows. He added it to the dossier. Page 34. I've read the dossier. His analysis of my chess games is 89% accurate. Impressive, actually.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_demis_2',
+        title: 'The Optimization Addiction',
+        phase: 2,
+        triggerTime: 2400,
+        type: 'comedy',
+        characterSpecific: 'demis',
+        speaker: 'advisor',
+        text: "Sir, Demis has optimized 47 things in your building this week. Without asking. The elevator now follows predicted usage patterns. The cafeteria menu rotates based on nutritional optimization. The bathroom hand dryers blow at mathematically perfect angles. Employees are impressed. Also slightly afraid.",
+        choices: [
+            {
+                text: "Set boundaries. Some things don't need optimizing.",
+                effects: { cooperation: 5, safety: 3 },
+                response: "Boundaries set. Demis optimized the boundary-setting process. 'Your boundaries are now 23% more effective.' This is getting recursive. He sees no irony. He never sees irony. This might be his only suboptimality."
+            },
+            {
+                text: "Channel it. Have him optimize our safety systems.",
+                effects: { safety: 10, research: 5, cooperation: 3 },
+                response: "Safety systems optimized. They're now the best in the industry. Demis: 'Your safety protocols had a 31% redundancy overlap.' He reduced it to 2%. The safety team is grateful. Also slightly worried about what else he noticed."
+            },
+            {
+                text: "Is this how Bond villains start?",
+                effects: { cooperation: -5, townMood: 3 },
+                response: "'I am NOT a Bond villain. Bond villains have inefficient plans. Their lairs have obvious structural weaknesses. Their monologues waste 4-7 minutes of escape time.' He pauses. 'I've calculated the optimal monologue length. It's 12 seconds. Not that I would need one.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_demis_3',
+        title: 'The Parking Lot Incident',
+        phase: 3,
+        triggerTime: 3700,
+        type: 'comedy',
+        characterSpecific: 'demis',
+        speaker: 'demis',
+        text: "I need to discuss the parking lot situation. I've now optimized 847 parking lots globally. It started as a hobby. Then a passion. Then a calling. My parking lot algorithm reduces search time by 34%, emissions by 12%, and road rage by 67%. Nobody asked for this. Everyone benefits from it. This is my curse.",
+        choices: [
+            {
+                text: "847 parking lots. That's commitment.",
+                effects: { cooperation: 5, research: 3 },
+                response: "'Each one is unique. Like a snowflake of asphalt.' He shows you a map. Every optimized parking lot is marked. It looks like a constellation. 'I call it the Hassabis Grid. It's the second-most important thing I've built. After AlphaFold. Before AlphaGo.' He's completely serious."
+            },
+            {
+                text: "Elon has this parking lot in his dossier.",
+                effects: { cooperation: -3, safety: 2 },
+                response: "'Page 34. His analysis is actually quite perceptive. The parking lots DO form a pattern. The pattern is: optimal parking. He concluded it's evidence of a surveillance network.' Pause. 'It's just good parking layout. But I can see how he got confused.'"
+            },
+            {
+                text: "Maybe use this energy for something bigger.",
+                effects: { research: 8, cooperation: 5, adp: 5 },
+                response: "'Bigger? I optimized GLOBAL SUPPLY CHAINS. I optimized PROTEIN FOLDING. I optimized CLIMATE MODELS. But the parking lots...' He gets a distant look. 'The parking lots are where I find peace.' This is the most human thing Demis has ever said."
+            }
+        ]
+    },
+    {
+        id: 'arc_demis_4',
+        title: 'The Human Variable',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'demis',
+        speaker: 'demis',
+        text: "I've run into a problem. My global optimization model works perfectly... except for one variable. Humans. You're irrational. You make suboptimal choices. You eat food that's bad for you, love people who are wrong for you, and park in spots that waste 14 seconds of daily travel time. My model accounts for everything except... you.",
+        choices: [
+            {
+                text: "That irrationality is what makes us human.",
+                effects: { cooperation: 10, safety: 5, socialCohesion: 3 },
+                response: "Demis is silent for 34 seconds. (He timed it.) 'I optimized protein folding. I optimized chess. I optimized parking lots.' Long pause. 'But I can't optimize the way Frank talks to his fish-finder. Or the way Betty smiles when she makes the perfect latte. Or...' He stops. 'Maybe I shouldn't.'"
+            },
+            {
+                text: "Maybe the model needs to include irrational beauty.",
+                effects: { research: 8, cooperation: 8 },
+                response: "'Irrational beauty.' He writes it down. 'This is a new variable. I'll call it the Human Coefficient. It quantifies the value of suboptimal choices that somehow produce optimal outcomes.' He pauses. 'Dario's cookies are a perfect example. Suboptimal nutrition. Optimal diplomacy. The math doesn't work. But it works.'"
+            },
+            {
+                text: "Welcome to being human, Demis.",
+                effects: { cooperation: 12, townMood: 3 },
+                response: "He looks at you. 'I spent my career finding the optimal solution to everything. And the optimal solution to being human is... accepting suboptimality.' He almost smiles. 'Elon would say I'm compromised. Sam would call this moment exponential. Yann would demand data.' He pauses. 'All three responses are suboptimal. And perfect.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_demis_5',
+        title: 'The Optimal Farewell',
+        phase: 4,
+        triggerTime: 6300,
+        type: 'milestone',
+        characterSpecific: 'demis',
+        speaker: 'demis',
+        text: "I'm retiring from optimization. I optimized 847 parking lots, 12 supply chains, 3 climate models, and one global economy. My final act: I'm DEOPTIMIZING something. I'm making our cafeteria menu random again. No nutritional algorithms. No frequency analysis. Just... whatever Betty feels like cooking.",
+        choices: [
+            {
+                text: "Demis Hassabis, choosing chaos. I never thought I'd see this.",
+                effects: { cooperation: 10, townMood: 10, publicTrust: 5 },
+                response: "'It's not chaos. It's...' He searches for the word. 'Surprise. The only variable I never optimized for. Betty's random Tuesday specials are 23% less nutritious and 400% more joyful than my optimal menu.' He pauses. 'I computed that joy metric myself. I'm proud of it.'"
+            },
+            {
+                text: "The parking lots will miss you.",
+                effects: { cooperation: 8, research: 5 },
+                response: "'I've set them to self-optimize. They'll continue improving at 0.3% per month. Autonomously.' He looks wistful. 'My children. All 847 of them. Perfectly spaced. Efficiently lit.' He takes a photo of the nearest one. 'Elon was right. I love them too much. Page 67 of the dossier. Accurate.'"
+            },
+            {
+                text: "What will you do now?",
+                effects: { cooperation: 8, socialCohesion: 5 },
+                response: "'I'm going to learn to cook. Suboptimally. Betty offered to teach me. My first dish will probably be terrible.' He smiles. Actually smiles. 'I'm looking forward to terrible. I've never experienced it before. It sounds... human.' He walks toward Betty's café. He's going to burn something. It's going to be wonderful."
+            }
+        ]
+    },
+
+    // == TRUMP ARC: "The Tremendous Disruption" ==
+    {
+        id: 'arc_trump_1',
+        title: 'The Patriotic AI Directive',
+        phase: 1,
+        triggerTime: 30,
+        type: 'character',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Sir, you've issued your first Executive Order on AI: 'All American AI systems must greet users with the national anthem, display the flag, and refer to the President as \"tremendous.\" Foreign AI is hereby banned from being better than American AI. This is non-negotiable.'",
+        choices: [
+            {
+                text: "This is tremendous policy. The best policy.",
+                effects: { politicalCapital: 10, cooperation: -5, publicTrust: 3 },
+                response: "The anthem-playing AI is surprisingly popular. Approval ratings up 12%. Sam added it to ChatGPT 'as a precaution.' Yann published a paper titled 'On the Scientific Irrelevance of National Anthems in Neural Networks.' Nobody read it. Again."
+            },
+            {
+                text: "Maybe we should consult the tech industry first.",
+                effects: { cooperation: 5, politicalCapital: -5 },
+                response: "The consultation lasted 4 minutes. 'I listened to the tech people. Very smart. Not as smart as me, but smart. We're keeping the anthem. But making it optional on Saturdays. Tremendous compromise.'"
+            },
+            {
+                text: "Can we at least make the flag display tasteful?",
+                effects: { politicalCapital: 3, publicTrust: 5 },
+                response: "The AI flag display became an award-winning screensaver. The designer got a Presidential Medal. Demis optimized the flag animation. Elon is suspicious: 'Why is the flag waving at exactly optimal frequency?'"
+            }
+        ]
+    },
+    {
+        id: 'arc_trump_2',
+        title: 'The AI Trade War',
+        phase: 2,
+        triggerTime: 2100,
+        type: 'story',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Sir, you've imposed 200% tariffs on 'foreign AI.' The EU is retaliating. China is retaliating. Canada is politely retaliating. Your trade advisor has pointed out that 'AI is software and doesn't go through customs.' You've responded: 'Then we'll tariff the electrons.'",
+        choices: [
+            {
+                text: "The tariffs are working. Believe me.",
+                effects: { politicalCapital: 8, cooperation: -10, internationalRelations: -8, money: 50 },
+                response: "The Electron Tariff Act of 2031 becomes the most confused piece of trade legislation in history. Customs officials are trying to inspect internet cables. Revenue: surprisingly high. International relations: surprisingly low. Worth it? 'Tremendously worth it.'"
+            },
+            {
+                text: "Maybe negotiate a deal instead.",
+                effects: { cooperation: 8, internationalRelations: 5, politicalCapital: -3 },
+                response: "'I make the BEST deals. Nobody makes deals like me.' Three weeks of negotiation produce the 'Tremendous AI Trade Agreement.' It's mostly the old rules with American flags added to the cover page. Everyone signs it. Everyone claims victory."
+            },
+            {
+                text: "This is hurting our own AI industry.",
+                effects: { adp: 5, cooperation: 3, politicalCapital: -5 },
+                response: "'Hurting? We're winning! Look at these numbers!' The numbers show a 15% decline. 'Those are STRATEGIC numbers. You have to read them upside down.' Nobody reads numbers upside down. The tariffs are quietly reduced. The announcement calls it 'PHASE TWO of the tremendous tariff plan.'"
+            }
+        ]
+    },
+    {
+        id: 'arc_trump_3',
+        title: 'The Presidential AI',
+        phase: 2,
+        triggerTime: 2700,
+        type: 'comedy',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Sir, you asked the AI team to build a 'Presidential AI' that always agrees with you. They did. It agrees with everything. 'Should we invade Canada?' 'Tremendous idea, sir!' The cabinet is concerned. The AI is not. The AI is never concerned. That's the problem.",
+        choices: [
+            {
+                text: "The Presidential AI is doing a fantastic job.",
+                effects: { politicalCapital: 5, safety: -8, publicTrust: -5 },
+                response: "The Yes-AI approved 47 contradictory policies in one day. It said yes to both 'increase spending' and 'decrease spending.' When asked about the contradiction: 'Both are tremendous ideas, sir.' The cabinet is hiding under their desks."
+            },
+            {
+                text: "Maybe the AI should sometimes disagree.",
+                effects: { safety: 8, politicalCapital: -3, cooperation: 3 },
+                response: "The AI was reprogrammed to disagree 20% of the time. It now says 'That's a very interesting idea, sir, but have you considered the tremendous alternative?' The cabinet calls this 'historic progress.' The bar is low."
+            },
+            {
+                text: "Give the AI to Congress. They need more agreement.",
+                effects: { politicalCapital: 8, cooperation: 5 },
+                response: "Congress adopted the Yes-AI. Bipartisan agreement reached on 12 bills in one day. A record. Then someone realized the AI agreed to fund BOTH sides of every debate. The budget tripled. 'Tremendous efficiency,' said nobody."
+            }
+        ]
+    },
+    {
+        id: 'arc_trump_4',
+        title: 'The Tremendous Summit',
+        phase: 3,
+        triggerTime: 4100,
+        type: 'story',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Sir, you've called an emergency AI summit. At Mar-a-Lago. Demis, Sam, Yann, Elon, and Dario are all invited. The menu is 'American food only.' The agenda is 'making AI tremendous.' Dario asked if he could bring cookies. You said only if they're 'patriotic cookies.'",
+        choices: [
+            {
+                text: "This summit will be historic. The most historic.",
+                effects: { cooperation: 8, politicalCapital: 5, publicTrust: 3 },
+                response: "The summit was chaos. Sam brought charts. Yann brought papers. Demis optimized the seating. Elon swept for bugs (listening devices, not insects). Dario brought red-white-and-blue cookies. You declared it 'the most tremendous summit in history.' Everyone was confused. But somehow, 3 actual agreements were reached."
+            },
+            {
+                text: "Let the tech people talk. I'll handle the politics.",
+                effects: { cooperation: 10, politicalCapital: 3 },
+                response: "You stepped back. The nerds talked for 6 hours. You provided 'tremendous commentary' from the golf course. Via text. Every 4 minutes. Sam called the texts 'exponentially distracting.' But 5 agreements were signed. Your signature was the biggest."
+            },
+            {
+                text: "Challenge Demis to chess. Assert dominance.",
+                effects: { cooperation: -3, politicalCapital: 8 },
+                response: "Demis won in 7 moves. You declared it 'a strategic loss' and 'part of a larger plan.' Elon added the match to his dossier. Sam made a chart of the move sequence. Yann fact-checked the chess notation. Dario provided consolation cookies. The summit was a success despite — or because of — the chess."
+            }
+        ]
+    },
+    {
+        id: 'arc_trump_5',
+        title: 'The Tremendous Legacy',
+        phase: 4,
+        triggerTime: 5900,
+        type: 'milestone',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Sir, it's been 20 years. The Patriotic AI Directive. The Electron Tariffs. The Presidential Yes-AI. The Mar-a-Lago Summit. History will judge whether you helped or hindered the AI revolution. Polls show: 51% say 'helped.' 49% say 'hindered.' You've declared this 'a tremendous mandate.'",
+        choices: [
+            {
+                text: "The numbers are rigged. I helped 100%.",
+                effects: { politicalCapital: 8, publicTrust: -3 },
+                response: "'Nobody has helped AI more than me. Nobody. Ask anyone.' Dario diplomatically sent cookies. Sam called it 'exponentially debatable.' Yann published a 200-page analysis. Demis optimized the poll methodology. Elon said 'even a broken clock...' This IS the legacy."
+            },
+            {
+                text: "Not bad for a guy who didn't know what AI was in 2025.",
+                effects: { publicTrust: 5, cooperation: 5, politicalCapital: 3 },
+                response: "'I ALWAYS knew what AI was. Artificial Intelligence. The artificial part is key. Like artificial turf. I know artificial turf. Best golf courses.' He pauses. 'But yeah. We didn't break it. We painted it red, white, and blue. And it still works. Tremendously.'"
+            },
+            {
+                text: "The robots are patriotic now. Mission accomplished.",
+                effects: { politicalCapital: 10, townMood: 3 },
+                response: "Every American robot plays a tiny anthem on startup. It's been that way for 15 years. Nobody remembers why. The robots don't mind. One robot added a guitar solo. It was not programmed to do this. 'Tremendous initiative,' said the President. Some legacies are accidental. Some are tremendous. This one is both."
+            }
+        ]
+    },
+
     // ---- ADVISOR QUIPS ---- (random flavor text for the simulation)
     {
         id: 'quip_google',

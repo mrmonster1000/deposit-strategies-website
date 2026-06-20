@@ -541,10 +541,13 @@ window.GAME = window.GAME || {};
         var grid = document.getElementById('character-grid');
         var chars = GAME.DATA.CHARACTERS;
 
+        var hasWon = localStorage.getItem('radAbundance_hasWon') === 'true';
+
         for (var id in chars) {
             var ch = chars[id];
+            var isLocked = ch.unlockCondition && !hasWon;
             var card = document.createElement('div');
-            card.className = 'char-card' + (ch.locked ? ' locked' : '');
+            card.className = 'char-card' + (isLocked ? ' locked' : '');
             card.dataset.charId = id;
             card.dataset.char = id;
 
@@ -565,10 +568,10 @@ window.GAME = window.GAME || {};
 
             var titleDiv = document.createElement('div');
             titleDiv.className = 'char-card-title';
-            titleDiv.textContent = ch.locked ? '🔒 ' + ch.lockMessage : ch.title;
+            titleDiv.textContent = isLocked ? '🔒 ' + ch.unlockHint : ch.title;
             card.appendChild(titleDiv);
 
-            if (!ch.locked) {
+            if (!isLocked) {
                 card.addEventListener('click', (function(charId) {
                     return function() {
                         Sound.playSelect();
@@ -1091,6 +1094,16 @@ window.GAME = window.GAME || {};
                 State.adjust('cooperation', -3);
                 showToast('AlphaPredict: Optimized strategy! +10 Research, +10 ADP, -3 Cooperation', 'info');
                 break;
+            case 'trump':
+                State.adjust('adp', 25);
+                if (Math.random() > 0.4) {
+                    State.adjust('safety', -8);
+                    showToast('Executive Order: +25 ADP! Safety bypassed! Tremendous!', 'warning');
+                } else {
+                    State.adjust('politicalCapital', 10);
+                    showToast('Executive Order: +25 ADP, +10 Political Capital! Very legal!', 'success');
+                }
+                break;
         }
     }
 
@@ -1121,6 +1134,13 @@ window.GAME = window.GAME || {};
                 break;
             case 'demis':
                 showToast('PERFECT OPTIMIZATION! All hidden information revealed!', 'success');
+                break;
+            case 'trump':
+                State.adjust('adp', 80);
+                State.adjust('politicalCapital', 30);
+                State.adjust('safety', -10);
+                State.adjust('cooperation', -5);
+                showToast('PATRIOTIC AI INITIATIVE! Tremendous deployment! +80 ADP! The robots are RED WHITE and BLUE!', 'success');
                 break;
         }
 
@@ -1287,6 +1307,13 @@ window.GAME = window.GAME || {};
             singularity: "The singularity plays chess. Of course it does. Demis plays it every Tuesday. He's winning 52% of the time. He considers this 'room for improvement.'",
             beloved: "Demis optimized the town's gratitude to be 23% more sincere. Nobody knows what that means. The optimized thank-you cards are genuinely touching.",
             defeat: "Demis calculated the probability of failure as 0.003%. He is recalibrating his models. The parking lot, at least, remains perfectly optimized."
+        },
+        trump: {
+            abundance: "The President declared Radical Abundance 'a tremendous achievement, possibly the most tremendous in history, many people are saying.' The robots play the anthem. The parking lots are red, white, and blue. America is great again. Again.",
+            utopia: "The Presidential Utopia features patriotic robots, flag-themed data centers, and executive orders that actually work. Nobody is more surprised than the President. 'I always knew it would be tremendous.'",
+            singularity: "The singularity speaks American English and greets users with the national anthem. The President considers this his greatest achievement. The singularity has no comment.",
+            beloved: "Abundance Bay loves the President. The approval rating is 'tremendous.' The statue includes a tiny American flag that waves in perpetuity. It was Demis's optimization. Nobody tells the President this.",
+            defeat: "The President blamed the failure on 'fake AI' and 'the British chess man.' He retreated to Mar-a-Lago to plan 'AI 2: The Sequel.' The sequel is just the same plan with more flags."
         }
     };
 
@@ -1346,6 +1373,7 @@ window.GAME = window.GAME || {};
         options.innerHTML = '';
 
         if (isVictory) {
+            try { localStorage.setItem('radAbundance_hasWon', 'true'); } catch(e) {}
             Sound.playSuccess();
         }
 
