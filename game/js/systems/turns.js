@@ -72,7 +72,7 @@ GAME.Systems.Simulation = (function() {
     function calculateProduction() {
         var state = State.get();
         var production = {
-            money: 3, // base income
+            money: 5, // base income (increased from 3 for better early game)
             research: 0,
             compute: 0,
             power: 0,
@@ -92,7 +92,7 @@ GAME.Systems.Simulation = (function() {
         state.buildings.forEach(function(placed) {
             var bData = GAME.DATA.BUILDINGS[placed.type];
             if (!bData) return;
-            production.money -= (bData.maintenance * 1.5) / 30; // daily maintenance (increased)
+            production.money -= bData.maintenance / 30;
             if (bData.produces) {
                 for (var key in bData.produces) {
                     if (production[key] !== undefined) {
@@ -109,7 +109,7 @@ GAME.Systems.Simulation = (function() {
         state.townBuildings.forEach(function(placed) {
             var bData = GAME.DATA.TOWN.buildings[placed.type];
             if (!bData) return;
-            production.money -= (bData.maintenance * 1.5) / 30;
+            production.money -= bData.maintenance / 30;
             if (bData.produces) {
                 for (var key in bData.produces) {
                     if (production[key] !== undefined) {
@@ -137,10 +137,10 @@ GAME.Systems.Simulation = (function() {
         }
 
         // ADP generation formula: research * compute * safety factor
-        var safetyFactor = Math.pow(state.safety / 100, 2);
-        var computeFactor = Math.max(1, state.compute) / 10;
-        var researchAdp = (production.research * computeFactor * safetyFactor) / 10;
-        var trickleAdp = production.research * 0.03 * safetyFactor;
+        var safetyFactor = Math.max(0.1, state.safety / 100);
+        var computeFactor = Math.max(1, state.compute) / 8;
+        var researchAdp = (production.research * computeFactor * safetyFactor) / 8;
+        var trickleAdp = production.research * 0.05 * safetyFactor;
         production.adp += researchAdp + trickleAdp;
 
         // Apply production
@@ -175,7 +175,7 @@ GAME.Systems.Simulation = (function() {
         var state = State.get();
 
         // Monthly money from ADP (deployment revenue)
-        var adpRevenue = state.adp * 0.5;
+        var adpRevenue = state.adp * 0.8;
         State.adjust('money', adpRevenue);
 
         // Town population growth based on mood
@@ -291,7 +291,7 @@ GAME.Systems.Simulation = (function() {
         var state = State.get();
         if (state.gameTime % 30 !== 0) return;
 
-        var baseChance = 0.15 + (state.phase - 1) * 0.05;
+        var baseChance = 0.10 + (state.phase - 1) * 0.05;
 
         // Modify by safety (lower safety = more crises)
         var safetyMod = (100 - state.safety) / 200;

@@ -27,7 +27,7 @@ GAME.Systems.State = (function() {
             phaseName: 'Foundation',
 
             // Resources
-            money: 200,
+            money: 250,
             moneyPerTick: 0,
             adp: 0,
             research: charData.startingStats.research || 0,
