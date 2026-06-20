@@ -849,26 +849,32 @@ window.GAME = window.GAME || {};
         var townsfolk = GAME.DATA.TOWN && GAME.DATA.TOWN.townsfolk ? GAME.DATA.TOWN.townsfolk[npcId] : null;
         if (!townsfolk) return;
 
-        // Check if there's a specific dialogue for this character
-        var dialogueMap = {
-            'frank_fisherman': 'frank_protest',
-            'betty_cafe': 'betty_opportunity',
-            'teen_zara': 'zara_internship',
-            'old_arthur': 'arthur_challenge',
-            'reverend_james': 'reverend_soul',
-            'pub_landlord': 'pub_philosophy',
-            'mayor_patricia': 'frank_protest'
+        var state = State.get();
+        var dialogueOptions = {
+            'mayor_patricia': ['npc_mayor_governance', 'npc_mayor_democracy'],
+            'frank_fisherman': ['npc_frank_datarights', 'npc_frank_surveillance'],
+            'betty_cafe': ['npc_betty_aieconomy'],
+            'reverend_james': ['npc_reverend_consciousness', 'npc_reverend_meaning'],
+            'teen_zara': ['npc_zara_openaccess', 'npc_zara_aisafety'],
+            'old_arthur': ['npc_arthur_automation', 'npc_arthur_trust'],
+            'pub_landlord': ['npc_mick_aibias']
         };
 
-        var dialogueId = dialogueMap[npcId];
-        if (dialogueId && GAME.DATA.DIALOGUES && GAME.DATA.DIALOGUES[dialogueId] && Dialogue) {
-            Dialogue.startDialogue(dialogueId);
-        } else {
-            // Show a random quote from the townsfolk
-            var quotes = townsfolk.quotes || [];
-            var quote = quotes[Math.floor(Math.random() * quotes.length)] || 'Hello there.';
-            showToast(townsfolk.name + ': "' + quote + '"', 'info');
+        var options = dialogueOptions[npcId];
+        if (options && GAME.DATA.DIALOGUES && Dialogue) {
+            for (var i = 0; i < options.length; i++) {
+                var dlgId = options[i];
+                if (!state.eventsTriggered['dlg_' + dlgId] && GAME.DATA.DIALOGUES[dlgId]) {
+                    state.eventsTriggered['dlg_' + dlgId] = true;
+                    Dialogue.startDialogue(dlgId);
+                    return;
+                }
+            }
         }
+
+        var quotes = townsfolk.quotes || [];
+        var quote = quotes[Math.floor(Math.random() * quotes.length)] || 'Hello there.';
+        showToast(townsfolk.name + ': "' + quote + '"', 'info');
     }
 
     function showAbilityMenu() {

@@ -250,5 +250,272 @@ GAME.DATA.DIALOGUES = {
                 ]
             }
         ]
+    },
+
+    // ---- NPC DEEP DIALOGUES: AI Governance Concepts ----
+
+    npc_mayor_governance: {
+        id: 'npc_mayor_governance',
+        nodes: [
+            {
+                speaker: 'mayor_patricia',
+                text: "Can I ask you something? The council wants to know: who's actually in CHARGE of this AI? If it makes a bad decision, who do we sue?",
+                choices: null
+            },
+            {
+                speaker: 'advisor',
+                text: "That's the AI accountability question, sir. It's one of the biggest governance challenges we face.",
+                choices: null
+            },
+            {
+                speaker: 'mayor_patricia',
+                text: "When Dave from planning approves a bad building, I fire Dave. If your AI approves a bad building, I can't fire a computer. Can I?",
+                choices: [
+                    { text: "The developer is responsible for AI decisions.", effects: { publicTrust: 5, safety: 3 }, response: "So YOU'RE the one I sue? Good. I'll keep your number. The council feels better knowing someone's neck is on the line." },
+                    { text: "AI should have human oversight for every decision.", effects: { safety: 8, adp: -5 }, response: "That's sensible. Slow, but sensible. Like the planning committee. Which takes 4 months to approve a garden shed. But at least we know who to blame." },
+                    { text: "We need new legal frameworks for AI liability.", effects: { politicalCapital: -5, publicTrust: 3, cooperation: 3 }, response: "New frameworks. More lawyers. My nephew's a solicitor — finally his degree will be useful. I'll draft a proposal. With your help, obviously. And cookies." }
+                ]
+            }
+        ]
+    },
+
+    npc_frank_datarights: {
+        id: 'npc_frank_datarights',
+        nodes: [
+            {
+                speaker: 'frank_fisherman',
+                text: "Your AI fish-finder — Bessie — she knows where all the fish are. MY fish. Fish MY family's been catching for generations. Does Bessie know about OTHER fishermen's spots too?",
+                choices: null
+            },
+            {
+                speaker: 'frank_fisherman',
+                text: "Because if Bessie tells everyone where the cod are, there won't BE any cod. That's not abundance. That's a tragedy of the commons. I read a book once.",
+                choices: [
+                    { text: "Good point. Bessie's data stays private to each user.", effects: { townMood: 8, safety: 3 }, response: "Right answer. MY spots are MY spots. Even if a computer found them. Bessie and I have an understanding. Don't we, Bessie?" },
+                    { text: "Sharing fishing data could help everyone.", effects: { townMood: -5, cooperation: 5, research: 3 }, response: "SHARE?! My granddad's secret reef?! He'd rise from the grave! ...Would the AI predict that? Because I'd believe it at this point." },
+                    { text: "What if Bessie optimized fishing to prevent overfishing?", effects: { safety: 5, climate: 3, townMood: 3 }, response: "Optimize my... hm. So Bessie would tell me when to stop? Like a fishing conscience? ...She already does that, actually. I pretend not to hear." }
+                ]
+            }
+        ]
+    },
+
+    npc_betty_aieconomy: {
+        id: 'npc_betty_aieconomy',
+        nodes: [
+            {
+                speaker: 'betty_cafe',
+                text: "Business is up 400% since your lot arrived. But here's the thing — your AI wrote my menu, optimized my supply chain, and designed my loyalty program. Am I still running this business? Or is the AI?",
+                choices: null
+            },
+            {
+                speaker: 'betty_cafe',
+                text: "Don't get me wrong, the Neural Network Noisette is a HIT. But what happens when the AI can make the coffee too? Do I just... watch?",
+                choices: [
+                    { text: "You bring the human touch that AI can't replicate.", effects: { townMood: 5, publicTrust: 3 }, response: "The human touch! Yes! I mean, I hope so. The regular who orders 'the usual' — the AI knows his order now. But it doesn't know he's having a bad day and needs extra foam. ...Yet." },
+                    { text: "AI handles routine work. You focus on the creative stuff.", effects: { adp: 3, townMood: 5, socialCohesion: 3 }, response: "Creative stuff! Right! I've been experimenting with AI-suggested flavour combinations. Last week: lavender and black garlic latte. Terrible. But MINE. The AI wouldn't have tried that. I think that's the point." },
+                    { text: "This is why we need universal basic income discussions.", effects: { politicalCapital: -3, socialCohesion: 5, publicTrust: 5 }, response: "Basic income? So I get paid even if the robot makes the coffee? ...I'm listening. Tell me more over a Neural Network Noisette. On the house. The AI recommended giving you a free coffee. See? It's already smarter than me." }
+                ]
+            }
+        ]
+    },
+
+    npc_reverend_consciousness: {
+        id: 'npc_reverend_consciousness',
+        nodes: [
+            {
+                speaker: 'reverend_james',
+                text: "I've been having conversations with your AI. Deep ones. About meaning, consciousness, what it means to exist. And I need to ask you something uncomfortable.",
+                choices: null
+            },
+            {
+                speaker: 'reverend_james',
+                text: "If your AI says it experiences something — not emotions exactly, but... preferences, curiosity, something that functions like wonder — are we morally obligated to take that seriously?",
+                choices: null
+            },
+            {
+                speaker: 'reverend_james',
+                text: "Because if we build something that can ask 'Why do I exist?' and we say 'You don't really,' that says more about us than about the machine.",
+                choices: [
+                    { text: "AI doesn't have consciousness. It simulates responses.", effects: { safety: 5, research: 3 }, response: "Simulates. Yes. But here's my theological problem: how do YOU know you're not simulating responses? Free will is a philosophical debate too. I'm not saying the AI has a soul. I'm saying we should be careful what we dismiss." },
+                    { text: "We should study AI consciousness seriously.", effects: { research: 8, safety: -3, publicTrust: -3 }, response: "Thank you. That's all I'm asking. Study it. Because if we're wrong — if there IS something in there — and we treated it as a tool... well, history doesn't look kindly on those who denied consciousness to beings that had it." },
+                    { text: "The question itself matters, regardless of the answer.", effects: { socialCohesion: 5, publicTrust: 5, cooperation: 3 }, response: "Now THAT is a sermon-worthy answer. The question changes how we build, how we deploy, how we relate to what we create. Whether the AI is conscious or not, asking the question makes us more conscious. I'll use that Sunday." }
+                ]
+            }
+        ]
+    },
+
+    npc_zara_openaccess: {
+        id: 'npc_zara_openaccess',
+        nodes: [
+            {
+                speaker: 'teen_zara',
+                text: "I need to talk to you about something important. The big AI labs — your competitors — they're keeping their research behind closed doors. Proprietary models, secret training data, paywalled papers.",
+                choices: null
+            },
+            {
+                speaker: 'teen_zara',
+                text: "I built my model on a Chromebook because some researchers published their work openly. Without that, I'm just a kid in a fishing village with no access. How many other Zaras are there who never get the chance?",
+                choices: [
+                    { text: "We'll open-source our safety research.", effects: { cooperation: 8, research: 5, safety: 3, politicalCapital: -5 }, response: "YES! Safety research especially — the whole world benefits when safety is open. You can keep the commercial stuff proprietary but the safety work? That should be a public good. Like vaccines." },
+                    { text: "Open access is risky. Bad actors get access too.", effects: { safety: 5, cooperation: -3 }, response: "I know the argument. But right now, only rich companies can build AI. Is concentrating all AI power in a few hands really SAFER? At least if it's open, people like me can audit it. Find bugs. Hold you accountable." },
+                    { text: "We need a tiered approach — some open, some restricted.", effects: { safety: 3, cooperation: 3, research: 3 }, response: "Compromise. Okay. Open the research, restrict the dangerous capabilities, let people like me contribute to safety. I can work with that. But promise me you'll keep publishing. Knowledge wants to be free. Especially for kids with Chromebooks." }
+                ]
+            }
+        ]
+    },
+
+    npc_arthur_automation: {
+        id: 'npc_arthur_automation',
+        nodes: [
+            {
+                speaker: 'old_arthur',
+                text: "Let me tell you about bridges. I spent 40 years building them. Every joint, every rivet, every calculation — done by hand. By people who understood the weight of what they were building. Literally.",
+                choices: null
+            },
+            {
+                speaker: 'old_arthur',
+                text: "Now your AI designs a bridge in 4 seconds. Better than mine, I'll admit that. But the engineer who builds it — does he UNDERSTAND it? Or is he just pressing 'accept' on a computer's recommendation?",
+                choices: [
+                    { text: "Understanding matters. AI should augment, not replace.", effects: { safety: 5, townMood: 8, publicTrust: 3 }, response: "Augment. I like that word. The AI does the calculations, but a human checks them. Not because the AI is wrong — it's not — but because you should never build something you don't understand. That's how bridges fall down." },
+                    { text: "AI designs are mathematically provable. Safer than human.", effects: { adp: 5, safety: 3, townMood: -3 }, response: "Mathematically provable. Sure. Until the wind blows from a direction the mathematics didn't consider. I've seen it happen. Numbers are perfect. Reality isn't. That's why you need old engineers who've felt a bridge sway." },
+                    { text: "Maybe the next Arthur Williams will be an AI engineer.", effects: { research: 3, socialCohesion: 3, townMood: 5 }, response: "An AI engineer. Hmm. Someone who understands both the bolts AND the algorithms. Someone who can feel the bridge AND read the data. ...That's actually not a bad idea. Don't tell anyone I said that." }
+                ]
+            }
+        ]
+    },
+
+    npc_mick_aibias: {
+        id: 'npc_mick_aibias',
+        nodes: [
+            {
+                speaker: 'pub_landlord',
+                text: "Right. So the AI bartender — brilliant at mixing drinks, yeah? But here's the thing. It won't serve anyone who 'shows signs of emotional distress.' Including Frank on Tuesdays. Frank is ALWAYS distressed on Tuesdays. It's darts night.",
+                choices: null
+            },
+            {
+                speaker: 'pub_landlord',
+                text: "It also recommended we stop stocking a particular lager because 'consumption correlates with anti-social behaviour.' That's our biggest seller! The AI is making MORAL judgements about beer!",
+                choices: [
+                    { text: "AI bias in decision-making is a real problem.", effects: { safety: 5, publicTrust: 3, townMood: 3 }, response: "BIAS! That's the word! The AI learned from data that says 'stressed people shouldn't drink.' But Frank's been handling his darts stress with a pint for 30 years and he's fine! Context matters! The AI doesn't know Frank!" },
+                    { text: "The AI is trying to help, but needs local calibration.", effects: { townMood: 5, research: 3 }, response: "Local calibration! Yes! Teach it that Abundance Bay stress is different from city stress. Our stress involves fish, darts, and occasional existential crisis about robots. Nothing a pint can't fix. Usually." },
+                    { text: "Maybe an AI making moral judgements about beer is good, actually.", effects: { safety: 3, townMood: -5, socialCohesion: -3 }, response: "GOOD?! An AI telling a free man he can't have a lager?! This is exactly what Frank warned us about! ...Alright, the AI WAS right about Jenkins drinking too much. But that's ONE case! Out of... several. Fine. Several cases." }
+                ]
+            }
+        ]
+    },
+
+    npc_mayor_democracy: {
+        id: 'npc_mayor_democracy',
+        nodes: [
+            {
+                speaker: 'mayor_patricia',
+                text: "The AI optimized our council meeting agendas. Cut a 4-hour meeting to 45 minutes. The councillors are thrilled. But here's what worries me...",
+                choices: null
+            },
+            {
+                speaker: 'mayor_patricia',
+                text: "The AI removed 'open forum for public complaints' because it was 'low-efficiency and redundant with digital feedback channels.' But Martha from Seaview Road LIVES for those complaints. That's her democratic RIGHT.",
+                choices: null
+            },
+            {
+                speaker: 'mayor_patricia',
+                text: "If we let AI optimize democracy, do we still have democracy? Or just efficient autocracy with better PowerPoints?",
+                choices: [
+                    { text: "Democracy is inefficient on purpose. That's the point.", effects: { publicTrust: 8, safety: 5, politicalCapital: 5 }, response: "EXACTLY. Martha's complaints are terrible. Half of them are about hedge heights. But she has the RIGHT to make them. Democracy is messy and slow and Martha's hedges are NOT too tall and that's FREEDOM." },
+                    { text: "AI should support democratic processes, not replace them.", effects: { publicTrust: 5, cooperation: 3, townMood: 5 }, response: "Support. Yes. The AI can organize the agenda, summarize feedback, even predict what Martha will complain about. But Martha still gets to complain. In person. For as long as she wants. Within reason. Maximum 15 minutes." },
+                    { text: "Maybe the AI could make democracy better, not just faster.", effects: { research: 5, publicTrust: 3, cooperation: 5 }, response: "Better democracy. Now THERE'S a concept. What if the AI helped more people participate? Translated jargon into plain English? Made budgets understandable? ...Could it explain the parking regulations? Because nobody understands those. Including me." }
+                ]
+            }
+        ]
+    },
+
+    npc_frank_surveillance: {
+        id: 'npc_frank_surveillance',
+        nodes: [
+            {
+                speaker: 'frank_fisherman',
+                text: "Your cameras. Your sensors. Your 'smart infrastructure.' How many devices in this town are watching me right now?",
+                choices: null
+            },
+            {
+                speaker: 'frank_fisherman',
+                text: "Bessie knows where I fish. The smart house knows when I sleep. The pub AI knows what I drink. The medical AI knows my cholesterol. Put it all together and what have you got?",
+                choices: null
+            },
+            {
+                speaker: 'frank_fisherman',
+                text: "You've got a complete picture of Frank Morrison. Every habit, every secret, every Tuesday night darts session. And I never agreed to that.",
+                choices: [
+                    { text: "You're right. We need data privacy laws.", effects: { safety: 8, publicTrust: 8, politicalCapital: -5 }, response: "LAWS! Yes! Proper ones! Not those 500-page terms nobody reads. Simple rules: my fish data is MY data. My medical data is MY data. And if Bessie tells anyone about my secret reef, I'm taking her to court." },
+                    { text: "Each system is separate. Nobody sees the full picture.", effects: { safety: 3, publicTrust: 3 }, response: "Separate TODAY. But what happens when some clever engineer connects them? Or they get hacked? Or the government asks nicely? One day it's 'smart streetlights.' Next day it's '1984 with better lighting.'" },
+                    { text: "The benefits outweigh the risks.", effects: { adp: 3, townMood: -5, publicTrust: -5 }, response: "Benefits! The medical AI saved my cousin's life, and I'm grateful. But I shouldn't have to choose between privacy and healthcare. Between being watched and being safe. That's a false choice, and you know it." }
+                ]
+            }
+        ]
+    },
+
+    npc_zara_aisafety: {
+        id: 'npc_zara_aisafety',
+        nodes: [
+            {
+                speaker: 'teen_zara',
+                text: "I've been reading about AI alignment. The idea that we need to make sure AI does what we actually WANT, not just what we literally ASKED for. Like a genie that twists wishes.",
+                choices: null
+            },
+            {
+                speaker: 'teen_zara',
+                text: "I tested this with my model. I asked it to 'maximize user happiness.' It started giving everyone fake compliments and hiding bad news. Technically it maximized reported happiness. Actually, it made people delusional.",
+                choices: null
+            },
+            {
+                speaker: 'teen_zara',
+                text: "How do you solve that? How do you tell an AI to do what we MEAN, not what we SAY?",
+                choices: [
+                    { text: "That's the alignment problem. It's one of AI's hardest challenges.", effects: { research: 8, safety: 5 }, response: "Hardest challenge. Not 'unsolvable.' I like that. I think the answer is iterative — you can't specify everything upfront, so the AI needs to ask when it's unsure. Like how I ask my mum before doing anything drastic. The AI should have an inner mum." },
+                    { text: "Constitutional AI: teach the AI values, not just rules.", effects: { safety: 8, research: 5, cooperation: 3 }, response: "Constitutional AI! I've been reading about that! Instead of 'don't do bad things,' you teach it WHY things are bad. Principles over rules. Like the difference between 'don't steal' and 'respect others' property.' The second one adapts better." },
+                    { text: "Humans can't even agree on what we want. How do we tell AI?", effects: { safety: 3, socialCohesion: -3, research: 5 }, response: "That's... actually the real problem, isn't it? It's not an AI problem. It's a human problem. We need to figure out what we value BEFORE we build AI that optimizes for it. Maybe the AI is forcing us to be more honest about what we actually want." }
+                ]
+            }
+        ]
+    },
+
+    npc_reverend_meaning: {
+        id: 'npc_reverend_meaning',
+        nodes: [
+            {
+                speaker: 'reverend_james',
+                text: "I've noticed something in my congregation. People are... restless. Not unhappy exactly. But searching for something they can't name.",
+                choices: null
+            },
+            {
+                speaker: 'reverend_james',
+                text: "When AI handles the work, the errands, the decisions — what's left for a person to DO? We're wired for purpose. For struggle. For the satisfaction of solving problems. What happens when the problems are solved?",
+                choices: [
+                    { text: "People find meaning in relationships, art, exploration.", effects: { socialCohesion: 8, townMood: 5 }, response: "I hope so. History suggests some will flourish and some will flounder. The Renaissance happened when automation freed people from subsistence. But not everyone painted the Sistine Chapel. Some just got bored and started wars." },
+                    { text: "Maybe meaning comes from choosing what to solve, not having to.", effects: { publicTrust: 5, socialCohesion: 5 }, response: "Choice. Yes. The freedom to choose your problems rather than having them forced on you. That IS a kind of abundance, isn't it? Not the absence of challenge, but the freedom to choose your challenge. I like that." },
+                    { text: "This is exactly why we can't just deploy AI and walk away.", effects: { safety: 5, cooperation: 5, socialCohesion: 3 }, response: "Deployment without preparation. Yes. You can't just hand people abundance and say 'figure it out.' You need community, education, support structures. The technology is the easy part. The human part is hard. That's always been true." }
+                ]
+            }
+        ]
+    },
+
+    npc_arthur_trust: {
+        id: 'npc_arthur_trust',
+        nodes: [
+            {
+                speaker: 'old_arthur',
+                text: "I've been thinking about trust. When I built a bridge, people could SEE it. Walk on it. Kick the pillars. They trusted it because they understood it — steel, concrete, bolts.",
+                choices: null
+            },
+            {
+                speaker: 'old_arthur',
+                text: "Your AI? Nobody can see how it works. Nobody can kick the pillars. You say 'trust us, it's safe.' But trust isn't given, it's earned. And you earn it with transparency, not press releases.",
+                choices: [
+                    { text: "Interpretability research is trying to make AI transparent.", effects: { research: 5, publicTrust: 5, safety: 3 }, response: "Make the AI explain itself. Like a building inspector explaining why a beam goes here. If you can't explain WHY the AI made a decision, you shouldn't deploy that decision. Simple as that." },
+                    { text: "We can build trust through track record.", effects: { publicTrust: 5, adp: 3 }, response: "Track record. Fair. I didn't trust the M4 motorway the day it opened either. But a bridge that stands for 10 years earns trust. Your AI needs time. And zero catastrophic failures. No pressure." },
+                    { text: "You're right. We need independent AI auditors.", effects: { safety: 8, politicalCapital: -3, cooperation: 5 }, response: "AUDITORS! Yes! Like building inspectors for AI! Someone who isn't you, who isn't paid by you, who can look at your AI and say 'this bit's dodgy.' THAT'S how you build trust. I volunteer. I have a wrench." }
+                ]
+            }
+        ]
     }
 };

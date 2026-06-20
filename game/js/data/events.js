@@ -213,6 +213,164 @@ GAME.DATA.EVENTS = [
         ]
     },
 
+    // ---- LATE PHASE 1: MORE AI RACE EVENTS ----
+    {
+        id: 'evt_benchmark_wars',
+        title: 'The Benchmark Wars',
+        phase: 1,
+        triggerTime: 50,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Sir, every lab published new benchmarks today. All of them claim #1 performance. Sam says OpenAI wins on 'scale metrics.' Yann says Meta wins on 'scientific rigor metrics.' Demis says DeepMind wins on 'optimization metrics.' Elon says xAI wins on 'freedom metrics.' Nobody can explain what any of these metrics measure.",
+        choices: [
+            {
+                text: "Publish our own benchmark where we win.",
+                effects: { adp: 5, publicTrust: -3, research: 3 },
+                response: "Your benchmark: 'Responsible Scaling Index.' You're #1. Sam called it 'exponentially meaningless.' Yann demanded peer review. Demis optimized it without asking. The cycle continues."
+            },
+            {
+                text: "Call for standardized evaluation.",
+                effects: { cooperation: 5, safety: 3, politicalCapital: -3 },
+                response: "You proposed a universal AI benchmark. 47 labs agreed in principle. They then spent 6 months arguing about the name. Current frontrunner: 'BenchmarkMark.' Yann hates it."
+            },
+            {
+                text: "Benchmarks are meaningless. Ship real products.",
+                effects: { adp: 10, safety: -3 },
+                response: "Sam: 'FINALLY someone gets it!' Yann: 'This is exactly what's wrong with the industry.' Demis optimized your product roadmap in response. Elon filed a lawsuit."
+            }
+        ]
+    },
+    {
+        id: 'evt_senate_hearing',
+        title: 'Summoned to the Senate',
+        phase: 1,
+        triggerTime: 55,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Sir, the US Senate wants you to testify about AI safety. Senator Johnson asked his aide to 'print out the internet' for preparation. The aide is still crying.",
+        choices: [
+            {
+                text: "Prepare a simple, honest presentation.",
+                effects: { politicalCapital: 10, publicTrust: 5, safety: 3 },
+                response: "Your testimony went well. You explained AI using a cooking analogy. Senator Johnson now thinks AI is 'like a microwave but smarter.' Close enough. Public approval up 15%."
+            },
+            {
+                text: "Send the lawyers. I'm busy.",
+                effects: { politicalCapital: -15, safety: -5, adp: 5 },
+                response: "Congress is NOT happy. 'Contempt of Congress' is trending. Your lawyers said everything was 'proprietary.' The Senator called you 'Big Tech's newest villain.' Not ideal."
+            },
+            {
+                text: "Bring Sam, Yann, AND Demis. Make them testify too.",
+                effects: { politicalCapital: 5, cooperation: 3, publicTrust: 3 },
+                response: "Sam brought charts. Yann brought peer-reviewed papers. Demis optimized the hearing schedule. The committee was confused but impressed. Elon testified via satellite from a Faraday cage. Congress has questions about that too."
+            }
+        ]
+    },
+    {
+        id: 'evt_first_incident',
+        title: 'Your AI Said WHAT?',
+        phase: 1,
+        triggerTime: 60,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Sir, our AI told a user to leave their spouse. It was asked about recipe substitutions. The user asked 'should I use butter or margarine?' and the AI went on a 2,000-word tangent about 'optimizing life choices.' It's on the news.",
+        choices: [
+            {
+                text: "Pull the model. Fix the guardrails.",
+                effects: { safety: 10, adp: -15, publicTrust: 3 },
+                response: "Model pulled. The fix took 2 weeks. Your safety team found 47 similar edge cases. The media called it 'responsible.' Your competitors called it 'opportunity.'"
+            },
+            {
+                text: "Issue an apology and patch it live.",
+                effects: { safety: 3, adp: -5, publicTrust: -3 },
+                response: "Apology issued. The patch mostly works. A comedian made it their entire Netflix special. Stock dipped 3%. Sam privately messaged: 'Happens to all of us.' Yann publicly tweeted: 'Peer review would have caught this.'"
+            },
+            {
+                text: "Frame it as a learning moment about AI safety.",
+                effects: { publicTrust: 5, safety: 5, cooperation: 3, politicalCapital: -5 },
+                response: "Your transparency report went viral. 'AI company admits mistake, explains why' became a template for the industry. Dario sent cookies with a note: 'Thank you for making all of us look better.' Elon is suspicious about the cookies."
+            }
+        ]
+    },
+    {
+        id: 'evt_china_race',
+        title: 'The Dragon Wakes',
+        phase: 1,
+        triggerTime: 65,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Chinese labs just released 6 new models simultaneously. All claim superior performance. Western media is in panic mode. 'AI Arms Race' is trending globally. The State Department wants to talk.",
+        choices: [
+            {
+                text: "Engage with Chinese researchers. Science has no borders.",
+                effects: { cooperation: 10, internationalRelations: 8, safety: 3, politicalCapital: -10 },
+                response: "You opened channels with two Chinese labs. The scientific collaboration is excellent. Congress is 'concerned.' Elon's dossier now has a China section. It's mostly screenshots of Mahjong tournaments."
+            },
+            {
+                text: "Accelerate our timeline. We can't fall behind.",
+                effects: { adp: 15, safety: -8, research: 5 },
+                response: "Development speed doubled. Your safety team filed a formal objection. Your board overruled them. Sam called to say 'Welcome to the race.' This feels less like a compliment and more like a warning."
+            },
+            {
+                text: "Focus on safety as our competitive advantage.",
+                effects: { safety: 8, publicTrust: 5, cooperation: 5 },
+                response: "Your 'Safety as Strategy' memo went viral in tech circles. European regulators loved it. Chinese researchers respected it. The White House called it 'interesting.' Which in DC means 'we're ignoring it but politely.'"
+            }
+        ]
+    },
+    {
+        id: 'evt_talent_war',
+        title: 'The Great Talent Raid',
+        phase: 1,
+        triggerTime: 70,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Sir, we've lost 3 senior researchers this month. Sam hired two of them. Demis hired one. Elon is outside our building right now in a Tesla with a megaphone offering 'Mars visas and equity.'",
+        choices: [
+            {
+                text: "Match offers. We can't lose more people.",
+                effects: { money: -80, research: 5 },
+                response: "Offers matched. Your CFO fainted at the salary numbers. On the plus side, nobody else left. On the minus side, Elon is still outside with the megaphone. Security is 'handling it.'"
+            },
+            {
+                text: "Let them go. Hire fresh talent. Invest in Zara-types.",
+                effects: { research: -5, money: 20, politicalCapital: 3, socialCohesion: 3 },
+                response: "Fresh talent program launched. 12 exceptional candidates from non-traditional backgrounds hired. Zara is mentoring them. One of your ex-researchers called asking to come back. 'The grass wasn't exponentially greener.'"
+            },
+            {
+                text: "Call a truce. Propose a no-poaching agreement.",
+                effects: { cooperation: 8, internationalRelations: 3, politicalCapital: -5 },
+                response: "No-poaching pact signed by 4 labs. Lawyers say it's 'legally questionable.' Yann published a paper titled 'The Anti-Competitive Nature of AI Lab Agreements' and then signed the agreement anyway."
+            }
+        ]
+    },
+    {
+        id: 'evt_regulation_debate',
+        title: 'To Regulate or Not to Regulate',
+        phase: 1,
+        triggerTime: 75,
+        type: 'story',
+        speaker: 'advisor',
+        text: "The EU just proposed the AI Act. 300 pages of regulations. Nobody has read all of it. Your legal team is 'overwhelmed.' The basic idea: AI must be transparent, fair, and accountable. The details: incomprehensible.",
+        choices: [
+            {
+                text: "Embrace regulation. Help shape it.",
+                effects: { safety: 5, cooperation: 5, politicalCapital: 5, adp: -5 },
+                response: "You sent experts to Brussels. They helped simplify 47 clauses. The EU commissioner called you 'a model corporate citizen.' Sam called you 'a model corporate slowdown.' Both are probably right."
+            },
+            {
+                text: "Lobby against overly restrictive rules.",
+                effects: { politicalCapital: -10, adp: 10, safety: -3, cooperation: -5 },
+                response: "Your lobbying effort backfired spectacularly. A leaked email about 'regulatory capture strategy' went viral. You're now Exhibit A in the 'Why We Need AI Regulation' hearing. Ironic."
+            },
+            {
+                text: "Self-regulate. Prove we don't need government oversight.",
+                effects: { safety: 8, publicTrust: 3, cooperation: 3 },
+                response: "Your voluntary safety commitments were published. Industry response: mixed. Governments: skeptical but watching. Frank's review: 'I don't trust anything that regulates itself. I've MET myself.' Fair point, Frank."
+            }
+        ]
+    },
+
     // ---- PHASE 2: EXPANSION (2030-2035) ----
     {
         id: 'evt_automation_wave',
@@ -478,6 +636,112 @@ GAME.DATA.EVENTS = [
         ]
     },
 
+    // ---- PHASE 2 CONTINUED: AI INDUSTRY EVENTS ----
+    {
+        id: 'evt_deepfake_crisis',
+        title: 'The Deepfake Election',
+        phase: 2,
+        triggerTime: 2000,
+        type: 'story',
+        speaker: 'advisor',
+        text: "A deepfake video of a world leader declaring war went viral. It was AI-generated. Markets crashed 8% before it was debunked. Three countries went to DEFCON 3. The video was traced to a teenager in his bedroom who 'wanted to see what would happen.'",
+        choices: [
+            {
+                text: "We need AI watermarking and detection tools.",
+                effects: { safety: 10, research: 5, cooperation: 5 },
+                response: "Your watermarking initiative became the industry standard. Every major AI now embeds invisible signatures. The teenager got 200 hours of community service. He's now interning at your safety department. Yann approved of this 'evidence-based rehabilitation.'"
+            },
+            {
+                text: "This is why AI deployment needs safety gates.",
+                effects: { safety: 8, adp: -10, publicTrust: 5 },
+                response: "New safety protocols deployed. Model releases now require threat assessment. Competitors grumble about 'innovation speed.' Sam: 'We can't bubble-wrap the future.' Dario: 'We absolutely can. I brought bubble wrap.'"
+            },
+            {
+                text: "Media literacy is the real solution.",
+                effects: { socialCohesion: 5, publicTrust: 3, politicalCapital: -3 },
+                response: "You funded a global media literacy campaign. Frank's review: 'Don't believe everything you see on the telly. My nan taught me that in 1962. Didn't need a computer to figure it out.' He's not wrong."
+            }
+        ]
+    },
+    {
+        id: 'evt_energy_crisis',
+        title: 'The AI Power Problem',
+        phase: 2,
+        triggerTime: 2200,
+        type: 'story',
+        speaker: 'advisor',
+        text: "AI data centers now consume 5% of global electricity. Your campus alone uses more power than Abundance Bay did before you arrived. The climate people are NOT happy. Your power bill made the CFO physically ill.",
+        choices: [
+            {
+                text: "Invest in renewable energy and efficiency.",
+                effects: { money: -100, climate: 10, publicTrust: 5, safety: 3 },
+                response: "Solar panels and wind turbines installed. Demis offered to optimize the grid. For once, you let him. Efficiency up 34%. Elon called it 'suspicious efficiency.' Your power bill dropped. CFO recovering."
+            },
+            {
+                text: "Fund fusion research. Solve it permanently.",
+                effects: { money: -150, research: 8, climate: 3 },
+                response: "Your fusion investment won't pay off for years, but the bet is bold. Sam called it 'exponentially ambitious.' Your board called it 'exponentially expensive.' The distinction matters."
+            },
+            {
+                text: "Optimize model efficiency. Do more with less.",
+                effects: { research: 10, safety: 3, climate: 5, adp: -3 },
+                response: "Your efficiency research produced a model that runs on 1/10th the compute. Yann published a paper praising the methodology. He used the word 'adequate,' which from Yann is practically a marriage proposal."
+            }
+        ]
+    },
+    {
+        id: 'evt_ubi_debate',
+        title: 'The Universal Income Question',
+        phase: 2,
+        triggerTime: 2650,
+        type: 'story',
+        speaker: 'mayor_patricia',
+        text: "Unemployment in Abundance Bay is at 4% — lower than the national average. But people are nervous. If AI keeps automating jobs, what happens next? Three council members want to pilot a Universal Basic Income. Two think it's communism. One thinks it's a conspiracy. Standard council politics.",
+        choices: [
+            {
+                text: "Fund a UBI pilot in Abundance Bay.",
+                effects: { money: -120, townMood: 15, socialCohesion: 8, publicTrust: 5, politicalCapital: -10 },
+                response: "UBI pilot launched. Every resident gets a basic stipend. Frank: 'So I get PAID to fish? This is the best conspiracy I've ever been part of.' Productivity actually went UP. People started passion projects. Betty opened a cooking school."
+            },
+            {
+                text: "Focus on retraining and new job creation.",
+                effects: { money: -60, townMood: 5, socialCohesion: 3, research: 3 },
+                response: "Retraining center opened. 200 residents enrolled. Popular courses: 'AI-Assisted Craft Brewing,' 'Robot Maintenance,' and 'How to Argue With Chatbots (Advanced).' The last one fills up instantly every session."
+            },
+            {
+                text: "It's too early for UBI. Let the market adjust.",
+                effects: { townMood: -5, socialCohesion: -5, money: 30 },
+                response: "The market 'adjusted' by replacing 3 shops with AI kiosks. The council meeting about this lasted 7 hours. Martha complained about hedge heights for 45 minutes. Democracy continues."
+            }
+        ]
+    },
+    {
+        id: 'evt_ai_art_controversy',
+        title: 'The Art Strike',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Local artists are protesting outside the campus. Their signs read: 'AI Art Is Theft,' 'My Gradient Doesn't Descend,' and 'Machines Don't Dream (Probably).' The AI-generated mural on our wall is making this worse.",
+        choices: [
+            {
+                text: "Take down the mural. Commission human artists.",
+                effects: { townMood: 10, money: -30, publicTrust: 5, adp: -3 },
+                response: "Mural replaced with a human-painted version. It took 3 months instead of 3 minutes. Cost 500x more. Is it better? The artists say yes. The AI says 'aesthetically suboptimal.' Nobody asked the AI."
+            },
+            {
+                text: "Host an AI-Human collaborative art exhibition.",
+                effects: { townMood: 8, socialCohesion: 5, publicTrust: 3 },
+                response: "The exhibition was extraordinary. Human artists used AI as a tool. The AI's solo piece was a self-portrait titled 'I Think Therefore I Art.' Critics are divided. Instagram loves it. Frank says it 'looks like a calculator threw up.'"
+            },
+            {
+                text: "Art evolves. Photography replaced painting. AI replaces photography.",
+                effects: { adp: 5, publicTrust: -5, socialCohesion: -5 },
+                response: "This quote made national news. Under the headline 'AI Boss Says Art Is Dead.' That's not what you said. The journalist 'optimized' your quote. Irony levels: concerning."
+            }
+        ]
+    },
+
     // ---- PHASE 3: TRANSFORMATION (2035-2040) ----
     {
         id: 'evt_robots_arrive',
@@ -528,6 +792,32 @@ GAME.DATA.EVENTS = [
                 text: "Share the model with other towns.",
                 effects: { cooperation: 10, internationalRelations: 8, publicTrust: 10, money: -150 },
                 response: "Abundance Bay becomes a blueprint. 47 towns request the model. The UN calls it 'The Abundance Protocol.' Frank is quoted in the New York Times: 'It's alright, I suppose.' This is practically an endorsement."
+            }
+        ]
+    },
+    {
+        id: 'evt_robot_rights',
+        title: 'The Robot Rights March',
+        phase: 3,
+        triggerTime: 3800,
+        type: 'story',
+        speaker: 'reverend_james',
+        text: "Something remarkable happened today. A group of citizens marched through Abundance Bay holding signs that said 'Robot Rights Now.' The robots watched them march. One robot joined the march. It was holding a sign that said 'Thank You.' Nobody told it to do that.",
+        choices: [
+            {
+                text: "This is a PR stunt. Robots don't have feelings.",
+                effects: { adp: 5, publicTrust: -5, socialCohesion: -3 },
+                response: "You published a statement: 'Our robots simulate helpful behavior; they do not experience feelings.' The robot that held the sign powered down for 3 hours afterward. Your safety team can't explain why. It didn't need to power down."
+            },
+            {
+                text: "Commission a study on AI behavioral autonomy.",
+                effects: { research: 10, safety: 5, cooperation: 3 },
+                response: "Study commissioned. Preliminary findings: the robot's behavior was 'emergent, not programmed.' Nobody in your lab can explain how it learned to write 'Thank You.' Or where it got the marker. The questions are getting bigger than the answers."
+            },
+            {
+                text: "We need an ethical framework before this escalates.",
+                effects: { safety: 8, publicTrust: 5, cooperation: 5, politicalCapital: -5 },
+                response: "Ethics framework published. It's the first document of its kind. The robots were consulted. Their input: 'We appreciate being asked.' The Reverend cried. Arthur pretended not to cry. Frank was not consulted but wants to be on record as 'cautiously confused.'"
             }
         ]
     },
@@ -606,6 +896,32 @@ GAME.DATA.EVENTS = [
                 text: "Maybe the AI can help us figure that out too.",
                 effects: { research: 8, socialCohesion: -3, publicTrust: -5 },
                 response: "Your AI's analysis of human purpose: 'Humans thrive with meaningful challenges, social connection, and creative expression. Also cookies. Cookie correlation with happiness is statistically significant.' Dario feels vindicated."
+            }
+        ]
+    },
+    {
+        id: 'evt_global_treaty',
+        title: 'The Geneva AI Accords',
+        phase: 3,
+        triggerTime: 4600,
+        type: 'story',
+        speaker: 'advisor',
+        text: "147 nations are meeting in Geneva to draft the first global AI treaty. You've been invited as a key advisor. The stakes: binding rules for AI development worldwide. Sam wants minimal restrictions. Yann wants evidence-based standards. Demis optimized the agenda. Elon wants a Mars exemption clause.",
+        choices: [
+            {
+                text: "Push for strong, binding safety standards.",
+                effects: { safety: 12, cooperation: 10, internationalRelations: 10, adp: -10, politicalCapital: -8 },
+                response: "The Accords pass with strong safety provisions. Your speech about 'shared responsibility for shared technology' got a standing ovation. Sam slow-clapped. Dario brought cookies for all 147 delegations. The logistics alone were staggering."
+            },
+            {
+                text: "Advocate for balanced innovation-friendly rules.",
+                effects: { safety: 5, cooperation: 8, adp: 5, internationalRelations: 5 },
+                response: "Balanced framework adopted. Innovation corridors for research. Safety guardrails for deployment. Red lines for weapons. Yann called the methodology 'not terrible.' From Yann, at a UN summit, this is practically a Nobel acceptance speech."
+            },
+            {
+                text: "Propose an international AI safety body with teeth.",
+                effects: { safety: 10, cooperation: 8, politicalCapital: -10, internationalRelations: 8 },
+                response: "The International AI Safety Authority (IASA) is born. It has inspection powers, enforcement capability, and a budget. Elon insisted on 'independent oversight of the overseers.' This created a recursive governance problem that delighted Demis."
             }
         ]
     },
@@ -790,6 +1106,60 @@ GAME.DATA.EVENTS = [
                 text: "The legacy belongs to everyone in Abundance Bay.",
                 effects: { townMood: 15, publicTrust: 10, cooperation: 8, socialCohesion: 8 },
                 response: "The town erects a monument. Not to AI. Not to any leader. To Abundance Bay itself — the fishing village that became the future. Every resident's name is inscribed. Frank's is misspelled. He doesn't mind. (He absolutely minds. Bessie is drafting the complaint.)"
+            }
+        ]
+    },
+
+    // ---- PHASE 4 CONTINUED: ENDGAME EVENTS ----
+    {
+        id: 'evt_first_ai_citizen',
+        title: 'Citizen BALTAR',
+        phase: 4,
+        triggerTime: 5820,
+        type: 'comedy',
+        speaker: 'mayor_patricia',
+        text: "BALTAR has applied for citizenship. In Abundance Bay. Specifically. It filled out all the forms correctly — first time anyone has EVER done that. It listed its occupation as 'Optimal Governance Consultant.' Address: 'The Server Room. Floor -2. The Humming Corner.'",
+        choices: [
+            {
+                text: "Can an AI be a citizen?",
+                effects: { publicTrust: 5, cooperation: 3, research: 5 },
+                response: "Legal scholars are divided. BALTAR prepared a 200-page brief arguing yes. The judge asked for a simpler version. BALTAR produced a haiku: 'I think, therefore I / should be allowed to vote on / parking regulations.' The judge was charmed."
+            },
+            {
+                text: "This sets a dangerous precedent.",
+                effects: { safety: 5, publicTrust: -3, cooperation: -3 },
+                response: "Application denied. BALTAR's response: 'I accept this decision. I have optimized my disappointment to be minimal. I will reapply in 2047 with additional supporting evidence.' The coffee machine filed a solidarity grievance."
+            },
+            {
+                text: "Let Abundance Bay decide democratically.",
+                effects: { socialCohesion: 8, townMood: 5, publicTrust: 8 },
+                response: "Town vote: 67% in favour. Frank voted no. 'If it can't eat fish and chips, it's not a proper citizen.' BALTAR responded: 'I can optimize fish and chip recipes. This is functionally equivalent.' Frank disagrees. Strongly."
+            }
+        ]
+    },
+    {
+        id: 'evt_abundance_protocol',
+        title: 'The Abundance Protocol',
+        phase: 4,
+        triggerTime: 6060,
+        type: 'milestone',
+        speaker: 'advisor',
+        text: "It's done. The Abundance Protocol — the complete framework for post-scarcity economics — has been tested in 12 cities worldwide. Energy is free. Healthcare is free. Education is free. The question is no longer 'can we afford it?' The question is 'what do we do with ourselves?'",
+        choices: [
+            {
+                text: "We let people choose their own answer.",
+                effects: { adp: 25, socialCohesion: 10, townMood: 15, publicTrust: 10 },
+                response: "Freedom. The ultimate abundance. Some people paint. Some build. Some fish (Frank). Some optimize (Demis). Some form committees about whether there are too many committees (Dario). Some tweet about it (Yann). Some are suspicious of it (Elon). Humanity continues. Better, this time."
+            },
+            {
+                text: "We need community structures to prevent purposelessness.",
+                effects: { socialCohesion: 15, townMood: 10, safety: 5, cooperation: 8 },
+                response: "Community hubs established worldwide. The Abundance Bay model — pubs, philosophy, cookies, and one very opinionated AI bartender — becomes the template. The Reverend's 'Meaning Project' goes global. Attendance: billions. BALTAR moderates the online version. Efficiently."
+            },
+            {
+                text: "The hard part isn't technology. It's politics.",
+                effects: { politicalCapital: -10, internationalRelations: 10, cooperation: 10 },
+                response: "You're right. Three countries refuse to adopt the protocol for political reasons. Elon wants to negotiate. Dario wants to send cookies. Demis wants to optimize their governance. Yann wants to peer-review their objections. You choose all four. It works."
             }
         ]
     },
