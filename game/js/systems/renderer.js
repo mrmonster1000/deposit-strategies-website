@@ -828,69 +828,191 @@ GAME.Systems.Renderer = (function() {
     // --- CAMPUS BUILDINGS ---
 
     function drawResearchLab(bx, by, bw, bh, time) {
-        var wallColor = '#2a3a6a';
-        // Main body
-        drawRect(bx, by, bw, bh, wallColor);
-        drawRect(bx + 2, by + 2, bw - 4, bh - 4, lightenColor(wallColor, 15));
-        // Roof
-        drawRect(bx - 1, by - 2, bw + 2, 4, '#3a4a7a');
-        // Antenna on top
-        drawRect(bx + bw / 2 - 1, by - 14, 2, 14, '#6a6a8a');
-        drawRect(bx + bw / 2 - 3, by - 16, 6, 3, '#8a8aaa');
-        // Blinking antenna light
+        // Shadow
+        drawRect(bx + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
+        // Foundation / concrete base
+        drawRect(bx - 3, by + bh - 4, bw + 6, 6, '#505058');
+        drawRect(bx - 2, by + bh - 3, bw + 4, 4, '#606068');
+        // Main wall — 3 tone layers
+        drawRect(bx, by, bw, bh, '#222e55');
+        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#2a3a6a');
+        drawRect(bx + 3, by + 3, bw - 6, bh - 8, '#30407a');
+        // Darker side wall (right edge depth)
+        drawRect(bx + bw - 3, by + 2, 3, bh - 4, '#1e2a50');
+        // Roof with overhang
+        drawRect(bx - 3, by - 4, bw + 6, 6, '#3a4a7a');
+        drawRect(bx - 2, by - 3, bw + 4, 4, '#4a5a8a');
+        drawRect(bx - 1, by - 2, bw + 2, 2, '#5a6a9a');
+        // Roof detail — AC unit
+        drawRect(bx + 4, by - 8, 10, 5, '#505060');
+        drawRect(bx + 5, by - 7, 8, 3, '#606070');
+        // Antenna mast
+        drawRect(bx + bw / 2 - 1, by - 18, 2, 16, '#6a6a8a');
+        drawRect(bx + bw / 2 - 3, by - 20, 6, 3, '#8a8aaa');
         var blink = Math.sin(time * 0.005) > 0;
-        drawRect(bx + bw / 2 - 1, by - 17, 2, 2, blink ? '#ff4040' : '#601010');
-        // Windows with blue tint
-        drawWindows(bx, by, bw, bh, time, 100, '#4080ff', '#182848');
-        // Door
-        drawRect(bx + bw / 2 - 3, by + bh - 10, 6, 10, '#182040');
+        drawRect(bx + bw / 2 - 1, by - 21, 2, 2, blink ? '#ff4040' : '#601010');
+        // Individual windows with frames (not grid)
+        var winY1 = by + 8;
+        var winY2 = by + bh / 2 + 2;
+        for (var wx = bx + 6; wx < bx + bw - 10; wx += 12) {
+            var lit1 = Math.sin(time * 0.0008 + wx * 0.3 + 100) > -0.2;
+            var lit2 = Math.sin(time * 0.0008 + wx * 0.5 + 200) > -0.1;
+            // Window frame
+            drawRect(wx - 1, winY1 - 1, 8, 10, '#1a2040');
+            drawRect(wx, winY1, 6, 8, lit1 ? '#4080ff' : '#182848');
+            if (lit1) {
+                drawRect(wx + 1, winY1 + 1, 2, 3, '#6090ff');
+                drawRect(wx + 3, winY1, 1, 8, '#2a4a70');
+            }
+            drawRect(wx - 1, winY2 - 1, 8, 10, '#1a2040');
+            drawRect(wx, winY2, 6, 8, lit2 ? '#4080ff' : '#182848');
+            if (lit2) {
+                drawRect(wx + 1, winY2 + 2, 2, 3, '#6090ff');
+            }
+        }
+        // Floor divider stripe
+        drawRect(bx + 2, by + bh / 2 - 1, bw - 4, 2, '#4a5a8a');
+        // Main door with glass panel and frame
+        var doorX = bx + bw / 2 - 6;
+        var doorH = Math.floor(bh * 0.35);
+        drawRect(doorX - 1, by + bh - doorH - 1, 13, doorH + 1, '#1a2040');
+        drawRect(doorX, by + bh - doorH, 11, doorH, '#243060');
+        drawRect(doorX + 2, by + bh - doorH + 2, 7, doorH - 6, '#3a5a90');
+        drawRect(doorX + 4, by + bh - doorH + 3, 3, doorH - 8, '#4a6aa0');
+        drawRect(doorX + 8, by + bh - doorH / 2, 1, 3, '#8a8aaa');
+        // Step in front of door
+        drawRect(doorX - 2, by + bh, 15, 2, '#606068');
+        // "AI LAB" sign above door
+        drawRect(bx + bw / 2 - 10, by + bh - doorH - 8, 20, 6, '#1a2040');
+        ctx.font = '4px "Press Start 2P", monospace';
+        ctx.fillStyle = '#4080ff';
+        ctx.textAlign = 'center';
+        ctx.fillText('AI LAB', bx + bw / 2, by + bh - doorH - 4);
+        // Light glow spill from door onto ground
+        var doorGlow = 0.08 + Math.sin(time * 0.002) * 0.03;
+        ctx.fillStyle = 'rgba(64, 128, 255, ' + doorGlow + ')';
+        ctx.fillRect(doorX - 2, by + bh + 1, 16, 4);
     }
 
     function drawSafetyDept(bx, by, bw, bh, time) {
-        var wallColor = '#2a5a3a';
-        drawRect(bx, by, bw, bh, wallColor);
-        drawRect(bx + 2, by + 2, bw - 4, bh - 4, lightenColor(wallColor, 12));
-        // Roof
-        drawRect(bx - 1, by - 2, bw + 2, 4, '#3a6a4a');
-        // Shield emblem on front (triangle shape)
+        // Shadow
+        drawRect(bx + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
+        // Foundation
+        drawRect(bx - 2, by + bh - 3, bw + 4, 5, '#505058');
+        drawRect(bx - 1, by + bh - 2, bw + 2, 3, '#606068');
+        // Main wall — reinforced look
+        drawRect(bx, by, bw, bh, '#1e4a2e');
+        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#2a5a3a');
+        drawRect(bx + 3, by + 3, bw - 6, bh - 8, '#306a44');
+        // Right edge shadow
+        drawRect(bx + bw - 3, by + 2, 3, bh - 4, '#1a4028');
+        // Reinforced roof
+        drawRect(bx - 2, by - 4, bw + 4, 6, '#3a6a4a');
+        drawRect(bx - 1, by - 3, bw + 2, 4, '#4a7a5a');
+        // Security camera on roof
+        drawRect(bx + bw - 8, by - 8, 4, 5, '#505058');
+        drawRect(bx + bw - 6, by - 10, 6, 3, '#606068');
+        var camBlink = Math.sin(time * 0.006) > 0.5;
+        drawRect(bx + bw - 2, by - 9, 2, 1, camBlink ? '#ff2020' : '#400808');
+        // Shield emblem (larger, centered)
         var sx = bx + bw / 2;
-        var sy = by + 8;
-        drawRect(sx - 5, sy, 10, 2, '#60c060');
-        drawRect(sx - 4, sy + 2, 8, 2, '#60c060');
-        drawRect(sx - 3, sy + 4, 6, 2, '#60c060');
-        drawRect(sx - 2, sy + 6, 4, 2, '#60c060');
-        drawRect(sx - 1, sy + 8, 2, 2, '#60c060');
-        // Green accent stripe
-        drawRect(bx, by + bh / 2, bw, 2, '#40a040');
-        // Windows
-        drawWindows(bx, by + 14, bw, bh - 14, time, 200, '#40ff80', '#183018');
-        // Door
-        drawRect(bx + bw / 2 - 3, by + bh - 10, 6, 10, '#183018');
+        var sy = by + 6;
+        drawRect(sx - 6, sy, 12, 2, '#40a040');
+        drawRect(sx - 5, sy + 2, 10, 2, '#40a040');
+        drawRect(sx - 4, sy + 4, 8, 2, '#50b050');
+        drawRect(sx - 3, sy + 6, 6, 2, '#50b050');
+        drawRect(sx - 2, sy + 8, 4, 2, '#40a040');
+        drawRect(sx - 1, sy + 10, 2, 1, '#40a040');
+        // Checkmark inside shield
+        drawRect(sx - 2, sy + 4, 2, 2, '#80ff80');
+        drawRect(sx, sy + 2, 2, 2, '#80ff80');
+        // Green accent stripes
+        drawRect(bx + 2, by + bh * 0.45, bw - 4, 2, '#40a040');
+        drawRect(bx + 2, by + bh * 0.47, bw - 4, 1, '#308030');
+        // Windows — reinforced with thick frames
+        var winY = by + bh * 0.5 + 4;
+        for (var wx = bx + 6; wx < bx + bw - 10; wx += 12) {
+            var lit = Math.sin(time * 0.0008 + wx * 0.3 + 200) > -0.2;
+            drawRect(wx - 2, winY - 2, 10, 12, '#1a3020');
+            drawRect(wx - 1, winY - 1, 8, 10, '#1e3828');
+            drawRect(wx, winY, 6, 8, lit ? '#40ff80' : '#183018');
+            if (lit) drawRect(wx + 1, winY + 1, 2, 3, '#80ff80');
+        }
+        // Secure door — heavy frame
+        var doorX = bx + bw / 2 - 6;
+        var doorH = Math.floor(bh * 0.3);
+        drawRect(doorX - 2, by + bh - doorH - 2, 16, doorH + 2, '#1a3020');
+        drawRect(doorX, by + bh - doorH, 12, doorH, '#244a30');
+        drawRect(doorX + 2, by + bh - doorH + 2, 8, doorH - 4, '#2e5a3a');
+        // Keycard reader
+        drawRect(doorX + 11, by + bh - doorH / 2, 3, 4, '#303030');
+        var readerGlow = Math.sin(time * 0.003) > 0 ? '#40ff40' : '#104010';
+        drawRect(doorX + 12, by + bh - doorH / 2 + 1, 1, 2, readerGlow);
+        // "SAFETY" sign
+        drawRect(bx + bw / 2 - 12, by + bh - doorH - 9, 24, 6, '#1a3020');
+        ctx.font = '4px "Press Start 2P", monospace';
+        ctx.fillStyle = '#40ff80';
+        ctx.textAlign = 'center';
+        ctx.fillText('SAFETY', bx + bw / 2, by + bh - doorH - 5);
+        // Green glow from sign
+        ctx.fillStyle = 'rgba(64, 255, 128, 0.06)';
+        ctx.fillRect(bx + bw / 2 - 14, by + bh - doorH - 12, 28, 14);
     }
 
     function drawDataCenter(bx, by, bw, bh, time) {
-        var wallColor = '#3a3a4a';
-        // Tall industrial body
-        drawRect(bx, by, bw, bh, wallColor);
-        drawRect(bx + 1, by + 1, bw - 2, bh - 2, '#424252');
-        // Roof with cooling fans
-        drawRect(bx - 2, by - 3, bw + 4, 5, '#505060');
-        // Fan units on roof
-        for (var fx = bx + 4; fx < bx + bw - 6; fx += 10) {
-            drawRect(fx, by - 8, 8, 6, '#606070');
-            drawRect(fx + 2, by - 6, 4, 2, '#808090');
+        // Shadow
+        drawRect(bx + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
+        // Foundation — heavy concrete
+        drawRect(bx - 3, by + bh - 4, bw + 6, 6, '#404048');
+        drawRect(bx - 2, by + bh - 3, bw + 4, 4, '#505058');
+        // Main wall — industrial steel
+        drawRect(bx, by, bw, bh, '#303040');
+        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#3a3a4a');
+        drawRect(bx + 3, by + 3, bw - 6, bh - 8, '#424252');
+        // Right shadow wall
+        drawRect(bx + bw - 3, by + 2, 3, bh - 4, '#282838');
+        // Corrugated wall texture (horizontal lines)
+        for (var cy = by + 6; cy < by + bh - 6; cy += 4) {
+            drawRect(bx + 3, cy, bw - 6, 1, '#484858');
         }
-        // Server rack lights (the signature look)
-        drawServerLights(bx + 2, by + 4, bw - 4, bh - 8, time, 300);
-        // Ventilation stripes
-        for (var vy = by + 4; vy < by + bh - 4; vy += 3) {
-            drawRect(bx, vy, 2, 1, '#505060');
-            drawRect(bx + bw - 2, vy, 2, 1, '#505060');
+        // Heavy roof with cooling units
+        drawRect(bx - 3, by - 4, bw + 6, 6, '#505060');
+        drawRect(bx - 2, by - 3, bw + 4, 4, '#5a5a6a');
+        // Cooling fan units on roof
+        for (var fx = bx + 4; fx < bx + bw - 8; fx += 14) {
+            drawRect(fx, by - 10, 10, 7, '#555565');
+            drawRect(fx + 1, by - 9, 8, 5, '#606070');
+            // Spinning fan indicator
+            var fanPhase = Math.floor(time * 0.01 + fx) % 4;
+            drawRect(fx + 3 + fanPhase, by - 8, 2, 2, '#909098');
+            // Heat exhaust shimmer
+            if (Math.random() < 0.04) spawnSmoke(fx + 5, by - 12);
         }
-        // Spawn smoke from cooling
-        if (Math.random() < 0.1) {
-            spawnSmoke(bx + bw / 2, by - 10);
+        // Server rack window (the signature look — visible interior)
+        var rackY = by + 6;
+        var rackH = bh - 16;
+        drawRect(bx + 5, rackY - 1, bw - 10, rackH + 2, '#1a1a2a');
+        drawServerLights(bx + 6, rackY, bw - 12, rackH, time, 300);
+        // Ventilation grilles on sides
+        for (var vy = by + 6; vy < by + bh - 6; vy += 3) {
+            drawRect(bx, vy, 3, 1, '#505060');
+            drawRect(bx + bw - 3, vy, 3, 1, '#505060');
         }
+        // Heavy security door — no windows
+        var doorX = bx + bw / 2 - 5;
+        drawRect(doorX - 1, by + bh - 16, 12, 16, '#282838');
+        drawRect(doorX, by + bh - 15, 10, 15, '#383848');
+        drawRect(doorX + 1, by + bh - 14, 8, 13, '#404050');
+        // Biometric scanner
+        drawRect(doorX + 9, by + bh - 10, 3, 4, '#202030');
+        var scanGlow = Math.sin(time * 0.004) > 0 ? '#4040ff' : '#101030';
+        drawRect(doorX + 10, by + bh - 9, 1, 2, scanGlow);
+        // "DATA" sign
+        drawRect(bx + bw / 2 - 8, by + bh - 18, 16, 5, '#202030');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#4080ff';
+        ctx.textAlign = 'center';
+        ctx.fillText('DATA', bx + bw / 2, by + bh - 15);
     }
 
     function drawMegaDataCenter(bx, by, bw, bh, time) {
@@ -917,28 +1039,77 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawPowerPlant(bx, by, bw, bh, time) {
-        var wallColor = '#4a3a2a';
-        drawRect(bx, by, bw, bh, wallColor);
-        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#5a4a3a');
-        // Smokestacks
-        var stackW = 6, stackH = 20;
-        drawRect(bx + bw * 0.3 - stackW / 2, by - stackH, stackW, stackH + 2, '#605040');
-        drawRect(bx + bw * 0.7 - stackW / 2, by - stackH, stackW, stackH + 2, '#605040');
-        // Stack tops
-        drawRect(bx + bw * 0.3 - stackW / 2 - 1, by - stackH - 2, stackW + 2, 3, '#706050');
-        drawRect(bx + bw * 0.7 - stackW / 2 - 1, by - stackH - 2, stackW + 2, 3, '#706050');
-        // Smoke
-        if (Math.random() < 0.12) {
-            spawnSmoke(bx + bw * 0.3, by - stackH - 4);
-            spawnSmoke(bx + bw * 0.7, by - stackH - 4);
+        // Shadow
+        drawRect(bx + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
+        // Foundation — heavy industrial
+        drawRect(bx - 3, by + bh - 4, bw + 6, 6, '#3a3028');
+        drawRect(bx - 2, by + bh - 3, bw + 4, 4, '#4a4038');
+        // Main wall — brick industrial
+        drawRect(bx, by, bw, bh, '#3a2a1a');
+        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#4a3a2a');
+        drawRect(bx + 3, by + 3, bw - 6, bh - 8, '#5a4a3a');
+        // Brick texture
+        for (var bry = by + 6; bry < by + bh - 8; bry += 5) {
+            var brOff = (Math.floor((bry - by) / 5) % 2) * 6;
+            for (var brx = bx + 4 + brOff; brx < bx + bw - 6; brx += 12) {
+                drawRect(brx, bry, 10, 4, '#544434');
+                drawRect(brx + 1, bry + 1, 8, 2, '#5e4e3e');
+            }
         }
-        // Power symbol (lightning bolt-ish)
-        drawRect(bx + bw / 2 - 1, by + 10, 4, 2, '#ffcc00');
-        drawRect(bx + bw / 2, by + 12, 3, 3, '#ffcc00');
-        drawRect(bx + bw / 2 + 1, by + 15, 2, 3, '#ffcc00');
-        // Industrial door
-        drawRect(bx + bw / 2 - 5, by + bh - 14, 10, 14, '#3a2a1a');
-        drawRect(bx + bw / 2, by + bh - 12, 1, 10, '#4a3a2a');
+        // Right shadow wall
+        drawRect(bx + bw - 3, by + 2, 3, bh - 4, '#2e2016');
+        // Smokestacks — taller, with bands
+        var stackW = 8, stackH = 28;
+        var s1x = bx + bw * 0.3 - stackW / 2;
+        var s2x = bx + bw * 0.7 - stackW / 2;
+        drawRect(s1x, by - stackH, stackW, stackH + 2, '#504030');
+        drawRect(s1x + 1, by - stackH + 1, stackW - 2, stackH, '#605040');
+        drawRect(s1x - 1, by - stackH - 2, stackW + 2, 3, '#706050');
+        drawRect(s1x, by - stackH + 8, stackW, 2, '#706050');
+        drawRect(s1x, by - stackH + 18, stackW, 2, '#706050');
+        drawRect(s2x, by - stackH, stackW, stackH + 2, '#504030');
+        drawRect(s2x + 1, by - stackH + 1, stackW - 2, stackH, '#605040');
+        drawRect(s2x - 1, by - stackH - 2, stackW + 2, 3, '#706050');
+        drawRect(s2x, by - stackH + 8, stackW, 2, '#706050');
+        drawRect(s2x, by - stackH + 18, stackW, 2, '#706050');
+        // Smoke from stacks
+        if (Math.random() < 0.12) {
+            spawnSmoke(s1x + stackW / 2, by - stackH - 4);
+            spawnSmoke(s2x + stackW / 2, by - stackH - 4);
+        }
+        // Lightning bolt emblem (larger)
+        var lx = bx + bw / 2;
+        drawRect(lx - 2, by + 7, 5, 3, '#ffcc00');
+        drawRect(lx - 1, by + 10, 4, 2, '#ffcc00');
+        drawRect(lx, by + 12, 4, 2, '#ffcc00');
+        drawRect(lx + 1, by + 14, 3, 3, '#ffcc00');
+        drawRect(lx, by + 10, 2, 2, '#ffee66');
+        // Warning stripes on wall
+        for (var ws = bx + 4; ws < bx + bw - 6; ws += 8) {
+            drawRect(ws, by + bh - 20, 4, 2, '#ffcc00');
+            drawRect(ws + 4, by + bh - 20, 4, 2, '#2a2a2a');
+        }
+        // Industrial roller door
+        var doorX = bx + bw / 2 - 7;
+        drawRect(doorX - 1, by + bh - 18, 16, 18, '#2a1a0a');
+        drawRect(doorX, by + bh - 17, 14, 17, '#3a2a1a');
+        for (var dy = by + bh - 16; dy < by + bh - 2; dy += 3) {
+            drawRect(doorX + 1, dy, 12, 2, '#4a3a2a');
+            drawRect(doorX + 1, dy + 1, 12, 1, '#3a2a1a');
+        }
+        // Transformer box outside
+        drawRect(bx - 6, by + bh - 14, 5, 14, '#404048');
+        drawRect(bx - 5, by + bh - 13, 3, 12, '#505058');
+        // Sparking transformer
+        if (Math.random() < 0.03) {
+            drawRect(bx - 5, by + bh - 16, 3, 2, '#ffff80');
+        }
+        // "POWER" sign
+        drawRect(bx + bw / 2 - 10, by + bh - 20, 20, 5, '#2a1a0a');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffcc00';
+        ctx.textAlign = 'center';
+        ctx.fillText('POWER', bx + bw / 2, by + bh - 17);
     }
 
     function drawFusionReactor(bx, by, bw, bh, time) {
@@ -996,29 +1167,86 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawCookieKitchen(bx, by, bw, bh, time) {
-        var wallColor = '#6a4020';
-        // Cozy warm building
-        drawRect(bx, by, bw, bh, wallColor);
-        drawRect(bx + 1, by + 1, bw - 2, bh - 2, '#7a5030');
-        // Pointed roof
-        drawRect(bx - 2, by - 2, bw + 4, 4, '#5a3018');
-        drawRect(bx + 2, by - 5, bw - 4, 4, '#5a3018');
-        // Chimney with warm glow
-        drawRect(bx + bw - 10, by - 16, 6, 14, '#5a3018');
-        // Warm orange glow from chimney
+        // Shadow
+        drawRect(bx + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
+        // Foundation — rustic stone
+        drawRect(bx - 2, by + bh - 3, bw + 4, 5, '#4a3828');
+        drawRect(bx - 1, by + bh - 2, bw + 2, 3, '#5a4838');
+        // Main wall — warm wood
+        drawRect(bx, by, bw, bh, '#5a3818');
+        drawRect(bx + 2, by + 2, bw - 4, bh - 4, '#6a4820');
+        drawRect(bx + 3, by + 3, bw - 6, bh - 8, '#7a5830');
+        // Right shadow
+        drawRect(bx + bw - 3, by + 2, 3, bh - 4, '#4a3018');
+        // Wood plank lines
+        for (var py = by + 8; py < by + bh - 8; py += 6) {
+            drawRect(bx + 3, py, bw - 6, 1, '#6a4020');
+        }
+        // Peaked roof — 3 layers
+        drawRect(bx - 4, by - 3, bw + 8, 5, '#4a2810');
+        drawRect(bx - 2, by - 6, bw + 4, 5, '#5a3818');
+        drawRect(bx + 2, by - 8, bw - 4, 4, '#5a3818');
+        drawRect(bx + 6, by - 10, bw - 12, 3, '#4a2810');
+        // Chimney — brick with warm glow
+        var chimX = bx + bw - 12;
+        drawRect(chimX, by - 22, 8, 20, '#5a3018');
+        drawRect(chimX + 1, by - 21, 6, 18, '#6a4028');
+        drawRect(chimX - 1, by - 24, 10, 3, '#6a4028');
+        // Brick lines on chimney
+        drawRect(chimX + 1, by - 16, 6, 1, '#5a3018');
+        drawRect(chimX + 1, by - 10, 6, 1, '#5a3018');
+        // Warm glow from chimney top
         var warmGlow = 0.3 + Math.sin(time * 0.003) * 0.15;
         ctx.fillStyle = 'rgba(255, 160, 40, ' + warmGlow + ')';
-        ctx.fillRect(bx + bw - 12, by - 20, 10, 6);
-        // Cookie smoke and cookie particles
-        if (Math.random() < 0.08) spawnSmoke(bx + bw - 7, by - 18);
-        if (Math.random() < 0.06) spawnCookieParticle(bx + bw - 7, by - 18);
-        // Window with warm light
-        drawRect(bx + 4, by + 6, 8, 8, '#ff9930');
-        drawRect(bx + 5, by + 7, 6, 6, '#ffbb60');
-        // Door
-        drawRect(bx + bw / 2 - 3, by + bh - 10, 6, 10, '#4a2810');
+        ctx.fillRect(chimX - 2, by - 28, 12, 6);
+        // Cookie smoke and particles
+        if (Math.random() < 0.08) spawnSmoke(chimX + 4, by - 26);
+        if (Math.random() < 0.06) spawnCookieParticle(chimX + 4, by - 26);
+        // Large front window — showing interior with warm light
+        drawRect(bx + 4, by + 5, 14, 12, '#3a2010');
+        drawRect(bx + 5, by + 6, 12, 10, '#ff9930');
+        drawRect(bx + 6, by + 7, 10, 8, '#ffbb60');
+        // Window cross-frame
+        drawRect(bx + 10, by + 6, 2, 10, '#4a2810');
+        drawRect(bx + 5, by + 10, 12, 2, '#4a2810');
+        // Interior detail — shelf with cookies visible
+        drawRect(bx + 6, by + 8, 3, 1, '#d0a050');
+        drawRect(bx + 13, by + 8, 3, 1, '#d0a050');
+        // Side window
+        drawRect(bx + bw - 14, by + 6, 8, 8, '#3a2010');
+        drawRect(bx + bw - 13, by + 7, 6, 6, '#ffaa40');
+        // Cozy door with arch top
+        var doorX = bx + bw / 2 - 5;
+        var doorH = Math.floor(bh * 0.38);
+        drawRect(doorX - 1, by + bh - doorH - 1, 12, doorH + 1, '#3a1808');
+        drawRect(doorX, by + bh - doorH, 10, doorH, '#4a2810');
+        drawRect(doorX + 1, by + bh - doorH + 1, 8, doorH - 2, '#5a3820');
+        // Door window (round-ish)
+        drawRect(doorX + 3, by + bh - doorH + 3, 4, 4, '#ffaa40');
         // Door handle
-        drawRect(bx + bw / 2 + 1, by + bh - 6, 1, 1, '#c0a040');
+        drawRect(doorX + 7, by + bh - doorH / 2, 2, 2, '#c0a040');
+        // Welcome mat
+        drawRect(doorX - 2, by + bh, 14, 2, '#8a6030');
+        // Hanging sign bracket
+        drawRect(bx + 3, by + bh - doorH - 4, 2, 6, '#6a5030');
+        drawRect(bx + 3, by + bh - doorH - 4, 10, 2, '#6a5030');
+        // "COOKIES" sign
+        drawRect(bx + 3, by + bh - doorH - 2, 14, 7, '#4a2010');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffcc66';
+        ctx.textAlign = 'center';
+        ctx.fillText('COOKIES', bx + 10, by + bh - doorH + 2);
+        // Awning over door
+        drawRect(doorX - 3, by + bh - doorH - 3, 16, 3, '#cc6620');
+        drawRect(doorX - 2, by + bh - doorH - 2, 14, 1, '#dd7730');
+        // Warm light spill onto ground
+        var doorGlowA = 0.1 + Math.sin(time * 0.002) * 0.04;
+        ctx.fillStyle = 'rgba(255, 170, 60, ' + doorGlowA + ')';
+        ctx.fillRect(doorX - 4, by + bh + 1, 18, 5);
+        // Planter box with flowers
+        drawRect(bx - 4, by + bh - 10, 4, 10, '#5a4020');
+        drawRect(bx - 3, by + bh - 12, 2, 3, '#40a040');
+        drawRect(bx - 4, by + bh - 13, 3, 2, '#ff6060');
     }
 
     function drawTalentOffice(bx, by, bw, bh, time) {
