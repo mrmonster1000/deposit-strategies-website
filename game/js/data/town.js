@@ -389,7 +389,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_tourism_boom',
-        triggerTime: 55,
+        triggerTime: 360,
         title: 'The AI Tourism Explosion',
         speaker: 'mayor_patricia',
         text: "We've got tourists! ACTUAL TOURISTS! They're calling us 'Silicon Bay!' The fish & chip shop has a 2-hour queue! Frank is selling 'I survived AI' t-shirts! He's making a fortune!",
@@ -401,7 +401,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_zara_breakthrough',
-        triggerTime: 90,
+        triggerTime: 2100,
         title: 'Zara\'s Big Day',
         speaker: 'teen_zara',
         text: "I did it. I actually did it. My model — the one I started on a Chromebook — just passed every benchmark. EVERY one. Yann peer-reviewed it. He said my methodology was 'not terrible.' That's like a Nobel Prize from him. I'm 19 and I just advanced the state of the art. From ABUNDANCE BAY.",
@@ -413,7 +413,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_arthur_bridge',
-        triggerTime: 110,
+        triggerTime: 3900,
         title: 'Arthur\'s Last Bridge',
         speaker: 'old_arthur',
         text: "The AI designed a new bridge for the town. I checked every calculation. Every joint. Every bolt pattern. It's... it's perfect. Better than anything I could design. In 40 years of engineering, I've never seen anything this good. And I hate that. But I also love it. And I hate that I love it.",
@@ -425,7 +425,7 @@ GAME.DATA.TOWN_EVENTS = [
     },
     {
         id: 'town_mick_singularity',
-        triggerTime: 130,
+        triggerTime: 4500,
         title: 'The AI Bartender\'s Bestseller',
         speaker: 'pub_landlord',
         text: "So... the AI bartender wrote a book. 'The Meaning of Pint: A Philosophical Journey Through Consciousness and Beer.' It's on the bestseller list. It outsold the Bible in Abundance Bay. The Reverend is taking it surprisingly well. He wrote the foreword.",

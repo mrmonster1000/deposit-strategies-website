@@ -402,6 +402,23 @@ window.GAME = window.GAME || {};
             Sound.playSuccess();
             showToast('PHASE ' + data.phase + ' UNLOCKED! New buildings available!', 'warning');
         });
+
+        var lastMoney = null;
+        var floatTickCounter = 0;
+        State.on('stateChanged', function(data) {
+            if (data.key === 'money' && lastMoney !== null) {
+                floatTickCounter++;
+                if (floatTickCounter % 5 === 0) {
+                    var diff = data.newValue - lastMoney;
+                    if (Math.abs(diff) >= 0.5) {
+                        var sign = diff > 0 ? '+' : '';
+                        var col = diff > 0 ? '#44ff88' : '#ff4444';
+                        Renderer.addFloatingText(sign + Math.floor(diff) + '$', 60, 28, col);
+                    }
+                }
+            }
+            lastMoney = (data.key === 'money') ? data.newValue : lastMoney;
+        });
     }
 
     // ---- CHARACTER SELECT ----
@@ -928,33 +945,47 @@ window.GAME = window.GAME || {};
         Sound.playSuccess();
     }
 
+    function autoPlaceBuilding(buildingId, isTown) {
+        var zone = isTown ? GAME.Systems.Renderer.ZONES.town : GAME.Systems.Renderer.ZONES.campus;
+        var zoneEnd = isTown ? GAME.Systems.Renderer.ZONES.harbor.right - 200 : zone.right - 200;
+        var zoneStart = zone.left + 100;
+
+        for (var x = zoneStart; x < zoneEnd; x += 50) {
+            if (canPlaceBuilding(buildingId, x, isTown)) {
+                State.addBuilding(buildingId, x, isTown);
+                return;
+            }
+        }
+        State.addBuilding(buildingId, zoneStart, isTown);
+    }
+
     function handleDialogueEffect(effect) {
         switch (effect) {
             case 'cookie_kitchen':
-                placeBuilding('cookie_kitchen', false);
+                autoPlaceBuilding('cookie_kitchen', false);
                 break;
             case 'small_lab':
-                placeBuilding('small_lab', false);
+                autoPlaceBuilding('small_lab', false);
                 break;
             case 'both':
-                placeBuilding('small_lab', false);
-                setTimeout(function() { placeBuilding('cookie_kitchen', false); }, 100);
+                autoPlaceBuilding('small_lab', false);
+                setTimeout(function() { autoPlaceBuilding('cookie_kitchen', false); }, 100);
                 break;
             case 'deployment_center':
-                placeBuilding('deployment_center', false);
+                autoPlaceBuilding('deployment_center', false);
                 break;
             case 'large_lab':
-                placeBuilding('large_lab', false);
+                autoPlaceBuilding('large_lab', false);
                 break;
             case 'scale_fast':
-                placeBuilding('deployment_center', false);
+                autoPlaceBuilding('deployment_center', false);
                 State.adjust('safety', -5);
                 break;
             case 'safety_dept':
-                placeBuilding('safety_dept', false);
+                autoPlaceBuilding('safety_dept', false);
                 break;
             case 'data_center':
-                placeBuilding('data_center', false);
+                autoPlaceBuilding('data_center', false);
                 break;
             case 'mars_plan':
                 State.adjust('safety', 3);

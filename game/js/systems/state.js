@@ -44,6 +44,7 @@ GAME.Systems.State = (function() {
             socialCohesion: 70,
             internationalRelations: 65,
             politicalCapital: charData.startingStats.politicalCapital || 100,
+            cooperation: 0,
 
             // Town
             townMood: GAME.DATA.TOWN.startingMood,
@@ -120,7 +121,7 @@ GAME.Systems.State = (function() {
         state[key] = value;
 
         // Clamp meters
-        var meters = ['safety', 'publicTrust', 'bankingStability', 'climate', 'socialCohesion', 'internationalRelations', 'townMood', 'politicalCapital'];
+        var meters = ['safety', 'publicTrust', 'bankingStability', 'climate', 'socialCohesion', 'internationalRelations', 'townMood', 'politicalCapital', 'cooperation'];
         if (meters.indexOf(key) !== -1) {
             state[key] = Math.max(0, Math.min(100, state[key]));
         }

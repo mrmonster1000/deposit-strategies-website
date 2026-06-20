@@ -86,6 +86,9 @@ GAME.Systems.Renderer = (function() {
     // Smoke particles
     var smokeParticles = [];
 
+    // Floating text system (resource popups)
+    var floatingTexts = [];
+
     // Player character state
     var player = {
         x: 1400,
@@ -2615,6 +2618,34 @@ GAME.Systems.Renderer = (function() {
     //  YEAR / STATUS OVERLAY
     // =========================================================================
 
+    function addFloatingText(text, screenX, screenY, color) {
+        floatingTexts.push({
+            text: text,
+            x: screenX,
+            y: screenY,
+            color: color || '#44ff88',
+            life: 1.0,
+            vy: -0.8
+        });
+        if (floatingTexts.length > 20) floatingTexts.shift();
+    }
+
+    function drawFloatingTexts() {
+        for (var i = floatingTexts.length - 1; i >= 0; i--) {
+            var ft = floatingTexts[i];
+            ft.y += ft.vy;
+            ft.life -= 0.012;
+            if (ft.life <= 0) {
+                floatingTexts.splice(i, 1);
+                continue;
+            }
+            var alpha = Math.min(1, ft.life * 2);
+            ctx.globalAlpha = alpha;
+            drawText(ft.text, ft.x, ft.y, { size: 7, color: ft.color, align: 'center' });
+            ctx.globalAlpha = 1;
+        }
+    }
+
     function drawOverlay(state, time) {
         if (!state) return;
 
@@ -2622,9 +2653,24 @@ GAME.Systems.Renderer = (function() {
         var yearStr = 'Year: ' + (state.year || 2025);
         drawText(yearStr, 8, 6, { size: 7, color: '#6688aa' });
 
+        // Income rate (below year)
+        var incomeStr = (state.moneyPerTick >= 0 ? '+' : '') + state.moneyPerTick.toFixed(1) + '$/day';
+        var incomeColor = state.moneyPerTick >= 0 ? '#44ff88' : '#ff4444';
+        drawText(incomeStr, 8, 16, { size: 6, color: incomeColor });
+
         // Population (top right-ish, near town)
         var popStr = 'Pop: ' + (state.townPopulation || 0);
         drawText(popStr, W - 170, 6, { size: 6, color: '#6688aa' });
+
+        // Paused indicator
+        if (state.paused) {
+            var pauseAlpha = 0.5 + Math.sin(time * 0.003) * 0.3;
+            ctx.globalAlpha = pauseAlpha;
+            drawText('▶ CLICK PLAY TO START', W / 2, H / 2 - 40, { size: 10, color: '#ffdd44', align: 'center' });
+            ctx.globalAlpha = 1;
+        }
+
+        drawFloatingTexts();
     }
 
     // =========================================================================
@@ -3090,6 +3136,9 @@ GAME.Systems.Renderer = (function() {
         resumeCameraFollow: function() { cameraFollowPlayer = true; },
 
         // Permanent building bounds for overlap checking
-        getPermanentBuildings: function() { return PERMANENT_BUILDINGS; }
+        getPermanentBuildings: function() { return PERMANENT_BUILDINGS; },
+
+        // Floating text feedback
+        addFloatingText: addFloatingText
     };
 })();
