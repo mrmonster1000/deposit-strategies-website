@@ -603,7 +603,7 @@ window.GAME = window.GAME || {};
             '<div class="verb-row">' +
             '<button class="verb-btn" data-action="build-campus" title="Build on your AI campus">BUILD CAMPUS</button>' +
             '<button class="verb-btn" data-action="build-town" title="Invest in the town">BUILD TOWN</button>' +
-            '<button class="verb-btn" data-action="ability" title="Use character ability">ABILITY</button>' +
+            '<button class="verb-btn" data-action="ability" title="View character abilities, victory progress, and use special powers">POWERS</button>' +
             '</div>' +
             '<div class="verb-row">' +
             '<button class="verb-btn speed-btn" id="btn-pause" data-action="pause">▶ PLAY</button>' +
@@ -923,6 +923,38 @@ window.GAME = window.GAME || {};
             });
         }
         options.appendChild(ultEl);
+
+        // Victory progress
+        var victoryEl = document.createElement('div');
+        victoryEl.className = 'decision-option';
+        victoryEl.style.borderColor = '#44aaff';
+
+        function progressBar(label, current, target, color) {
+            var pct = Math.min(100, Math.floor((current / target) * 100));
+            return '<div style="margin:3px 0;">' +
+                '<div style="display:flex;justify-content:space-between;font-size:7px;color:#a0a0c0;">' +
+                '<span>' + label + '</span><span>' + Math.floor(current) + '/' + target + '</span></div>' +
+                '<div style="background:#1a1a3a;height:6px;border:1px solid #333;margin-top:1px;">' +
+                '<div style="width:' + pct + '%;height:100%;background:' + color + ';"></div></div></div>';
+        }
+
+        var abundanceProgress =
+            progressBar('ADP', state.adp, 500, '#44ff88') +
+            progressBar('Town Mood', state.townMood, 70, '#ffdd44') +
+            progressBar('Safety', state.safety, 60, '#44aaff');
+
+        var singularityProgress = progressBar('ADP', state.adp, 1000, '#ff44ff');
+
+        var belovedProgress =
+            progressBar('Town Mood', state.townMood, 95, '#ffdd44') +
+            progressBar('Population', state.townPopulation, 10000, '#44ff88');
+
+        victoryEl.innerHTML =
+            '<div class="decision-option-title" style="color:#44aaff">VICTORY PROGRESS</div>' +
+            '<div style="font-size:7px;color:#88ff88;margin:4px 0;">Radical Abundance (ADP 500 + Mood 70 + Safety 60)</div>' + abundanceProgress +
+            '<div style="font-size:7px;color:#ff88ff;margin:4px 0;">Singularity (ADP 1000)</div>' + singularityProgress +
+            '<div style="font-size:7px;color:#ffdd44;margin:4px 0;">Beloved Leader (Mood 95 + Pop 10k)</div>' + belovedProgress;
+        options.appendChild(victoryEl);
 
         // Catchphrases
         var quoteEl = document.createElement('div');

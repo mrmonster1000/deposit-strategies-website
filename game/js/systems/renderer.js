@@ -86,6 +86,9 @@ GAME.Systems.Renderer = (function() {
     // Smoke particles
     var smokeParticles = [];
 
+    // Cookie particles (floating cookie emoji-like shapes from Cookie Kitchen)
+    var cookieParticles = [];
+
     // Floating text system (resource popups)
     var floatingTexts = [];
 
@@ -751,6 +754,42 @@ GAME.Systems.Renderer = (function() {
             ctx.fillStyle = 'rgba(140, 140, 160, ' + alpha + ')';
             ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.floor(p.size), Math.floor(p.size));
         }
+
+        // Cookie particles
+        for (var j = cookieParticles.length - 1; j >= 0; j--) {
+            var cp = cookieParticles[j];
+            cp.x += cp.vx;
+            cp.y += cp.vy;
+            cp.vy -= 0.005;
+            cp.life -= 0.012;
+            cp.angle += cp.spin;
+
+            if (cp.life <= 0) {
+                cookieParticles.splice(j, 1);
+                continue;
+            }
+
+            var ca = cp.life * 0.6;
+            var cx = Math.floor(cp.x);
+            var cy = Math.floor(cp.y);
+            ctx.fillStyle = 'rgba(210, 160, 60, ' + ca + ')';
+            ctx.fillRect(cx - 1, cy - 1, 3, 3);
+            ctx.fillStyle = 'rgba(140, 80, 20, ' + ca + ')';
+            ctx.fillRect(cx, cy, 1, 1);
+        }
+    }
+
+    function spawnCookieParticle(x, y) {
+        if (cookieParticles.length > 30) return;
+        cookieParticles.push({
+            x: x + (Math.random() - 0.5) * 6,
+            y: y,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: -0.4 - Math.random() * 0.4,
+            life: 1.0,
+            angle: Math.random() * 6.28,
+            spin: (Math.random() - 0.5) * 0.1
+        });
     }
 
     // =========================================================================
@@ -911,12 +950,19 @@ GAME.Systems.Renderer = (function() {
         drawRect(bx + 4, by + bh * 0.15, bw - 8, bh * 0.2, '#3a4a6a');
         drawRect(bx + 8, by + bh * 0.05, bw - 16, bh * 0.15, '#4a5a7a');
         drawRect(bx + 12, by, bw - 24, bh * 0.1, '#5a6a8a');
-        // Glowing core
+        // Pulsing plasma core with outer glow
         var glow = 0.4 + Math.sin(time * 0.004) * 0.2;
+        var outerGlow = 0.15 + Math.sin(time * 0.004) * 0.1;
+        ctx.fillStyle = 'rgba(80, 150, 255, ' + outerGlow + ')';
+        ctx.fillRect(bx + bw / 2 - 7, by + bh * 0.48 - 2, 14, 12);
         ctx.fillStyle = 'rgba(100, 180, 255, ' + glow + ')';
         ctx.fillRect(bx + bw / 2 - 4, by + bh * 0.5, 8, 8);
-        // Energy ring
-        drawRect(bx - 2, by + bh * 0.4, bw + 4, 2, '#4488ff');
+        ctx.fillStyle = 'rgba(200, 230, 255, ' + (glow * 0.6) + ')';
+        ctx.fillRect(bx + bw / 2 - 2, by + bh * 0.5 + 2, 4, 4);
+        // Pulsing energy ring
+        var ringAlpha = 0.6 + Math.sin(time * 0.006) * 0.3;
+        ctx.fillStyle = 'rgba(68, 136, 255, ' + ringAlpha + ')';
+        ctx.fillRect(bx - 2, by + bh * 0.4, bw + 4, 2);
     }
 
     function drawChipFab(bx, by, bw, bh, time) {
@@ -963,8 +1009,9 @@ GAME.Systems.Renderer = (function() {
         var warmGlow = 0.3 + Math.sin(time * 0.003) * 0.15;
         ctx.fillStyle = 'rgba(255, 160, 40, ' + warmGlow + ')';
         ctx.fillRect(bx + bw - 12, by - 20, 10, 6);
-        // Cookie smoke
+        // Cookie smoke and cookie particles
         if (Math.random() < 0.08) spawnSmoke(bx + bw - 7, by - 18);
+        if (Math.random() < 0.06) spawnCookieParticle(bx + bw - 7, by - 18);
         // Window with warm light
         drawRect(bx + 4, by + 6, 8, 8, '#ff9930');
         drawRect(bx + 5, by + 7, 6, 6, '#ffbb60');
@@ -1025,6 +1072,13 @@ GAME.Systems.Renderer = (function() {
         // Blinking top light
         var blink = Math.sin(time * 0.006) > 0;
         drawRect(bx + bw / 2 - 1, by - 21, 2, 2, blink ? '#44ffdd' : '#104030');
+        // Data streams radiating from dish
+        for (var ds = 0; ds < 3; ds++) {
+            var dsY = by - 22 - ((time * 0.03 + ds * 8) % 24);
+            var dsAlpha = 1.0 - ((time * 0.03 + ds * 8) % 24) / 24;
+            ctx.fillStyle = 'rgba(68, 255, 221, ' + (dsAlpha * 0.4) + ')';
+            ctx.fillRect(bx + bw / 2 - 1, Math.floor(dsY), 2, 2);
+        }
         // Windows
         drawWindows(bx, by, bw, bh, time, 800, '#44ffdd', '#103838');
     }
@@ -1046,9 +1100,11 @@ GAME.Systems.Renderer = (function() {
         // Grand entrance
         drawRect(bx + bw / 2 - 5, by + bh - 14, 10, 14, '#4a4018');
         drawRect(bx + bw / 2 - 4, by + bh - 12, 8, 10, '#5a5028');
-        // Flag on top
+        // Flag on top with flutter animation
         drawRect(bx + bw / 2, by - 12, 2, 12, '#8a7a40');
-        drawRect(bx + bw / 2 + 2, by - 12, 6, 4, '#ffdd44');
+        var flagWave = Math.sin(time * 0.005) * 1;
+        drawRect(bx + bw / 2 + 2, by - 12 + Math.floor(flagWave), 6, 4, '#ffdd44');
+        drawRect(bx + bw / 2 + 2, by - 11 + Math.floor(flagWave), 5, 2, '#ddbb22');
         drawWindows(bx, by, bw, bh, time, 850, '#ffdd44', '#302810');
     }
 
@@ -1057,14 +1113,22 @@ GAME.Systems.Renderer = (function() {
         drawRect(bx, by, bw, bh, wallColor);
         drawRect(bx + 1, by + 1, bw - 2, bh - 2, '#5a3030');
         drawRect(bx - 2, by - 3, bw + 4, 5, '#6a3030');
-        // Robot eye
-        var eyeGlow = Math.sin(time * 0.004) > 0 ? '#ff4040' : '#601010';
+        // Robot eye — alternating scan
+        var eyePhase = Math.sin(time * 0.004);
+        var eyeGlow = eyePhase > 0 ? '#ff4040' : '#601010';
         drawRect(bx + bw / 2 - 4, by + 6, 3, 3, eyeGlow);
-        drawRect(bx + bw / 2 + 1, by + 6, 3, 3, eyeGlow);
+        drawRect(bx + bw / 2 + 1, by + 6, 3, 3, eyePhase > 0 ? '#601010' : '#ff4040');
         // Assembly line (moving dots)
         var lineOffset = Math.floor(time * 0.01) % 8;
         for (var lx = bx + 4; lx < bx + bw - 4; lx += 8) {
             drawRect(lx + lineOffset, by + bh / 2, 3, 2, '#ff8844');
+        }
+        // Welding sparks
+        if (Math.random() < 0.05) {
+            var sparkX = bx + 4 + Math.random() * (bw - 8);
+            var sparkY = by + bh * 0.4 + Math.random() * 8;
+            drawRect(sparkX, sparkY, 1, 1, '#ffff80');
+            drawRect(sparkX + 1, sparkY - 1, 1, 1, '#ffaa40');
         }
         // Smoke
         if (Math.random() < 0.1) spawnSmoke(bx + bw / 2, by - 5);
@@ -1085,10 +1149,14 @@ GAME.Systems.Renderer = (function() {
         // Fins
         drawRect(rocketX - 3, by + bh * 0.5, 4, 8, '#cc3030');
         drawRect(rocketX + 7, by + bh * 0.5, 4, 8, '#cc3030');
-        // Flame glow
-        var flameAlpha = 0.2 + Math.sin(time * 0.008) * 0.1;
-        ctx.fillStyle = 'rgba(255, 140, 40, ' + flameAlpha + ')';
-        ctx.fillRect(rocketX + 1, by + bh * 0.55, 6, 10);
+        // Animated exhaust flame
+        var flameH = 6 + Math.sin(time * 0.01) * 3;
+        var flameAlpha = 0.3 + Math.sin(time * 0.008) * 0.15;
+        ctx.fillStyle = 'rgba(255, 200, 60, ' + flameAlpha + ')';
+        ctx.fillRect(rocketX + 2, by + bh * 0.55, 4, Math.floor(flameH));
+        ctx.fillStyle = 'rgba(255, 100, 20, ' + (flameAlpha * 0.7) + ')';
+        ctx.fillRect(rocketX + 3, by + bh * 0.55 + Math.floor(flameH), 2, Math.floor(flameH * 0.6));
+        if (Math.random() < 0.15) spawnSmoke(rocketX + 4, by + bh * 0.55 + flameH);
     }
 
     // --- TOWN BUILDINGS ---
@@ -2236,6 +2304,33 @@ GAME.Systems.Renderer = (function() {
             drawRect(WATER_X + 16, GROUND_Y - 8 + boatBob, 12, 7, '#e0d8d0');
             drawRect(WATER_X + 16, GROUND_Y - 6 + boatBob, 10, 5, '#d0c8c0');
             drawRect(WATER_X - 38, GROUND_Y + 8, 42, 1, '#8a7050');
+
+            // Lighthouse
+            var lhX = WATER_X - 30;
+            var lhY = GROUND_Y - 60;
+            drawRect(lhX, lhY, 12, 64, '#c0b8a0');
+            drawRect(lhX + 1, lhY + 1, 10, 62, '#d0c8b0');
+            drawRect(lhX + 2, lhY + 8, 8, 4, '#cc3030');
+            drawRect(lhX + 2, lhY + 24, 8, 4, '#cc3030');
+            drawRect(lhX + 2, lhY + 40, 8, 4, '#cc3030');
+            drawRect(lhX - 2, lhY - 4, 16, 6, '#a09880');
+            drawRect(lhX, lhY - 8, 12, 6, '#b0a890');
+            // Rotating light beam
+            var beamAngle = (time * 0.002) % (Math.PI * 2);
+            var beamDx = Math.cos(beamAngle);
+            if (beamDx > 0.3) {
+                var beamAlpha = 0.1 + beamDx * 0.15;
+                ctx.fillStyle = 'rgba(255, 255, 200, ' + beamAlpha + ')';
+                ctx.fillRect(lhX + 12, lhY - 6, Math.floor(beamDx * 50), 4);
+            } else if (beamDx < -0.3) {
+                var beamAlpha2 = 0.1 + Math.abs(beamDx) * 0.15;
+                ctx.fillStyle = 'rgba(255, 255, 200, ' + beamAlpha2 + ')';
+                ctx.fillRect(lhX + Math.floor(beamDx * 50), lhY - 6, Math.floor(Math.abs(beamDx) * 50), 4);
+            }
+            // Lamp glow
+            var lampGlow = 0.4 + Math.sin(time * 0.003) * 0.2;
+            ctx.fillStyle = 'rgba(255, 255, 180, ' + lampGlow + ')';
+            ctx.fillRect(lhX + 3, lhY - 6, 6, 4);
         }
     }
 
