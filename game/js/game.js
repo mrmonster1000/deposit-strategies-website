@@ -421,6 +421,14 @@ window.GAME = window.GAME || {};
 
         State.on('crisisTriggered', function(crisis) {
             queueEvent('crisis', crisis);
+            Sound.setTheme('crisis');
+        });
+
+        State.on('crisisResolved', function() {
+            var state = State.get();
+            if (!state.crisesActive || state.crisesActive.length === 0) {
+                Sound.setTheme('normal');
+            }
         });
 
         State.on('buildingPlaced', function(data) {
@@ -535,6 +543,16 @@ window.GAME = window.GAME || {};
                 void statEl.offsetWidth;
                 statEl.classList.add(flashClass);
                 setTimeout(function() { statEl.classList.remove(flashClass); }, 600);
+            }
+
+            // Switch to crisis music when things go badly
+            if (data.key === 'safety') {
+                var st = State.get();
+                if (data.newValue < 35 && st.crisesActive && st.crisesActive.length === 0) {
+                    Sound.setTheme('crisis');
+                } else if (data.newValue >= 45 && st.crisesActive && st.crisesActive.length === 0) {
+                    Sound.setTheme('normal');
+                }
             }
         });
     }

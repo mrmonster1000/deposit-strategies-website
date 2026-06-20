@@ -9,6 +9,7 @@ GAME.Systems.Sound = (function() {
     var musicPlaying = false;
     var musicNodes = [];
     var musicTimer = null;
+    var currentTheme = 'normal';
 
     function init() {
         try {
@@ -43,6 +44,7 @@ GAME.Systems.Sound = (function() {
     function playCrisis() { playTone(220, 0.2, 'sawtooth', 0.06); setTimeout(function() { playTone(165, 0.3, 'sawtooth', 0.06); }, 200); }
     function playSuccess() { playTone(523, 0.1, 'square', 0.04); setTimeout(function() { playTone(659, 0.1, 'square', 0.04); }, 100); setTimeout(function() { playTone(784, 0.15, 'square', 0.04); }, 200); }
 
+    // ---- NORMAL THEME (C major, bright) ----
     var MELODY = [
         { note: 262, dur: 0.3 }, { note: 330, dur: 0.3 }, { note: 392, dur: 0.3 }, { note: 330, dur: 0.3 },
         { note: 294, dur: 0.3 }, { note: 349, dur: 0.3 }, { note: 440, dur: 0.3 }, { note: 349, dur: 0.3 },
@@ -58,25 +60,213 @@ GAME.Systems.Sound = (function() {
         { note: 175, dur: 0.6 }, { note: 131, dur: 0.6 }, { note: 0, dur: 0.6 }
     ];
 
+    // ---- CRISIS THEME ----
+    // Transcribed from piano score: F minor, 7/8 time, tempo 95
+    // Arr. Anders Thue — brooding ostinato bass with building melody
+    // Eighth note at 95 BPM = ~0.316s, grouped in 7s for the 7/8 feel
+    var e = 0.316;   // eighth note
+    var q = 0.632;   // quarter note
+    var dq = 0.947;  // dotted quarter
+    var h = 1.263;   // half note
+    var dh = 1.895;  // dotted half note
+
+    var CRISIS_MELODY = [
+        // Bars 1-2: Bass only intro (melody tacet)
+        { note: 0, dur: 7 * e }, { note: 0, dur: 7 * e },
+        // Bars 3-4: Melody enters — sustained Ab, stepping to Eb
+        { note: 415, dur: dq },  // Ab4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: q },   // Eb4
+        { note: 415, dur: dq },  // Ab4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: e },   // Eb4
+        // Bars 5-6: Rising phrase
+        { note: 261, dur: dq },  // C4
+        { note: 277, dur: e },   // Db4
+        { note: 311, dur: dq },  // Eb4
+        { note: 261, dur: dh },  // C4 (sustained)
+        // Bars 7-8: Descending answer
+        { note: 277, dur: dq },  // Db4
+        { note: 0, dur: e },
+        { note: 261, dur: dq },  // C4
+        { note: 233, dur: e },   // Bb3
+        { note: 261, dur: q },   // C4
+        { note: 311, dur: e },   // Eb4
+        // Bars 9-10: Sustained dotted halves
+        { note: 311, dur: dh },  // Eb4
+        { note: 0, dur: e },
+        { note: 261, dur: dh },  // C4
+        { note: 0, dur: e },
+        // Bars 11-12: Still sustained, lower register
+        { note: 277, dur: dh },  // Db4
+        { note: 261, dur: q },   // C4
+        { note: 233, dur: h },   // Bb3
+        { note: 261, dur: e },   // C4
+        // Bars 13-16: Building energy — quarter notes stepping up
+        { note: 311, dur: q },   // Eb4
+        { note: 277, dur: dq },  // Db4
+        { note: 261, dur: dq },  // C4
+        { note: 233, dur: q },   // Bb3
+        { note: 277, dur: e },   // Db4
+        { note: 349, dur: q },   // F4
+        { note: 311, dur: dq },  // Eb4
+        { note: 0, dur: e },
+        // Bars 17-20: Forte section — driving eighths
+        { note: 415, dur: e },   // Ab4
+        { note: 466, dur: e },   // Bb4
+        { note: 415, dur: e },   // Ab4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: e },   // Eb4
+        { note: 349, dur: e },   // F4
+        { note: 415, dur: e },   // Ab4
+        { note: 466, dur: e },   // Bb4
+        { note: 523, dur: e },   // C5
+        { note: 466, dur: e },   // Bb4
+        { note: 415, dur: e },   // Ab4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: e },   // Eb4
+        { note: 277, dur: e },   // Db4
+        // Bars 21-24: Peak melodic phrases
+        { note: 311, dur: q },   // Eb4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: e },   // Eb4
+        { note: 261, dur: dq },  // C4
+        { note: 277, dur: e },   // Db4
+        { note: 311, dur: q },   // Eb4
+        { note: 415, dur: q },   // Ab4
+        { note: 349, dur: dq },  // F4
+        { note: 311, dur: dq },  // Eb4
+        // Bars 25-28: Sustained high notes
+        { note: 415, dur: dq },  // Ab4
+        { note: 349, dur: q },   // F4
+        { note: 311, dur: e },   // Eb4
+        { note: 277, dur: dq },  // Db4
+        { note: 261, dur: dq },  // C4
+        { note: 0, dur: e },
+        // Bars 29-32: Half notes — widening intervals
+        { note: 311, dur: dh },  // Eb4
+        { note: 0, dur: e },
+        { note: 277, dur: dq },  // Db4
+        { note: 261, dur: e },   // C4
+        { note: 277, dur: dq },  // Db4
+        { note: 311, dur: e },   // Eb4
+        { note: 349, dur: dq },  // F4
+        // Bars 33-36: Building to climax
+        { note: 415, dur: e },   // Ab4
+        { note: 466, dur: e },   // Bb4
+        { note: 523, dur: q },   // C5
+        { note: 466, dur: e },   // Bb4
+        { note: 415, dur: e },   // Ab4
+        { note: 523, dur: e },   // C5
+        { note: 554, dur: e },   // Db5
+        { note: 622, dur: q },   // Eb5
+        { note: 554, dur: e },   // Db5
+        { note: 523, dur: e },   // C5
+        { note: 466, dur: e },   // Bb4
+        { note: 415, dur: e },   // Ab4
+        // Bars 37-40: CLIMAX — ff/fff, powerful rhythmic hits
+        { note: 349, dur: e },   // F4
+        { note: 349, dur: e },   // F4
+        { note: 523, dur: e },   // C5
+        { note: 523, dur: e },   // C5
+        { note: 0, dur: e * 0.5 },
+        { note: 349, dur: e },   // F4
+        { note: 415, dur: e },   // Ab4
+        { note: 523, dur: e },   // C5
+        { note: 622, dur: e },   // Eb5
+        { note: 0, dur: e * 0.5 },
+        { note: 698, dur: e },   // F5
+        { note: 622, dur: e },   // Eb5
+        { note: 554, dur: e },   // Db5
+        { note: 523, dur: e },   // C5
+        { note: 466, dur: e },   // Bb4
+        { note: 415, dur: e },   // Ab4
+        { note: 349, dur: e },   // F4
+        { note: 311, dur: e },   // Eb4
+        // Bars 41-44: Final dramatic descent
+        { note: 349, dur: q },   // F4
+        { note: 261, dur: q },   // C4
+        { note: 0, dur: e },
+        { note: 349, dur: q },   // F4
+        { note: 261, dur: q },   // C4
+        { note: 0, dur: e },
+        { note: 175, dur: q },   // F3
+        { note: 0, dur: h }      // Final rest
+    ];
+
+    var CRISIS_BASS = [
+        // Driving F minor ostinato in 7/8: grouped 2+2+3
+        // Bar pattern 1: F-Ab root movement
+        { note: 87, dur: e },    // F2
+        { note: 104, dur: e },   // Ab2
+        { note: 0, dur: e * 0.5 },
+        { note: 87, dur: e },    // F2
+        { note: 104, dur: e },   // Ab2
+        { note: 0, dur: e * 0.5 },
+        { note: 131, dur: e },   // C3
+        // Bar pattern 2: Db-Eb movement
+        { note: 87, dur: e },    // F2
+        { note: 104, dur: e },   // Ab2
+        { note: 0, dur: e * 0.5 },
+        { note: 139, dur: e },   // Db3
+        { note: 104, dur: e },   // Ab2
+        { note: 0, dur: e * 0.5 },
+        { note: 156, dur: e },   // Eb3
+        // Bar pattern 3: Rising bass
+        { note: 104, dur: e },   // Ab2
+        { note: 131, dur: e },   // C3
+        { note: 0, dur: e * 0.5 },
+        { note: 104, dur: e },   // Ab2
+        { note: 156, dur: e },   // Eb3
+        { note: 0, dur: e * 0.5 },
+        { note: 131, dur: e },   // C3
+        // Bar pattern 4: Resolution
+        { note: 87, dur: e },    // F2
+        { note: 104, dur: e },   // Ab2
+        { note: 0, dur: e * 0.5 },
+        { note: 131, dur: e },   // C3
+        { note: 87, dur: e },    // F2
+        { note: 0, dur: e * 0.5 },
+        { note: 87, dur: q }     // F2 (longer)
+    ];
+
     function playMusicLoop() {
         if (!enabled || !audioCtx || musicPlaying) return;
         musicPlaying = true;
+        currentTheme = 'normal';
         schedulePhrase();
+    }
+
+    function setTheme(theme) {
+        if (theme === currentTheme) return;
+        var wasPlaying = musicPlaying;
+        stopMusic();
+        currentTheme = theme;
+        if (wasPlaying) {
+            musicPlaying = true;
+            schedulePhrase();
+        }
     }
 
     function schedulePhrase() {
         if (!musicPlaying || !enabled || !audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
+        var melodyData = currentTheme === 'crisis' ? CRISIS_MELODY : MELODY;
+        var bassData = currentTheme === 'crisis' ? CRISIS_BASS : BASS;
+        var melodyWave = currentTheme === 'crisis' ? 'sawtooth' : 'triangle';
+        var melodyVol = currentTheme === 'crisis' ? 0.018 : 0.02;
+        var bassVol = currentTheme === 'crisis' ? 0.014 : 0.012;
+
         var t = audioCtx.currentTime + 0.1;
 
-        MELODY.forEach(function(n) {
+        melodyData.forEach(function(n) {
             if (n.note > 0) {
                 var osc = audioCtx.createOscillator();
                 var gain = audioCtx.createGain();
-                osc.type = 'triangle';
+                osc.type = melodyWave;
                 osc.frequency.value = n.note;
-                gain.gain.setValueAtTime(0.02, t);
+                gain.gain.setValueAtTime(melodyVol, t);
                 gain.gain.exponentialRampToValueAtTime(0.001, t + n.dur * 0.9);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
@@ -90,22 +280,29 @@ GAME.Systems.Sound = (function() {
         var melodyLength = t - audioCtx.currentTime - 0.1;
 
         var bt = audioCtx.currentTime + 0.1;
-        BASS.forEach(function(n) {
-            if (n.note > 0) {
-                var osc = audioCtx.createOscillator();
-                var gain = audioCtx.createGain();
-                osc.type = 'square';
-                osc.frequency.value = n.note;
-                gain.gain.setValueAtTime(0.012, bt);
-                gain.gain.exponentialRampToValueAtTime(0.001, bt + n.dur * 0.9);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(bt);
-                osc.stop(bt + n.dur);
-                musicNodes.push(osc);
-            }
-            bt += n.dur;
-        });
+        var bassLength = 0;
+        bassData.forEach(function(n) { bassLength += n.dur; });
+
+        var bassRepeats = Math.ceil(melodyLength / bassLength);
+        for (var r = 0; r < bassRepeats; r++) {
+            bassData.forEach(function(n) {
+                if (bt >= audioCtx.currentTime + 0.1 + melodyLength) return;
+                if (n.note > 0) {
+                    var osc = audioCtx.createOscillator();
+                    var gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = n.note;
+                    gain.gain.setValueAtTime(bassVol, bt);
+                    gain.gain.exponentialRampToValueAtTime(0.001, bt + n.dur * 0.9);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(bt);
+                    osc.stop(bt + n.dur);
+                    musicNodes.push(osc);
+                }
+                bt += n.dur;
+            });
+        }
 
         musicTimer = setTimeout(function() {
             musicNodes = [];
@@ -159,6 +356,7 @@ GAME.Systems.Sound = (function() {
         playSuccess: playSuccess,
         playMusicLoop: playMusicLoop,
         stopMusic: stopMusic,
+        setTheme: setTheme,
         playSeagull: playSeagull,
         toggle: toggle
     };
