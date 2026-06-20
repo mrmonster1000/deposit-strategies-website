@@ -391,51 +391,150 @@ GAME.Systems.Renderer = (function() {
     var SIDEWALK_H = 10;
 
     function drawGround(time) {
-        // Draw zone-colored ground bands
+        // Draw zone-colored ground bands with gradient variation
         var zoneKeys = ['wilderness', 'campus', 'road', 'town', 'harbor'];
         for (var zi = 0; zi < zoneKeys.length; zi++) {
             var zone = ZONES[zoneKeys[zi]];
             if (!isVisible(zone.left, zone.right - zone.left)) continue;
+            // Base ground fill
             drawRect(zone.left, GROUND_Y, zone.right - zone.left, H - GROUND_Y, zone.ground);
-            // Subtle alternating strips for texture
+            // Alternating strips for texture
             for (var sx = zone.left; sx < zone.right; sx += 80) {
                 if ((sx / 80) % 2 === 0) {
                     drawRect(sx, GROUND_Y, 40, H - GROUND_Y, zone.groundAlt);
                 }
             }
+            // Subtle dirt patches for variety
+            var visL = Math.max(zone.left, camera.x - 20);
+            var visR = Math.min(zone.right, camera.x + W + 20);
+            for (var dp = Math.floor(visL / 200) * 200; dp < visR; dp += 200) {
+                var dSeed = dp * 3 + zi * 71;
+                var dpx = dp + seededRandom(dSeed) * 160;
+                if (dpx < zone.left || dpx > zone.right - 20) continue;
+                var dpw = 12 + seededRandom(dSeed + 1) * 20;
+                ctx.fillStyle = 'rgba(0,0,0,0.03)';
+                ctx.fillRect(dpx, GROUND_Y + 2, dpw, 4);
+            }
         }
 
-        // Sidewalk/pavement along developed zones (campus through harbor)
+        // Sidewalk/pavement along developed zones — enhanced with joints, cracks, drains
         var pavStart = ZONES.campus.left;
         var pavEnd = ZONES.harbor.right;
         if (isVisible(pavStart, pavEnd - pavStart)) {
-            var vs = Math.max(pavStart, camera.x - 10);
-            var ve = Math.min(pavEnd, camera.x + W + 10);
-            // Main sidewalk
-            drawRect(vs, SIDEWALK_Y, ve - vs, SIDEWALK_H, '#484840');
-            drawRect(vs, SIDEWALK_Y, ve - vs, 1, '#5a5a50');
+            var vs = Math.max(pavStart, camera.x - 20);
+            var ve = Math.min(pavEnd, camera.x + W + 20);
+            // 3D curb — raised edge with top highlight, face, and shadow
+            drawRect(vs, SIDEWALK_Y - 4, ve - vs, 4, '#606058');
+            drawRect(vs, SIDEWALK_Y - 4, ve - vs, 1, '#70706a');
+            drawRect(vs, SIDEWALK_Y - 1, ve - vs, 1, '#4a4a44');
+            // Main sidewalk surface with gradient
+            drawGradientRect(vs, SIDEWALK_Y, ve - vs, SIDEWALK_H, '#3e3e38', '#4a4a44');
+            // Top edge highlight
+            drawRect(vs, SIDEWALK_Y, ve - vs, 1, '#585850');
+            // Bottom edge shadow
             drawRect(vs, SIDEWALK_Y + SIDEWALK_H - 1, ve - vs, 1, '#2a2a24');
-            // Paving slab lines
-            for (var sl = Math.floor(vs / 30) * 30; sl < ve; sl += 30) {
+            // Individual slab joints (vertical)
+            for (var sl = Math.floor(vs / 24) * 24; sl < ve; sl += 24) {
                 drawRect(sl, SIDEWALK_Y, 1, SIDEWALK_H, '#3a3a34');
+                // Occasional wider worn joint
+                if (seededRandom(sl * 7) > 0.7) {
+                    drawRect(sl - 1, SIDEWALK_Y + 1, 1, SIDEWALK_H - 2, '#363630');
+                }
             }
-            // Curb above sidewalk
-            drawRect(vs, SIDEWALK_Y - 2, ve - vs, 2, '#555550');
-            drawRect(vs, SIDEWALK_Y - 2, ve - vs, 1, '#606058');
+            // Cross-joints (horizontal) every other slab
+            for (var cj = Math.floor(vs / 48) * 48; cj < ve; cj += 48) {
+                drawRect(cj, SIDEWALK_Y + SIDEWALK_H / 2, 24, 1, '#3a3a34');
+            }
+            // Sidewalk cracks (random hairline cracks)
+            for (var cr = Math.floor(vs / 100) * 100; cr < ve; cr += 100) {
+                var cSeed = cr * 13 + 777;
+                if (seededRandom(cSeed) > 0.5) continue;
+                var crx = cr + seededRandom(cSeed + 1) * 80;
+                var crl = 4 + seededRandom(cSeed + 2) * 10;
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.fillRect(crx, SIDEWALK_Y + 2, crl, 1);
+                ctx.fillRect(crx + 1, SIDEWALK_Y + 3, 1, 2 + seededRandom(cSeed + 3) * 3);
+            }
+            // Wear marks/scuffs
+            for (var wm = Math.floor(vs / 150) * 150; wm < ve; wm += 150) {
+                var wSeed = wm * 19 + 333;
+                if (seededRandom(wSeed) > 0.4) continue;
+                var wmx = wm + seededRandom(wSeed + 1) * 120;
+                ctx.fillStyle = 'rgba(0,0,0,0.04)';
+                ctx.fillRect(wmx, SIDEWALK_Y + 3, 8 + seededRandom(wSeed + 2) * 12, 3);
+            }
+            // Gum stains (dark dots)
+            for (var gm = Math.floor(vs / 80) * 80; gm < ve; gm += 80) {
+                var gmSeed = gm * 23 + 555;
+                if (seededRandom(gmSeed) > 0.35) continue;
+                var gmx = gm + seededRandom(gmSeed + 1) * 70;
+                ctx.fillStyle = 'rgba(0,0,0,0.08)';
+                ctx.fillRect(gmx, SIDEWALK_Y + 2 + seededRandom(gmSeed + 2) * 6, 2, 2);
+            }
+            // Lower curb edge (where sidewalk meets grass/ground below)
+            drawRect(vs, SIDEWALK_Y + SIDEWALK_H, ve - vs, 2, '#3a3a34');
+            drawRect(vs, SIDEWALK_Y + SIDEWALK_H + 2, ve - vs, 1, '#2a2a24');
+        }
+
+        // Drain grates near buildings
+        var drainPositions = [4300, 4700, 5100, 5500, 5950, 6300, 7700, 8100, 8600];
+        for (var di = 0; di < drainPositions.length; di++) {
+            var dx = drainPositions[di];
+            if (!isVisible(dx - 5, 14)) continue;
+            drawRect(dx, SIDEWALK_Y + 1, 10, 8, '#1a1a18');
+            drawRect(dx + 1, SIDEWALK_Y + 2, 8, 6, '#101010');
+            // Grate bars
+            for (var gb = 0; gb < 3; gb++) {
+                drawRect(dx + 1, SIDEWALK_Y + 3 + gb * 2, 8, 1, '#2a2a28');
+            }
+        }
+
+        // Puddle reflections near buildings (in town zone at night)
+        var puddlePositions = [4280, 4640, 5060, 5420, 6050, 7640, 8080, 8560];
+        for (var pi = 0; pi < puddlePositions.length; pi++) {
+            var px = puddlePositions[pi];
+            if (!isVisible(px - 5, 30)) continue;
+            var pSeed = px * 17;
+            var pw = 14 + seededRandom(pSeed) * 16;
+            ctx.fillStyle = 'rgba(20, 40, 60, 0.25)';
+            ctx.fillRect(px, SIDEWALK_Y + SIDEWALK_H + 3, pw, 3);
+            // Subtle building color reflection
+            ctx.fillStyle = 'rgba(80, 80, 100, 0.06)';
+            ctx.fillRect(px + 1, SIDEWALK_Y + SIDEWALK_H + 4, pw - 2, 1);
+        }
+
+        // Scattered pebbles on ground
+        var pebVisStart = Math.floor(camera.x / 160) * 160;
+        for (var pch = pebVisStart; pch < camera.x + W + 160; pch += 160) {
+            for (var pb = 0; pb < 4; pb++) {
+                var pbSeed = pch * 31 + pb * 43;
+                var pbx = pch + seededRandom(pbSeed) * 160;
+                var pby = SIDEWALK_Y + SIDEWALK_H + 6 + seededRandom(pbSeed + 1) * 12;
+                if (pbx >= WATER_X) continue;
+                ctx.fillStyle = 'rgba(60, 60, 50, 0.15)';
+                ctx.fillRect(pbx, pby, 2, 1);
+            }
         }
 
         // Dirt path in wilderness
         if (isVisible(0, 800)) {
             var pathS = Math.max(200, camera.x - 10);
             var pathE = Math.min(800, camera.x + W + 10);
-            drawRect(pathS, SIDEWALK_Y + 2, pathE - pathS, 6, '#3a3020');
+            drawRect(pathS, SIDEWALK_Y + 2, pathE - pathS, 8, '#3a3020');
             drawRect(pathS, SIDEWALK_Y + 2, pathE - pathS, 1, '#4a4030');
+            drawRect(pathS, SIDEWALK_Y + 9, pathE - pathS, 1, '#2a2018');
+            // Footprints/ruts in dirt
+            for (var fp = Math.floor(pathS / 40) * 40; fp < pathE; fp += 40) {
+                ctx.fillStyle = 'rgba(0,0,0,0.06)';
+                ctx.fillRect(fp + 5, SIDEWALK_Y + 4, 4, 2);
+                ctx.fillRect(fp + 18, SIDEWALK_Y + 5, 4, 2);
+            }
         }
 
         // Grass texture strips (scattered, denser)
         var visStart = Math.floor(camera.x / 120) * 120;
         for (var chunk = visStart; chunk < camera.x + W + 120; chunk += 120) {
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < 10; i++) {
                 var seed = chunk * 7 + i * 37;
                 var gx = chunk + seededRandom(seed) * 120;
                 var gy = GROUND_Y + 5 + seededRandom(seed + 53) * (SIDEWALK_Y - GROUND_Y - 12);
@@ -443,17 +542,26 @@ GAME.Systems.Renderer = (function() {
                     var grassShade = 30 + Math.floor(seededRandom(seed + 99) * 30);
                     ctx.fillStyle = 'rgba(' + grassShade + ', ' + (grassShade + 50) + ', ' + grassShade + ', 0.35)';
                     ctx.fillRect(gx, gy, 6 + seededRandom(seed + 71) * 10, 1);
+                    // Second blade
+                    if (seededRandom(seed + 88) > 0.5) {
+                        ctx.fillRect(gx + 2, gy - 1, 1, 2);
+                    }
                 }
             }
             // Small grass tufts
-            for (var g2 = 0; g2 < 3; g2++) {
+            for (var g2 = 0; g2 < 5; g2++) {
                 var gs = chunk * 11 + g2 * 97;
                 var gx2 = chunk + seededRandom(gs) * 120;
                 var gy2 = SIDEWALK_Y + SIDEWALK_H + 4 + seededRandom(gs + 50) * (H - SIDEWALK_Y - SIDEWALK_H - 10);
                 if (gx2 < WATER_X) {
                     ctx.fillStyle = 'rgba(30, 70, 30, 0.4)';
                     ctx.fillRect(gx2, gy2, 3, 2);
-                    ctx.fillRect(gx2 + 1, gy2 - 1, 1, 1);
+                    ctx.fillRect(gx2 + 1, gy2 - 2, 1, 2);
+                    // Varied height blades
+                    if (seededRandom(gs + 80) > 0.6) {
+                        ctx.fillStyle = 'rgba(25, 60, 25, 0.3)';
+                        ctx.fillRect(gx2 + 2, gy2 - 1, 1, 3);
+                    }
                 }
             }
         }
@@ -472,12 +580,31 @@ GAME.Systems.Renderer = (function() {
     function drawRoad(time) {
         if (!isVisible(ROAD_X - 10, ROAD_W + 20)) return;
         var rx = ROAD_X;
-        drawRect(rx, GROUND_Y, ROAD_W, H - GROUND_Y, COLORS.ground.path);
-        drawRect(rx, GROUND_Y, 2, H - GROUND_Y, COLORS.ground.pathLight);
-        drawRect(rx + ROAD_W - 2, GROUND_Y, 2, H - GROUND_Y, COLORS.ground.pathLight);
+        // Asphalt surface with gradient
+        drawGradientRect(rx, GROUND_Y, ROAD_W, H - GROUND_Y, '#2a2820', '#343028');
+        // Road edge lines (white/yellow)
+        drawRect(rx, GROUND_Y, 2, H - GROUND_Y, '#5a5840');
+        drawRect(rx + ROAD_W - 2, GROUND_Y, 2, H - GROUND_Y, '#5a5840');
+        // Center dashed line (yellow)
         for (var dy = GROUND_Y + 5; dy < H; dy += 16) {
             drawRect(rx + ROAD_W / 2 - 1, dy, 2, 8, '#5a5030');
         }
+        // Road surface texture (subtle aggregate)
+        for (var rt = Math.floor(camera.x / 40) * 40; rt < camera.x + W; rt += 40) {
+            if (rt < rx || rt > rx + ROAD_W) continue;
+            var rtSeed = rt * 29;
+            ctx.fillStyle = 'rgba(0,0,0,0.04)';
+            ctx.fillRect(rt + seededRandom(rtSeed) * 30, GROUND_Y + 3 + seededRandom(rtSeed + 1) * 20, 6, 1);
+        }
+        // Crosswalk at town side (x = ROAD_X, stripes perpendicular to road)
+        var cwY = GROUND_Y + 4;
+        for (var cw = 0; cw < 6; cw++) {
+            drawRect(rx + 4, cwY + cw * 6, ROAD_W - 8, 3, '#686050');
+        }
+        // Manhole cover
+        drawRect(rx + ROAD_W / 2 - 4, GROUND_Y + 14, 8, 8, '#2a2620');
+        drawRect(rx + ROAD_W / 2 - 3, GROUND_Y + 15, 6, 6, '#222018');
+        drawRect(rx + ROAD_W / 2 - 1, GROUND_Y + 17, 2, 2, '#2a2620');
     }
 
     // =========================================================================
