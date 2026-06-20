@@ -112,16 +112,16 @@ GAME.Systems.Renderer = (function() {
     // Permanent seedy building bounds (for overlap checks)
     // These are the fixed town establishments at 2x scale
     var PERMANENT_BUILDINGS = [
-        { x: 350, w: 140, name: 'Derelict Shack' },
-        { x: 4240, w: 320, name: 'Seedy Bar' },
-        { x: 4500, w: 290, name: 'Video Shop' },
-        { x: 4750, w: 340, name: 'Arcade' },
-        { x: 5050, w: 400, name: 'Supermarket' },
-        { x: 5400, w: 200, name: 'Church' },
-        { x: 5800, w: 300, name: 'Comedy Club' },
-        { x: 7580, w: 270, name: 'Gun Shop' },
-        { x: 7850, w: 500, name: 'Car Factory' },
-        { x: 8300, w: 400, name: 'Motel' }
+        { x: 350, w: 200, name: 'Derelict Shack' },
+        { x: 4220, w: 420, name: 'Seedy Bar' },
+        { x: 4600, w: 380, name: 'Video Shop' },
+        { x: 4950, w: 440, name: 'Arcade' },
+        { x: 5350, w: 520, name: 'Supermarket' },
+        { x: 5850, w: 340, name: 'Church' },
+        { x: 6200, w: 400, name: 'Comedy Club' },
+        { x: 7580, w: 360, name: 'Gun Shop' },
+        { x: 7920, w: 620, name: 'Car Factory' },
+        { x: 8520, w: 560, name: 'Motel' }
     ];
 
     function init(canvasId) {
@@ -451,16 +451,35 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawLamppost(x, y, time) {
-        // Pole
-        drawRect(x, y - 24, 2, 24, '#505058');
-        // Light fixture
-        drawRect(x - 3, y - 26, 8, 3, '#606068');
-        // Glow
-        var glowAlpha = 0.15 + Math.sin(time * 0.003) * 0.05;
-        ctx.fillStyle = 'rgba(255, 220, 120, ' + glowAlpha + ')';
-        ctx.fillRect(x - 6, y - 30, 14, 10);
+        // Pole — taller, thicker
+        drawRect(x, y - 44, 3, 44, '#505058');
+        drawRect(x + 1, y - 44, 1, 44, '#606068');
+        // Base plate
+        drawRect(x - 2, y - 2, 7, 3, '#404048');
+        // Curved arm
+        drawRect(x - 8, y - 46, 12, 3, '#606068');
+        drawRect(x - 9, y - 45, 2, 2, '#505058');
+        // Light fixture housing
+        drawRect(x - 10, y - 48, 14, 4, '#707078');
+        drawRect(x - 9, y - 47, 12, 2, '#808088');
         // Bulb
-        drawRect(x, y - 25, 2, 1, '#ffdd80');
+        drawRect(x - 6, y - 44, 6, 2, '#ffdd80');
+        // Light cone — triangular beam to ground (Thimbleweed style)
+        var glowAlpha = 0.08 + Math.sin(time * 0.003) * 0.02;
+        ctx.save();
+        ctx.globalAlpha = glowAlpha;
+        ctx.fillStyle = '#ffeebb';
+        ctx.beginPath();
+        ctx.moveTo(x - 8, y - 44);
+        ctx.lineTo(x + 2, y - 44);
+        ctx.lineTo(x + 22, y + 4);
+        ctx.lineTo(x - 28, y + 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        // Ground light pool
+        ctx.fillStyle = 'rgba(255, 220, 140, 0.04)';
+        ctx.fillRect(x - 30, y - 2, 54, 6);
     }
 
     function drawWelcomeSign(x, y) {
@@ -1848,7 +1867,7 @@ GAME.Systems.Renderer = (function() {
     // --- SEEDY STARTER BUILDINGS (the downmarket establishments) ---
 
     function drawSeedyBar(x, time) {
-        var bw = 80, bh = 68;
+        var bw = 100, bh = 82;
         var by = BUILDING_FLOOR - bh;
         // Shadow
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
@@ -1931,7 +1950,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawVideoShop(x, time) {
-        var bw = 72, bh = 58;
+        var bw = 90, bh = 72;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Faded blue shop front
@@ -1995,7 +2014,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawSeedyArcade(x, time) {
-        var bw = 84, bh = 64;
+        var bw = 104, bh = 78;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Dark building
@@ -2065,7 +2084,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawComedyClub(x, time) {
-        var bw = 74, bh = 60;
+        var bw = 94, bh = 74;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Dark brick exterior
@@ -2155,7 +2174,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawSupermarket(x, time) {
-        var bw = 100, bh = 64;
+        var bw = 130, bh = 80;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Large boxy building
@@ -2211,7 +2230,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawGunShop(x, time) {
-        var bw = 66, bh = 54;
+        var bw = 84, bh = 68;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Military green / khaki building
@@ -2259,7 +2278,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawCarFactory(x, time) {
-        var bw = 120, bh = 72;
+        var bw = 140, bh = 90;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 5, by + 5, bw, bh, 'rgba(0,0,0,0.3)');
         // Large industrial building
@@ -2327,7 +2346,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawRundownMotel(x, time) {
-        var bw = 100, bh = 56;
+        var bw = 120, bh = 70;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
         // Long building, peeling paint
@@ -2426,12 +2445,14 @@ GAME.Systems.Renderer = (function() {
         drawRect(x + bw - 3, BUILDING_FLOOR - 1, 1, 2, '#2a5020');
     }
 
-    var BLDG_SCALE = 2.0;
+    var BLDG_SCALE = 3.0;
+    var BLDG_SCALE_TALL = 3.5;
 
-    function drawScaledBuilding(drawFn, x, time) {
+    function drawScaledBuilding(drawFn, x, time, scale) {
+        var s = scale || BLDG_SCALE;
         ctx.save();
         ctx.translate(x, BUILDING_FLOOR);
-        ctx.scale(BLDG_SCALE, BLDG_SCALE);
+        ctx.scale(s, s);
         ctx.translate(-x, -BUILDING_FLOOR);
         drawFn(x, time);
         ctx.restore();
@@ -2439,23 +2460,22 @@ GAME.Systems.Renderer = (function() {
 
     function drawBaseTownFeatures(time) {
         // Derelict shack in the wilderness (scaled)
-        if (isVisible(350, 140)) {
+        if (isVisible(350, 200)) {
             drawScaledBuilding(drawDerelictShack, 350, time);
         }
 
-        // --- SEEDY TOWN ESTABLISHMENTS at 2x scale ---
-        // Town zone shifted: now starts at 4200
-        // Spacing accounts for 2x width with gaps for player-placed buildings
-        if (isVisible(4240, 320)) drawScaledBuilding(drawSeedyBar, 4240, time);
-        if (isVisible(4500, 290)) drawScaledBuilding(drawVideoShop, 4500, time);
-        if (isVisible(4750, 340)) drawScaledBuilding(drawSeedyArcade, 4750, time);
-        if (isVisible(5050, 400)) drawScaledBuilding(drawSupermarket, 5050, time);
-        if (isVisible(5800, 300)) drawScaledBuilding(drawComedyClub, 5800, time);
+        // --- SEEDY TOWN ESTABLISHMENTS at 3x scale ---
+        // Town zone starts at 4200 — wider spacing for 3x buildings
+        if (isVisible(4220, 420)) drawScaledBuilding(drawSeedyBar, 4220, time);
+        if (isVisible(4600, 380)) drawScaledBuilding(drawVideoShop, 4600, time);
+        if (isVisible(4950, 440)) drawScaledBuilding(drawSeedyArcade, 4950, time);
+        if (isVisible(5350, 520)) drawScaledBuilding(drawSupermarket, 5350, time);
+        if (isVisible(6200, 400)) drawScaledBuilding(drawComedyClub, 6200, time);
 
-        // Harbor zone
-        if (isVisible(7580, 270)) drawScaledBuilding(drawGunShop, 7580, time);
-        if (isVisible(7850, 500)) drawScaledBuilding(drawCarFactory, 7850, time);
-        if (isVisible(8300, 400)) drawScaledBuilding(drawRundownMotel, 8300, time);
+        // Harbor zone — Car Factory is multi-story (tall scale)
+        if (isVisible(7580, 360)) drawScaledBuilding(drawGunShop, 7580, time);
+        if (isVisible(7920, 620)) drawScaledBuilding(drawCarFactory, 7920, time, BLDG_SCALE_TALL);
+        if (isVisible(8520, 560)) drawScaledBuilding(drawRundownMotel, 8520, time, BLDG_SCALE_TALL);
 
         // Background houses (these stay small — they're distant background)
         var bgY = GROUND_Y - 12;
@@ -2490,12 +2510,12 @@ GAME.Systems.Renderer = (function() {
             drawRect(h.x + h.w / 2 - 2, h.y + h.h - 7, 4, 7, darkenColor(h.color, 0.4));
         }
 
-        // Church (also scaled via transform)
-        var churchX = 5400;
-        if (isVisible(churchX - 20, 200)) {
+        // Church (multi-story tall scale — steeple towers over single-story buildings)
+        var churchX = 5850;
+        if (isVisible(churchX - 20, 340)) {
             ctx.save();
             ctx.translate(churchX, BUILDING_FLOOR);
-            ctx.scale(BLDG_SCALE, BLDG_SCALE);
+            ctx.scale(BLDG_SCALE_TALL, BLDG_SCALE_TALL);
             ctx.translate(-churchX, -BUILDING_FLOOR);
 
             var churchY = GROUND_Y - 40;
@@ -2661,7 +2681,7 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawPerson(wx, wy, bounce, skinColor, shirtColor, time, idx, large, abundanceLevel) {
-        var sz = large ? 2.5 : 2.0;
+        var sz = large ? 3.5 : 3.0;
         var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(5 * sz);
@@ -2731,7 +2751,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawNamedNPC(wx, wy, portrait, name, time, idx, abundanceLevel) {
-        var sz = 3.0;
+        var sz = 4.5;
         var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(6 * sz);
@@ -2784,9 +2804,22 @@ GAME.Systems.Renderer = (function() {
         // Body
         ctx.fillStyle = shirtColor;
         ctx.fillRect(px, baseY - legH - bodyH - bob, bodyW, bodyH);
-        // Shirt detail / collar
-        ctx.fillStyle = lightenColor(shirtColor, 15);
-        ctx.fillRect(px + bodyW / 2 - 2, baseY - legH - bodyH - bob, 4, 3);
+        // Shadow side
+        ctx.fillStyle = darkenColor(shirtColor, 0.8);
+        ctx.fillRect(px + bodyW - 4, baseY - legH - bodyH - bob, 4, bodyH);
+        // Collar / lapel
+        ctx.fillStyle = lightenColor(shirtColor, 20);
+        ctx.fillRect(px + bodyW / 2 - 3, baseY - legH - bodyH - bob, 6, 3);
+        ctx.fillRect(px + bodyW / 2 - 2, baseY - legH - bodyH + 3 - bob, 4, 2);
+        // Buttons
+        ctx.fillStyle = darkenColor(shirtColor, 0.6);
+        ctx.fillRect(px + bodyW / 2 - 1, baseY - legH - bodyH + 6 - bob, 2, 1);
+        ctx.fillRect(px + bodyW / 2 - 1, baseY - legH - bodyH + 10 - bob, 2, 1);
+        // Belt
+        ctx.fillStyle = '#1a1a20';
+        ctx.fillRect(px + 1, baseY - legH - 3 - bob, bodyW - 2, 3);
+        ctx.fillStyle = '#c0a040';
+        ctx.fillRect(px + bodyW / 2 - 1, baseY - legH - 3 - bob, 3, 3);
 
         // Arms
         ctx.fillStyle = shirtColor;
@@ -2803,25 +2836,52 @@ GAME.Systems.Renderer = (function() {
             ctx.fillRect(px - armW, baseY - legH - bodyH + armH - 1 - bob, armW, 2);
         }
 
-        // Head
+        // Head with jawline
         ctx.fillStyle = portrait.skinTone;
         var headX = px + Math.floor((bodyW - headW) / 2);
-        ctx.fillRect(headX, baseY - totalH - bob, headW, headH);
-        // Hair
+        var headTop = baseY - totalH - bob;
+        ctx.fillRect(headX, headTop, headW, headH);
+        // Jawline — chin narrower than forehead
+        ctx.fillStyle = '#0a0a1a';
+        ctx.fillRect(headX - 1, headTop + headH - 4, 2, 4);
+        ctx.fillRect(headX + headW - 1, headTop + headH - 4, 2, 4);
+        // Chin highlight
+        ctx.fillStyle = lightenColor(portrait.skinTone, 15);
+        ctx.fillRect(headX + 3, headTop + headH - 2, headW - 6, 1);
+        // Nose hint
+        ctx.fillStyle = darkenColor(portrait.skinTone, 0.85);
+        ctx.fillRect(headX + headW / 2, headTop + Math.floor(4.5 * sz), 2, 3);
+        // Ears
+        ctx.fillStyle = portrait.skinTone;
+        ctx.fillRect(headX - 2, headTop + Math.floor(3 * sz), 2, Math.floor(2 * sz));
+        ctx.fillRect(headX + headW, headTop + Math.floor(3 * sz), 2, Math.floor(2 * sz));
+        // Hair with volume (2 tones)
         ctx.fillStyle = portrait.hairColor;
-        var hairH = portrait.hairStyle === 'receding' ? Math.floor(2 * sz) : Math.floor(3 * sz);
-        ctx.fillRect(headX, baseY - totalH - bob, headW, hairH);
+        var hairH = portrait.hairStyle === 'receding' ? Math.floor(2 * sz) : Math.floor(3.5 * sz);
+        ctx.fillRect(headX - 1, headTop - 2, headW + 2, hairH + 2);
+        ctx.fillStyle = lightenColor(portrait.hairColor, 25);
+        ctx.fillRect(headX + 2, headTop - 1, headW - 4, Math.floor(1.5 * sz));
         if (portrait.hairStyle !== 'receding') {
-            ctx.fillRect(headX - 1, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
-            ctx.fillRect(headX + headW, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
+            ctx.fillStyle = portrait.hairColor;
+            ctx.fillRect(headX - 2, headTop + Math.floor(1 * sz), 2, Math.floor(4 * sz));
+            ctx.fillRect(headX + headW, headTop + Math.floor(1 * sz), 2, Math.floor(4 * sz));
         }
-        // Eyes
+        // Eyes with white sclera
+        var eyeY = headTop + Math.floor(3.5 * sz);
+        ctx.fillStyle = '#e0e0e0';
+        ctx.fillRect(headX + 4, eyeY, 5, 4);
+        ctx.fillRect(headX + headW - 9, eyeY, 5, 4);
+        // Pupils
         ctx.fillStyle = '#202020';
-        ctx.fillRect(headX + 3, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
-        ctx.fillRect(headX + headW - 5, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
-        // Mouth
+        ctx.fillRect(headX + 5, eyeY + 1, 3, 2);
+        ctx.fillRect(headX + headW - 8, eyeY + 1, 3, 2);
+        // Mouth (smile when happy)
         ctx.fillStyle = al >= 2 ? '#c06040' : '#804030';
-        ctx.fillRect(headX + headW / 2 - 2, baseY - totalH + headH - Math.floor(2 * sz) - bob, 4, 1);
+        ctx.fillRect(headX + headW / 2 - 3, headTop + headH - Math.floor(2 * sz), 6, 1);
+        if (al >= 2) {
+            ctx.fillRect(headX + headW / 2 - 4, headTop + headH - Math.floor(2 * sz) - 1, 1, 1);
+            ctx.fillRect(headX + headW / 2 + 3, headTop + headH - Math.floor(2 * sz) - 1, 1, 1);
+        }
 
         // Glasses
         if (portrait.glasses) {
@@ -2878,14 +2938,14 @@ GAME.Systems.Renderer = (function() {
     var highlightedNPCId = null;
 
     var TOWN_NPCS = [
-        { id: 'betty_cafe', x: 4400, name: 'Betty', portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#a03030', glasses: false, beard: false } },
-        { id: 'pub_landlord', x: 4320, name: 'Mick', portrait: { skinTone: '#e8c090', hairColor: '#604020', hairStyle: 'short', shirtColor: '#a06030', glasses: false, beard: true } },
-        { id: 'teen_zara', x: 4740, name: 'Zara', portrait: { skinTone: '#a07040', hairColor: '#202020', hairStyle: 'short', shirtColor: '#3060a0', glasses: false, beard: false } },
-        { id: 'mayor_patricia', x: 5200, name: 'Mayor', portrait: { skinTone: '#e8c890', hairColor: '#885530', hairStyle: 'short', shirtColor: '#304080', glasses: true, beard: false } },
-        { id: 'reverend_james', x: 5450, name: 'Rev. James', portrait: { skinTone: '#f0d0a0', hairColor: '#505050', hairStyle: 'short', shirtColor: '#202020', glasses: true, beard: false } },
+        { id: 'betty_cafe', x: 4500, name: 'Betty', portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#a03030', glasses: false, beard: false } },
+        { id: 'pub_landlord', x: 4350, name: 'Mick', portrait: { skinTone: '#e8c090', hairColor: '#604020', hairStyle: 'short', shirtColor: '#a06030', glasses: false, beard: true } },
+        { id: 'teen_zara', x: 4980, name: 'Zara', portrait: { skinTone: '#a07040', hairColor: '#202020', hairStyle: 'short', shirtColor: '#3060a0', glasses: false, beard: false } },
+        { id: 'mayor_patricia', x: 5600, name: 'Mayor', portrait: { skinTone: '#e8c890', hairColor: '#885530', hairStyle: 'short', shirtColor: '#304080', glasses: true, beard: false } },
+        { id: 'reverend_james', x: 5930, name: 'Rev. James', portrait: { skinTone: '#f0d0a0', hairColor: '#505050', hairStyle: 'short', shirtColor: '#202020', glasses: true, beard: false } },
         { id: 'old_arthur', x: 7700, name: 'Arthur', portrait: { skinTone: '#e8c090', hairColor: '#c0c0c0', hairStyle: 'receding', shirtColor: '#606040', glasses: true, beard: true } },
         { id: 'frank_fisherman', x: 9800, name: 'Frank', portrait: { skinTone: '#d0a060', hairColor: '#888888', hairStyle: 'receding', shirtColor: '#404060', glasses: false, beard: true } },
-        { id: 'comedian_wright', x: 5870, name: 'Steven', portrait: { skinTone: '#e8c8a0', hairColor: '#8a7060', hairStyle: 'swept', shirtColor: '#404060', glasses: true, beard: false } },
+        { id: 'comedian_wright', x: 6300, name: 'Steven', portrait: { skinTone: '#e8c8a0', hairColor: '#8a7060', hairStyle: 'swept', shirtColor: '#404060', glasses: true, beard: false } },
     ];
 
     // =========================================================================
@@ -2927,7 +2987,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawPlayer(time) {
-        var sz = 2.8;
+        var sz = 4.0;
         var px = Math.floor(player.x);
         var baseY = SIDEWALK_Y + SIDEWALK_H + 2;
         var headW = Math.floor(6 * sz);
@@ -2962,9 +3022,23 @@ GAME.Systems.Renderer = (function() {
         // Body
         ctx.fillStyle = player.shirtColor;
         ctx.fillRect(drawX, baseY - legH - bodyH - bob, bodyW, bodyH);
-        // Collar/detail
-        ctx.fillStyle = lightenColor(player.shirtColor, 20);
-        ctx.fillRect(drawX + bodyW / 2 - 2, baseY - legH - bodyH - bob, 4, 3);
+        // Shadow side of body
+        ctx.fillStyle = darkenColor(player.shirtColor, 0.8);
+        ctx.fillRect(drawX + bodyW - 3, baseY - legH - bodyH - bob, 3, bodyH);
+        // Collar/lapel detail (V-shape)
+        ctx.fillStyle = lightenColor(player.shirtColor, 25);
+        ctx.fillRect(drawX + bodyW / 2 - 3, baseY - legH - bodyH - bob, 6, 2);
+        ctx.fillRect(drawX + bodyW / 2 - 2, baseY - legH - bodyH + 2 - bob, 4, 2);
+        // Shirt buttons
+        ctx.fillStyle = darkenColor(player.shirtColor, 0.6);
+        for (var btn = 0; btn < 3; btn++) {
+            ctx.fillRect(drawX + bodyW / 2 - 1, baseY - legH - bodyH + 5 + btn * 6 - bob, 2, 1);
+        }
+        // Belt
+        ctx.fillStyle = '#1a1a20';
+        ctx.fillRect(drawX + 1, baseY - legH - 2 - bob, bodyW - 2, 2);
+        ctx.fillStyle = '#c0a040';
+        ctx.fillRect(drawX + bodyW / 2 - 1, baseY - legH - 2 - bob, 3, 2);
 
         // Arms (swing with walk)
         var armSwing = Math.floor(walkAnim * 3);
@@ -2976,19 +3050,44 @@ GAME.Systems.Renderer = (function() {
         ctx.fillRect(drawX - armW, baseY - legH - bodyH + armH + 1 + armSwing - bob, armW, Math.floor(2.5 * sz));
         ctx.fillRect(drawX + bodyW, baseY - legH - bodyH + armH + 1 - armSwing - bob, armW, Math.floor(2.5 * sz));
 
-        // Head
+        // Head with jawline
+        var headX = drawX + Math.floor((bodyW - headW) / 2);
+        var headTop = baseY - totalH - bob;
         ctx.fillStyle = player.skinTone;
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, headH);
-        // Eyes (facing direction)
-        var eyeOffset = player.direction > 0 ? 2 : -2;
+        ctx.fillRect(headX, headTop, headW, headH);
+        // Jawline tapering — chin narrower than forehead
+        ctx.fillStyle = '#0a0a1a';
+        ctx.fillRect(headX - 1, headTop + headH - 3, 2, 3);
+        ctx.fillRect(headX + headW - 1, headTop + headH - 3, 2, 3);
+        // Chin highlight
+        ctx.fillStyle = lightenColor(player.skinTone, 15);
+        ctx.fillRect(headX + 2, headTop + headH - 2, headW - 4, 1);
+        // Eyes with white sclera (facing direction)
+        var eyeOffset = player.direction > 0 ? 1 : -1;
+        var eyeY = headTop + Math.floor(3 * sz);
+        // Sclera (white)
+        ctx.fillStyle = '#e0e0e0';
+        ctx.fillRect(headX + 3 + eyeOffset, eyeY, 4, 3);
+        ctx.fillRect(headX + headW - 7 + eyeOffset, eyeY, 4, 3);
+        // Pupils
         ctx.fillStyle = '#202020';
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + 3 + eyeOffset, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + headW - 5 + eyeOffset, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
-        // Hair
+        ctx.fillRect(headX + 4 + eyeOffset + (player.direction > 0 ? 1 : 0), eyeY + 1, 2, 2);
+        ctx.fillRect(headX + headW - 6 + eyeOffset + (player.direction > 0 ? 1 : 0), eyeY + 1, 2, 2);
+        // Mouth
+        ctx.fillStyle = '#804030';
+        ctx.fillRect(headX + headW / 2 - 2, headTop + headH - Math.floor(2 * sz), 4, 1);
+        // Nose hint
+        ctx.fillStyle = darkenColor(player.skinTone, 0.85);
+        ctx.fillRect(headX + headW / 2, headTop + Math.floor(4 * sz), 2, 2);
+        // Hair with volume (2 tones)
         ctx.fillStyle = player.hairColor;
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, Math.floor(3 * sz));
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) - 1, baseY - totalH + Math.floor(2 * sz) - bob, 1, Math.floor(2 * sz));
-        ctx.fillRect(drawX + Math.floor((bodyW - headW) / 2) + headW, baseY - totalH + Math.floor(2 * sz) - bob, 1, Math.floor(2 * sz));
+        ctx.fillRect(headX - 1, headTop - 2, headW + 2, Math.floor(3 * sz) + 2);
+        ctx.fillStyle = lightenColor(player.hairColor, 20);
+        ctx.fillRect(headX + 2, headTop - 1, headW - 4, Math.floor(1.5 * sz));
+        // Side hair
+        ctx.fillStyle = player.hairColor;
+        ctx.fillRect(headX - 2, headTop + Math.floor(1 * sz), 2, Math.floor(3 * sz));
+        ctx.fillRect(headX + headW, headTop + Math.floor(1 * sz), 2, Math.floor(3 * sz));
 
         // Name label
         var charName = player.characterId ? player.characterId.charAt(0).toUpperCase() + player.characterId.slice(1) : 'You';
