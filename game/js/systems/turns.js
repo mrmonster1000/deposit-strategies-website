@@ -257,10 +257,11 @@ GAME.Systems.Simulation = (function() {
         // Unlock new buildings when entering new phases
         if (state.phase >= 2 && state.unlockedBuildings.indexOf('chip_fab') === -1) {
             state.unlockedBuildings.push('chip_fab', 'mega_data_center', 'data_center', 'large_lab', 'poaching_dept', 'scale_center');
-            state.unlockedTownBuildings.push('school_upgrade', 'medical_clinic', 'harbor_upgrade', 'housing_development', 'renewable_energy');
+            state.unlockedTownBuildings.push('school_upgrade', 'medical_clinic', 'harbor_upgrade', 'housing_development', 'renewable_energy', 'ai_precinct');
         }
         if (state.phase >= 3 && state.unlockedBuildings.indexOf('robot_factory') === -1) {
             state.unlockedBuildings.push('robot_factory', 'fusion_reactor', 'advanced_chip_fab');
+            state.unlockedTownBuildings.push('robot_police');
         }
         if (state.phase >= 4 && state.unlockedBuildings.indexOf('mars_launchpad') === -1) {
             state.unlockedBuildings.push('mars_launchpad');

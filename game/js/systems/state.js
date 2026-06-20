@@ -76,7 +76,7 @@ GAME.Systems.State = (function() {
 
             // Unlocks
             unlockedBuildings: ['small_lab', 'safety_dept', 'power_plant', 'talent_office', 'deployment_center', 'cookie_kitchen', 'diplomacy_wing'],
-            unlockedTownBuildings: ['community_center', 'fiber_internet', 'pub_upgrade', 'town_beautification', 'fish_chip_shop', 'comedy_club'],
+            unlockedTownBuildings: ['community_center', 'fiber_internet', 'pub_upgrade', 'town_beautification', 'fish_chip_shop', 'comedy_club', 'police_station'],
 
             // Abilities
             abilityCooldowns: {},

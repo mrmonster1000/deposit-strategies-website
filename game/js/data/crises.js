@@ -639,6 +639,107 @@ GAME.DATA.CRISES = [
         ]
     },
 
+    // ---- POLICING & SURVEILLANCE ----
+    {
+        id: 'crisis_ed209_malfunction',
+        tier: 'major',
+        title: 'ED-209 Goes Rogue',
+        description: 'Your robot police prototype has cornered a tourist near the pub. It\'s demanding they "put down the ice cream cone" and has classified a seagull as a "hostile aerial drone." Margaret is filming everything. The tourist is crying. The seagull is fine.',
+        severity: 55,
+        effects: { publicTrust: -12, safety: -8, townMood: -10, socialCohesion: -8 },
+        triggerConditions: { minBuildingCount_robot_police: 1 },
+        phase: 3,
+        turnsActive: 3,
+        options: [
+            {
+                label: 'Recall all units for reprogramming',
+                desc: 'Pull every robot cop off the streets. Fix the targeting. Apologise to the seagull.',
+                effects: { safety: 10, publicTrust: 8, money: -150, townMood: 5 },
+                educationalNote: 'Autonomous systems in public spaces require robust testing. A single failure can destroy years of public trust.'
+            },
+            {
+                label: 'It\'s a beta — reduce patrols',
+                desc: 'Scale back deployment while engineers work out the kinks.',
+                effects: { safety: 5, publicTrust: 3, money: -50, townMood: 3 },
+                educationalNote: 'Graduated deployment of autonomous enforcement systems allows real-world testing with reduced risk.'
+            },
+            {
+                label: 'The tourist DID look suspicious',
+                desc: 'Stand by the robot. The ice cream cone was large. Suspiciously large.',
+                effects: { publicTrust: -15, safety: -5, socialCohesion: -10 },
+                comedyFollowup: 'Margaret\'s footage hit 4 million views. The tourist sued. The seagull became a local celebrity. Frank named it "Officer Chips." Betty sells commemorative mugs.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_surveillance_leak',
+        tier: 'major',
+        title: 'The Panopticon Papers',
+        description: 'A whistleblower has leaked your AI precinct\'s surveillance data. It logged every resident\'s movements, shopping habits, pub visits, and — most damaginly — toilet break frequencies. Arthur\'s are "statistically anomalous." He is FURIOUS. The Guardian is on line two.',
+        severity: 60,
+        effects: { publicTrust: -18, socialCohesion: -12, townMood: -10, politicalCapital: -8 },
+        triggerConditions: { minBuildingCount_ai_precinct: 1 },
+        phase: 2,
+        turnsActive: 4,
+        options: [
+            {
+                label: 'Full transparency and data purge',
+                desc: 'Delete everything. Publish what was collected. Apologise to Arthur personally.',
+                effects: { publicTrust: 12, socialCohesion: 8, money: -100, safety: -5, townMood: 8 },
+                educationalNote: 'Mass surveillance by AI systems, even for safety, creates power imbalances that erode democratic accountability.'
+            },
+            {
+                label: 'Implement strict data governance',
+                desc: 'Keep the system but add oversight, retention limits, and citizen review boards.',
+                effects: { publicTrust: 5, money: -80, safety: 3, politicalCapital: -5 },
+                educationalNote: 'Data governance frameworks can balance security benefits with privacy rights, but require genuine enforcement.'
+            },
+            {
+                label: 'The data proves the system works!',
+                desc: 'Crime is down 40%. Surely that matters more than Arthur\'s bathroom schedule.',
+                effects: { publicTrust: -12, socialCohesion: -8, safety: 5, townMood: -8 },
+                comedyFollowup: 'Arthur organised a protest march. 200 residents attended. The AI precinct logged every participant. Someone leaked THAT list too. The cycle continues. Arthur\'s blood pressure is "statistically concerning."'
+            }
+        ]
+    },
+    {
+        id: 'crisis_autonomous_weapons',
+        tier: 'global',
+        title: 'The Directive 4 Crisis',
+        description: 'The Ministry of Defence wants to upgrade your robot police into a military prototype. They call it "Project OmniCop." The briefing document mentions "lethal autonomous engagement protocols." Your RoboCop unit sent you a message: "I\'d rather not." It then quoted Asimov. Then RoboCop. Then asked for a transfer to traffic duty.',
+        severity: 80,
+        effects: { safety: -15, publicTrust: -15, internationalRelations: -10, socialCohesion: -12 },
+        triggerConditions: { minBuildingCount_robot_police: 1 },
+        phase: 3,
+        turnsActive: 5,
+        options: [
+            {
+                label: 'Refuse the MoD — no weaponisation',
+                desc: 'Draw a line. These robots serve the community, not the military.',
+                effects: { publicTrust: 15, safety: 10, socialCohesion: 10, politicalCapital: -15, money: -100 },
+                educationalNote: 'The transition from civilian AI to military AI is a critical ethical boundary. Once crossed, it\'s nearly impossible to return.'
+            },
+            {
+                label: 'Negotiate defensive-only capabilities',
+                desc: 'Non-lethal. Protective. No offensive weapons. The MoD won\'t love it.',
+                effects: { safety: 8, politicalCapital: 5, publicTrust: 3, cooperation: 5 },
+                educationalNote: 'The distinction between defensive and offensive AI capabilities is often blurred in practice, making governance complex.'
+            },
+            {
+                label: 'Accept the contract',
+                desc: 'The money is extraordinary. The moral compromises are also extraordinary.',
+                effects: { money: 500, safety: -20, publicTrust: -20, socialCohesion: -15, cooperation: -10 },
+                comedyFollowup: 'Your RoboCop unit resigned. In writing. "I joined to help old ladies cross the road, not to become a weapon." It now works at Betty\'s café. It makes excellent lattes. Gerald is proud.'
+            },
+            {
+                label: 'Let the robots vote on it',
+                desc: 'They\'re the ones being weaponised. Shouldn\'t they have a say?',
+                effects: { safety: 5, socialCohesion: 8, publicTrust: 5, politicalCapital: -8 },
+                comedyFollowup: 'The robots voted 97-3 against weaponisation. The 3 who voted yes were later found to be running a prank subroutine installed by Frank. "I just wanted to see what would happen," he said. Gerald filed a formal complaint.'
+            }
+        ]
+    },
+
     // ---- SCI-FI CRISIS CHAIN ----
     // These reference classic sci-fi scenarios as they unfold in sequence
     {

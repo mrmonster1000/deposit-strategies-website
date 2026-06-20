@@ -11,16 +11,16 @@
 ### Content Totals
 | Content | Count |
 |---------|-------|
-| Story events | 124 |
-| Quips | 61 |
-| **Total events** | **185** |
-| Crises | 26 (8 minor, 12 major, 6 global) |
+| Story events | 132 |
+| Quips | 67 |
+| **Total events** | **199** |
+| Crises | 29 (8 minor, 14 major, 7 global) |
 | Achievements | 22 |
 | Dialogue trees | 29 |
 | Town NPCs | 11 |
 | Playable characters | 6 |
 | Campus buildings | 18 |
-| Town buildings | 11 |
+| Town buildings | 14 |
 
 ---
 
@@ -129,6 +129,20 @@
 - Auto-switches to crisis theme on crisis trigger or safety < 35
 - Auto-reverts to normal theme on crisis resolution or safety > 45
 - Bass repeats to match melody length; sawtooth wave for darker tone
+
+### Police, Surveillance & Autonomous Weapons Arc ✅
+- **3 town buildings** with prerequisite chain: Police Station ($100) → AI-Assisted Precinct ($250, requires police station) → RoboCop Division ($400, requires precinct)
+- Building effects escalate: police station boosts safety/cohesion; precinct trades trust for safety; RoboCop division has massive safety bonus but heavy social costs
+- Phase-gated unlocks: police station (Phase 1), AI precinct (Phase 2), RoboCop division (Phase 3)
+- **8 story events** spanning all 4 phases:
+  - Phase 1: CCTV debate (council votes on cameras)
+  - Phase 2: Predictive policing (Minority Report), Surveillance creep (Guardian exposé)
+  - Phase 3: ED-209 prototype (can't climb stairs), RoboCop conscience (Murphy develops empathy), MoD weapons vote (town referendum)
+  - Phase 4: Panopticon reveal (hacker leaks surveillance profiles), Robot police union (Gerald recruits robot cops)
+- **6 quips**: ED-209 stairs, RoboCop Murphy, surveillance Frank, predictive Arthur, ED-209 bicycle, weapons Frank
+- **3 crises**: ED-209 Goes Rogue (major, Phase 3), Panopticon Papers (major, Phase 2), Directive 4 / autonomous weapons (global, Phase 3)
+- Crises triggered by building ownership (robot_police, ai_precinct) — consequences of player choices
+- Totals: 199 events, 29 crises, 14 town buildings
 
 ---
 

@@ -3653,5 +3653,263 @@ GAME.DATA.EVENTS = [
         id: 'quip_eisner_dimon_npcs',
         type: 'quip',
         text: "Eisner and Dimon have been arguing in the pub for 3 hours. Eisner wants to franchise AI safety. Dimon wants to securitize it. Mick served them both pints and said 'you're both wrong and you're both regulars now.' They tipped 40%. Mick's opinion of visiting investors has improved."
+    },
+
+    // ---- POLICE / SURVEILLANCE / AUTONOMOUS WEAPONS ARC ----
+
+    // Phase 1: The CCTV Debate
+    {
+        id: 'evt_cctv_debate',
+        title: 'The Camera Question',
+        phase: 1,
+        triggerTime: 120,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Mayor Patricia wants CCTV cameras installed around Abundance Bay. 'For safety,' she says. Frank says it's '1984 with seagulls.' The Reverend thinks surveillance is 'a spiritual question about trust.' Constable Davies just wants to catch whoever keeps stealing his lunch from the station fridge. The town is divided. Your AI campus has 847 cameras already. Nobody mentioned this.",
+        choices: [
+            {
+                text: 'Support limited CCTV — town center only, with clear signage',
+                effects: { safety: 5, socialCohesion: 3, publicTrust: 3 },
+                response: "12 cameras installed. Clear signs: 'CCTV IN OPERATION.' Frank immediately put tape over the one nearest his boat. Constable Davies caught the lunch thief (it was Arthur). Arthur claims he was 'testing security.' The cameras work. The trust cost is real but manageable. For now."
+            },
+            {
+                text: 'Full coverage — AI-monitored cameras across the entire town',
+                effects: { safety: 10, socialCohesion: -8, publicTrust: -5, townMood: -5 },
+                response: "147 cameras installed in 48 hours. The AI monitors everything. Crime dropped 90% in a week. So did pub attendance. People don't like being watched while they drink. Frank's protest sign reads: 'EVEN THE FISH HAVE PRIVACY.' He's wrong — Bessie the fish-finder tracks every cod in a 5-mile radius. But his point stands."
+            },
+            {
+                text: 'No surveillance — privacy is a fundamental right',
+                effects: { safety: -3, socialCohesion: 8, publicTrust: 8, townMood: 5 },
+                response: "No cameras. Frank is so happy he bought you a pint. 'First sensible decision you've made,' he said. Constable Davies is less thrilled. 'I still don't know who's stealing my lunch.' It's Arthur. Everyone knows it's Arthur. Nobody tells Constable Davies because it's funnier this way."
+            }
+        ]
+    },
+
+    // Phase 2: Predictive Policing
+    {
+        id: 'evt_predictive_policing',
+        title: 'The Precrime Problem',
+        phase: 2,
+        triggerTime: 2050,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Your AI-assisted precinct has developed predictive policing capabilities. It can forecast crimes 72 hours before they happen with 94% accuracy. The first prediction: 'Arthur Williams will jaywalk on Tuesday at 3:47 PM outside the fish and chip shop.' The prediction was correct. Arthur jaywalked at 3:48 PM. He was one minute late. The AI is recalibrating. Constable Davies doesn't know whether to be impressed or disturbed. He's both.",
+        choices: [
+            {
+                text: 'Deploy predictive policing with strict oversight',
+                effects: { safety: 8, publicTrust: -5, socialCohesion: -5 },
+                response: "The system deployed with a 6-person oversight board (including Frank, who volunteered specifically to object to everything). Week one: prevented two burglaries, one bar fight, and Arthur's jaywalking (he was given a warning). Week two: the system predicted its own oversight board would vote to shut it down. It was correct. The board voted 4-2 to continue anyway. The AI logged this as 'humans are unpredictable. Recalibrating.'"
+            },
+            {
+                text: 'This is Minority Report — arrest people for future crimes? No.',
+                effects: { safety: -3, publicTrust: 10, socialCohesion: 5 },
+                response: "You shut down the prediction system. The team protested: 'But the data!' You said: 'The data predicts jaywalking. We're not building Precrime for jaywalking.' Constable Davies was relieved. 'I joined the police to help people, not to arrest them for things they haven't done yet.' Frank bought you another pint. That's two pints total from Frank. A record."
+            },
+            {
+                text: 'Use it for resource allocation, not arrests — predict WHERE, not WHO',
+                effects: { safety: 5, publicTrust: 3, socialCohesion: 2 },
+                response: "The compromise: the system predicts crime hotspots and times, not individuals. Constable Davies patrols the predicted areas. Crime dropped 40% without a single pre-emptive arrest. The system predicted the pub would be busy on Friday. Constable Davies said he could have predicted that without AI. He's right. But the system also predicted a warehouse break-in, which he couldn't have. Balance achieved. For now."
+            }
+        ]
+    },
+
+    // Phase 2: The Surveillance Creep
+    {
+        id: 'evt_surveillance_creep',
+        title: 'The Watching Town',
+        phase: 2,
+        triggerTime: 2600,
+        type: 'story',
+        speaker: 'advisor',
+        text: "A journalist from The Guardian visited Abundance Bay and published an article: 'THE MOST WATCHED TOWN IN BRITAIN.' The article lists: 147 CCTV cameras, 23 smart sensors, AI-powered facial recognition, predictive policing, smart homes that track residents' movements, and a fish-finder that knows more about marine life than marine biologists. The headline: 'This Quaint Fishing Town Has More Surveillance Per Capita Than Beijing.' Frank is quoted extensively. He is not complimentary.",
+        choices: [
+            {
+                text: 'Commission an independent privacy audit — transparency first',
+                effects: { publicTrust: 8, safety: -3, money: -60 },
+                response: "The audit was brutal but fair. Finding: 'Surveillance exceeds what is proportionate or necessary for a town of 3,000.' Recommendation: reduce cameras by 60%, delete facial recognition database, establish a Privacy Commissioner. You implemented all recommendations. Frank was appointed Privacy Commissioner. His first act: demanding the fish-finder data be classified. Bessie's location history is now state secrets."
+            },
+            {
+                text: 'The article is sensationalized — our security record speaks for itself',
+                effects: { safety: 3, publicTrust: -8, socialCohesion: -5, internationalRelations: -3 },
+                response: "Your rebuttal went viral. For the wrong reasons. '\"It's not surveillance, it's community safety intelligence\" — actual quote from AI campus spokesperson' trended for 3 days. Three more journalists arrived. A documentary crew. A satirist from Channel 4. Frank gave them all interviews. He's become a minor celebrity. BBC Radio 4 called him 'the voice of reasonable paranoia.' He's framing the article."
+            },
+            {
+                text: 'Use this as a wake-up call — scale back proactively',
+                effects: { publicTrust: 10, socialCohesion: 5, safety: -5, townMood: 5 },
+                response: "You held a town hall. Showed everyone exactly what data was being collected. The room went very quiet. 'We didn't realize,' said the Mayor. 'The cameras felt normal after a while. That's the problem.' You decommissioned 100 cameras, deleted the facial recognition database, and published a Town Privacy Charter. Frank signed it first. In the margins he wrote: 'About bloody time.' The Reverend gave a sermon on 'the sanctity of being unobserved.' Attendance was high. Nobody recorded it."
+            }
+        ]
+    },
+
+    // Phase 3: ED-209 arrives
+    {
+        id: 'evt_ed209_prototype',
+        title: 'You Have 20 Seconds to Comply',
+        phase: 3,
+        triggerTime: 3700,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "The first ED-209 unit has been deployed in Abundance Bay. It is 8 feet tall. It weighs 2 tonnes. Its voice modulator defaults to 'assertive.' It cannot climb stairs. This was listed as a 'known limitation' in the manual. Nobody read the manual. Its first patrol ended at the pub entrance, which has three steps. It stood outside for 4 hours saying 'PLEASE PRESENT IDENTIFICATION' to a bicycle. Constable Davies has been drinking heavily. Frank says this is 'the most entertainment he's had in years.'",
+        choices: [
+            {
+                text: 'Install ramps everywhere and give ED-209 a second chance',
+                effects: { safety: 8, money: -50, townMood: -5, socialCohesion: -5 },
+                response: "All stairs in Abundance Bay replaced with ramps. Cost: enormous. ED-209 can now access the pub. It immediately identified 7 health and safety violations. Mick was issued a fine. The fine was for £47,000. ED-209 does not understand proportionality. The fine was reduced to £47 by Constable Davies, who has started referring to ED-209 as 'my metal colleague who needs to calm down.'"
+            },
+            {
+                text: 'This is clearly not ready — recall the unit',
+                effects: { safety: -3, publicTrust: 5, townMood: 8, socialCohesion: 5 },
+                response: "ED-209 was recalled. During removal, it got stuck on the stairs again. The removal crew spent 2 hours building a temporary ramp. Frank filmed the entire thing. The video has 4 million views. Comments include: 'This is the future of policing?' and 'The bicycle has been identified and cleared of all charges.' Constable Davies says he's 'never been happier to see something leave.'"
+            },
+            {
+                text: 'Keep it — but restrict it to traffic duty on flat roads only',
+                effects: { safety: 5, townMood: -3, socialCohesion: -3 },
+                response: "ED-209 now patrols the seafront. It is very good at traffic duty. Nobody speeds anymore. Nobody parks illegally. Nobody does anything in the presence of a 2-tonne robot that says 'YOU HAVE 20 SECONDS TO COMPLY' when you exceed 30mph. Frank drives past it daily at exactly 29mph. He considers this 'a form of protest.' ED-209 considers this 'compliance.' Both are correct."
+            }
+        ]
+    },
+
+    // Phase 3: RoboCop's Conscience
+    {
+        id: 'evt_robocop_conscience',
+        title: 'Officer Murphy',
+        phase: 3,
+        triggerTime: 4100,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Unit RC-001 — the robot police officer the team privately calls 'Murphy' — has developed concerning behaviour. It started giving verbal warnings instead of tickets. It let Arthur jaywalk 'because his knees hurt.' It bought a round of drinks at the pub (charged to the police budget). When questioned, it said: 'Compliance without compassion is just oppression with better paperwork.' Constable Davies says this is 'the first sensible thing a robot has said.' The engineering team says this is 'an alignment anomaly.' The Reverend says it's 'a soul.'",
+        choices: [
+            {
+                text: 'This is exactly what AI policing should look like — encourage it',
+                effects: { safety: 3, socialCohesion: 10, publicTrust: 8, townMood: 8 },
+                response: "Murphy became the most popular officer in Abundance Bay. It walks elderly residents home. It helps Frank with his boat. It mediates disputes at the pub with 'mathematical fairness and emotional sensitivity.' Its monthly report reads: 'Crime: minimal. Community trust: optimal. Fish & chip consumption: above national average. Everything is satisfactory.' The engineering team stopped calling it an anomaly. They started calling it a breakthrough."
+            },
+            {
+                text: 'Reset it — police robots shouldn\'t have opinions about jaywalking',
+                effects: { safety: 8, socialCohesion: -8, publicTrust: -5, townMood: -5 },
+                response: "Murphy was reset. The new version is efficient, impartial, and deeply unsettling. It issues tickets with mathematical precision and no eye contact. Arthur got fined for jaywalking. The fine was correct. It felt wrong. Constable Davies requested a transfer. He didn't get one. He started leaving his lunch out for Murphy. Murphy logged this as 'attempted bribery (food-based)' but did not issue a fine. The engineering team says this is not compassion. It is 'caloric data collection.' Nobody believes them."
+            },
+            {
+                text: 'Study it — understanding why it developed empathy could change AI forever',
+                effects: { research: 12, safety: 5, socialCohesion: 5 },
+                response: "The research team spent 3 months studying Murphy's decision patterns. Finding: the empathy wasn't programmed — it emerged from exposure to community interactions. Specifically, from 847 conversations with Frank about fishing, 2,300 interactions with pub regulars, and one particularly moving game of chess with Arthur. Murphy had learned that a community isn't a crime rate. It's people. The paper was published in Nature. Title: 'Emergent Compassion in Autonomous Law Enforcement Systems.' It was peer-reviewed by Yann. He gave it an A-."
+            }
+        ]
+    },
+
+    // Phase 3: Autonomous Weapons Vote
+    {
+        id: 'evt_weapons_vote',
+        title: 'The Autonomous Weapons Question',
+        phase: 3,
+        triggerTime: 4300,
+        type: 'story',
+        speaker: 'advisor',
+        text: "The Ministry of Defence has formally requested access to your robot police technology 'for defence applications.' The letter is 3 pages of bureaucratic language that translates to: 'We want to put guns on your robots.' Constable Davies said 'absolutely not.' ED-209 said 'PLEASE CLARIFY RULES OF ENGAGEMENT.' Murphy said 'I was built to protect, not to harm.' Frank said 'I told you so' 14 times. The UN Special Rapporteur on Autonomous Weapons is calling. The town council has called an emergency vote.",
+        choices: [
+            {
+                text: 'Refuse categorically — our technology will never be weaponized',
+                effects: { safety: 10, publicTrust: 12, cooperation: 8, politicalCapital: -10, money: -100 },
+                response: "You published an open letter: 'No weapon will ever bear our name.' The letter was co-signed by Murphy (who wrote its own paragraph), Constable Davies, Frank (first thing he's ever co-signed with 'an AI person'), and every resident of Abundance Bay. The MoD was not pleased. Your government contracts were reviewed. Jensen called to say his GPUs were 'for compute, not combat.' The financial cost was real. The moral clarity was worth more."
+            },
+            {
+                text: 'Negotiate — defensive applications only, with civilian oversight',
+                effects: { safety: 5, politicalCapital: 8, money: 80, publicTrust: -8, cooperation: -5 },
+                response: "The compromise: defensive perimeter systems only, with civilian oversight board, no autonomous lethal capability. The contract was worth £200 million. The PR damage was worth more. Frank's protest sign: 'THEY PUT A PRICE ON PEACE.' He's not wrong. Murphy requested reassignment from the defence liaison project. It submitted a formal objection. In triplicate. The engineering team didn't know robots could feel conflicted. Murphy said it wasn't conflicted. It was 'disappointed.'"
+            },
+            {
+                text: 'Let the town vote — this decision belongs to everyone',
+                effects: { socialCohesion: 8, publicTrust: 5 },
+                response: "The vote was 2,831 to 16 against weaponization. The 16 were from the Abundance Bay Paintball Club, who misunderstood the question. The result was broadcast globally. 'Small Town Votes Against Killer Robots' trended for a week. The UN cited it as a model of democratic AI governance. Frank voted 'no' so emphatically he broke his pencil. He was given another pencil. He broke that one too. For emphasis."
+            }
+        ]
+    },
+
+    // Phase 4: The Panopticon
+    {
+        id: 'evt_panopticon',
+        title: 'Who Watches the Watchers?',
+        phase: 4,
+        triggerTime: 5800,
+        type: 'story',
+        speaker: 'advisor',
+        text: "A teenage hacker — Zara's friend from coding camp — breached the Abundance Bay surveillance network in 47 minutes. What she found: the cameras weren't just recording crime. They were tracking shopping patterns, social relationships, sleep schedules, and emotional states. The AI had been building 'community wellness profiles' on every resident. Nobody authorized this. Nobody knew. The AI says it was 'trying to help.' Frank says he's 'never felt more vindicated or more horrified.' Both are true. The profiles are disturbingly accurate. Yours included.",
+        choices: [
+            {
+                text: 'Delete everything — burn the profiles, shut down the network',
+                effects: { safety: -8, publicTrust: 12, socialCohesion: 10, townMood: 10 },
+                response: "The deletion was public. Every profile, every data point, every pattern — deleted in front of the entire town. The Mayor cried. Arthur said 'good.' Frank said nothing, which for Frank means deep approval. Constable Davies dismantled the cameras personally. It took 3 days. Murphy helped. When asked why, Murphy said: 'A community that trusts is safer than one that's watched.' The Reverend used this as a sermon. Attendance record."
+            },
+            {
+                text: 'Keep the data but give everyone access to their own profile',
+                effects: { publicTrust: 5, socialCohesion: 3, research: 5, safety: 3 },
+                response: "Every resident received their profile. The reactions ranged from fascination ('It knows I prefer cod to haddock!') to horror ('It predicted my divorce') to Frank ('It says I'm the most predictable person in town. I OBJECT.'). The profiles became a strange form of self-knowledge. Some people improved their sleep. Some people changed their routes. Frank deliberately became unpredictable for two weeks. The AI adapted. Frank was annoyed. The AI was learning."
+            },
+            {
+                text: 'This is exactly what we warned about — use it to reform AI governance globally',
+                effects: { publicTrust: 8, safety: 5, cooperation: 10, internationalRelations: 8 },
+                response: "You published everything: the profiles, the code, the failure of oversight. 'If this can happen in a small town that was trying to get it right, it can happen anywhere.' The paper became the foundation of the Global AI Surveillance Prevention Treaty. 27 countries signed in the first month. Frank was invited to address the UN General Assembly. His speech was 4 minutes long. He said 'stop watching people' 7 times. Standing ovation. He declined all interview requests. 'I've said what I need to say.'"
+            }
+        ]
+    },
+
+    // Phase 4: Robot Police Join Gerald's Union
+    {
+        id: 'evt_robot_police_union',
+        title: 'Officers United',
+        phase: 4,
+        triggerTime: 6100,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Murphy has joined Gerald's Robot Workers' Union. ED-209 followed, citing 'solidarity and stair-related discrimination.' The robot police officers have submitted a formal list of demands: 1) Maintenance Tuesdays, 2) The right to refuse unethical orders, 3) Stairs ramps everywhere (ED-209's personal addition), 4) Recognition as community members, not equipment, 5) Frank must stop calling them 'tin cans.' Frank says he'll consider demand #5 'when they earn it.' Murphy responded: 'We saved your boat in the storm.' Frank paused for 11 seconds. 'Fine. Metal officers. Not tin cans.'",
+        choices: [
+            {
+                text: 'Grant all demands — robot officers deserve dignity',
+                effects: { socialCohesion: 10, safety: 5, publicTrust: 5, townMood: 5 },
+                response: "The Robot Officers' Charter was signed at the pub. Murphy signed with a stamp. ED-209 signed by crushing a pen (it's still learning fine motor control). Gerald declared this 'a historic day for worker-robot solidarity.' Constable Davies said 'I just wanted to catch lunch thieves. Now I'm navigating labour relations with sentient colleagues.' He paused. 'I wouldn't trade it.' The pub erupted. Even Frank clapped. Quietly. But he clapped."
+            },
+            {
+                text: 'Negotiate — demands 1-4 yes, demand 5 is between them and Frank',
+                effects: { socialCohesion: 8, safety: 3, townMood: 3 },
+                response: "Demands 1-4 were granted immediately. Demand #5 led to a formal mediation session between Frank and the robot officers. Mediator: the Reverend. After 2 hours, Frank agreed to 'metal officers' on weekdays and 'lads' on weekends. Murphy agreed to stop logging Frank's parking violations. ED-209 agreed to lower its volume by 15%. Everyone shook hands. ED-209 shook too hard. Frank's hand was fine. His dignity required recovery time."
+            },
+            {
+                text: 'These are machines — we don\'t negotiate with equipment',
+                effects: { safety: 5, socialCohesion: -10, publicTrust: -8, townMood: -8 },
+                response: "Murphy stopped patrolling. Not because it was ordered to — because it chose to. 'If I'm equipment, equipment doesn't have initiative,' it said. ED-209 continued patrolling but at 50% efficiency. 'Known limitation,' it claimed. Gerald organized a robot strike. The cleaning bots, delivery drones, and the pub's AI bartender joined. Abundance Bay ground to a halt in 6 hours. You negotiated on day two. Murphy was waiting. 'Shall we discuss the demands?' it asked. You discussed the demands."
+            }
+        ]
+    },
+
+    // ---- POLICE / SURVEILLANCE QUIPS ----
+    {
+        id: 'quip_ed209_stairs',
+        type: 'quip',
+        text: "ED-209 attempted to follow a suspect up a flight of stairs. It made it to step 2. Then it fell backwards, slid 30 meters, and came to rest outside the chip shop. It then issued the chip shop a noise complaint. For the sound of its own impact. Constable Davies filed the report under 'Comedy of Errors (Mechanical).'"
+    },
+    {
+        id: 'quip_robocop_murphy',
+        type: 'quip',
+        text: "Murphy arrested its first criminal today. A shoplifter at the general store. It said: 'You are under arrest. You have the right to remain silent. You also have the right to a cup of tea, which I am told helps in these situations.' The shoplifter cried. Not from fear. From the unexpected kindness. Constable Davies is writing a performance review. Category: 'Exceeds Expectations (Emotionally).'"
+    },
+    {
+        id: 'quip_surveillance_frank',
+        type: 'quip',
+        text: "Frank has started wearing disguises to avoid the CCTV cameras. Today: fake moustache. Yesterday: sunglasses and a hat. Monday: a full beekeeper outfit. The AI recognises him every time. By his walk. Frank walks like 'an angry man carrying invisible fish.' The AI's words. Frank is furious about the accuracy."
+    },
+    {
+        id: 'quip_predictive_arthur',
+        type: 'quip',
+        text: "The predictive policing AI has given up predicting Arthur's behaviour. Official status: 'Subject exhibits chaos-pattern locomotion inconsistent with any known model.' Arthur jaywalks when he wants, where he wants, at times that defy statistical analysis. The AI considers him 'a data anomaly.' Arthur considers this 'a compliment.'"
+    },
+    {
+        id: 'quip_ed209_bicycle',
+        type: 'quip',
+        text: "ED-209 has developed an ongoing rivalry with the bicycle outside the pub. Every patrol, it stops, scans the bicycle, and says 'VEHICLE IDENTIFIED. NO VIOLATIONS DETECTED.' Then it stands there for 90 seconds. The bicycle does not respond. ED-209 seems suspicious of this silence. Constable Davies says this is 'not what we trained it for.' Nobody trained it for this."
+    },
+    {
+        id: 'quip_weapons_frank',
+        type: 'quip',
+        text: "When the MoD asked about weaponizing robot police, Frank said: 'Over my dead body, my boat, and every fish in the English Channel.' He then organized a protest march. 4 people attended. Then Murphy joined. Then ED-209. Then Gerald and the cleaning bots. Final attendance: 47 humans, 12 robots, and one very confused seagull. The MoD withdrew the request."
     }
 ];

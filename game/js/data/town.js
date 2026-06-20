@@ -429,6 +429,59 @@ GAME.DATA.TOWN = {
             ],
             spriteKey: 'chipshop'
         },
+        police_station: {
+            id: 'police_station',
+            name: 'Abundance Bay Police Station',
+            category: 'community',
+            description: 'A proper police station for a growing town. Constable Davies has been operating out of a shed. He deserves walls.',
+            cost: 100,
+            maintenance: 12,
+            size: { w: 3, h: 2 },
+            produces: { safety: 3, socialCohesion: 4, townMood: 3 },
+            flavorTexts: [
+                'Constable Davies has walls now. And a desk. And a phone that works. He cried. Quietly.',
+                'Crime rate was already low. Main offence: Frank parking his boat illegally. The boat is on a trailer. The trailer is on a double yellow.',
+                'The station has a holding cell. It has been used once. Arthur fell asleep in it after pub quiz night. He said it was "comfortable."',
+                'Frank asked if the police station would have cameras. Constable Davies said "Frank, I can see the entire town from my window. I don\'t need cameras."'
+            ],
+            spriteKey: 'police'
+        },
+        ai_precinct: {
+            id: 'ai_precinct',
+            name: 'AI-Assisted Precinct',
+            category: 'community',
+            description: 'Predictive policing, facial recognition, and crime pattern analysis. Constable Davies now has an AI partner. He calls it "Dave."',
+            cost: 250,
+            maintenance: 25,
+            size: { w: 4, h: 3 },
+            requires: { police_station: 1 },
+            produces: { safety: 8, socialCohesion: -3, publicTrust: -2, townMood: -2 },
+            flavorTexts: [
+                'AI flagged Frank\'s fishing route as "suspicious repeated coastal activity." Frank is NOT amused.',
+                'Predictive system forecasts crime 72 hours ahead. Main prediction: "Arthur will jaywalk on Tuesday." Arthur jaywalked on Tuesday.',
+                'Facial recognition identified the Mayor as "Person of Interest #7." She demands to know who #1-6 are. So does everyone else.',
+                'Dave the AI solved 3 cold cases from the 1990s. Constable Davies is impressed. Dave is "just doing math." The math is very good.'
+            ],
+            spriteKey: 'precinct'
+        },
+        robot_police: {
+            id: 'robot_police',
+            name: 'RoboCop Division',
+            category: 'community',
+            description: 'Fully autonomous robot police officers. They are efficient. They are tireless. They cannot climb stairs. This is a known issue.',
+            cost: 400,
+            maintenance: 35,
+            size: { w: 5, h: 3 },
+            requires: { ai_precinct: 1 },
+            produces: { safety: 15, socialCohesion: -8, publicTrust: -5, townMood: -5 },
+            flavorTexts: [
+                'Unit ED-209 issued 4,000 parking tickets in one afternoon. Including to itself. It paid the fine. Promptly.',
+                'Robot officer attempted community outreach. It high-fived a child. The child went to hospital. Force calibration update deployed.',
+                'ED-209 cornered a shoplifter. "You have 20 seconds to comply." The shoplifter complied in 3. ED-209 seemed disappointed.',
+                'The robot police formed a basketball team. They are undefeated. They are also terrible company. Constable Davies refuses to attend their games.'
+            ],
+            spriteKey: 'robocop'
+        },
         housing_development: {
             id: 'housing_development',
             name: 'Smart Housing Estate',
