@@ -93,10 +93,12 @@ window.GAME = window.GAME || {};
         updateMeter('international', state.internationalRelations);
 
         // Player stats
+        document.getElementById('stat-money').textContent = Math.floor(state.money);
         document.getElementById('stat-adp').textContent = Math.floor(state.adp);
         document.getElementById('stat-safety').textContent = Math.floor(state.safety);
         document.getElementById('stat-political').textContent = Math.floor(state.politicalCapital);
         document.getElementById('stat-research').textContent = Math.floor(state.research);
+        document.getElementById('stat-town').textContent = Math.floor(state.townMood);
 
         // Competitor panel
         updateCompetitorPanel();
@@ -622,28 +624,18 @@ window.GAME = window.GAME || {};
             });
         });
 
-        // Add money display to stats
-        var statsEl = document.getElementById('player-stats');
-        var moneyRow = document.createElement('div');
-        moneyRow.className = 'stat-row';
-        moneyRow.innerHTML = '<span class="stat-label">FUNDS</span><span class="stat-value" id="stat-money">500</span>';
-        statsEl.insertBefore(moneyRow, statsEl.firstChild);
+        // Setup event log toggle
+        var logToggle = document.getElementById('hud-log-toggle');
+        if (logToggle) {
+            logToggle.addEventListener('click', function() {
+                var log = document.getElementById('action-log');
+                if (log) {
+                    log.classList.toggle('hud-collapsed');
+                    log.classList.toggle('hud-expanded');
+                }
+            });
+        }
 
-        // Add town mood to stats
-        var townRow = document.createElement('div');
-        townRow.className = 'stat-row';
-        townRow.innerHTML = '<span class="stat-label">TOWN</span><span class="stat-value" id="stat-town">60</span>';
-        statsEl.appendChild(townRow);
-
-        // Update stats periodically
-        setInterval(function() {
-            var state = State.get();
-            if (!state) return;
-            var moneyEl = document.getElementById('stat-money');
-            var townEl = document.getElementById('stat-town');
-            if (moneyEl) moneyEl.textContent = Math.floor(state.money);
-            if (townEl) townEl.textContent = Math.floor(state.townMood);
-        }, 500);
     }
 
     // ---- ACTIONS ----

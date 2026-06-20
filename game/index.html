@@ -83,46 +83,57 @@
                 </div>
             </div>
 
-            <!-- Main Scene Area -->
+            <!-- Main Scene Area — expanded to fill screen -->
             <div id="scene-area">
-                <canvas id="game-canvas" width="960" height="400"></canvas>
+                <canvas id="game-canvas" width="960" height="540"></canvas>
                 <div id="scene-overlay"></div>
+                <!-- HUD overlay on canvas — portrait + stats -->
+                <div id="hud-overlay">
+                    <div id="hud-left">
+                        <div id="player-portrait" class="portrait-frame">
+                            <canvas id="portrait-canvas" width="96" height="96"></canvas>
+                        </div>
+                        <div id="player-stats">
+                            <div class="stat-row">
+                                <span class="stat-label">FUNDS</span>
+                                <span class="stat-value" id="stat-money">200</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">ADP</span>
+                                <span class="stat-value" id="stat-adp">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">SAFETY</span>
+                                <span class="stat-value" id="stat-safety">70</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">POL.CAP</span>
+                                <span class="stat-value" id="stat-political">100</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">RESEARCH</span>
+                                <span class="stat-value" id="stat-research">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">TOWN</span>
+                                <span class="stat-value" id="stat-town">60</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hud-right">
+                        <div id="hud-log-toggle" title="Toggle event log">EVENT LOG</div>
+                        <div id="action-log" class="hud-collapsed">
+                            <div class="log-entries" id="log-entries"></div>
+                        </div>
+                        <div id="competitor-panel">
+                            <div class="comp-title">RIVALS</div>
+                            <div id="competitor-list"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Middle Panel: Character + Info -->
-            <div id="middle-panel">
-                <div id="player-portrait" class="portrait-frame">
-                    <canvas id="portrait-canvas" width="96" height="96"></canvas>
-                </div>
-                <div id="player-stats">
-                    <div class="stat-row">
-                        <span class="stat-label">ADP</span>
-                        <span class="stat-value" id="stat-adp">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">SAFETY</span>
-                        <span class="stat-value" id="stat-safety">70</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">POL.CAP</span>
-                        <span class="stat-value" id="stat-political">100</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">RESEARCH</span>
-                        <span class="stat-value" id="stat-research">0</span>
-                    </div>
-                </div>
-                <div id="action-log">
-                    <div class="log-title">EVENT LOG</div>
-                    <div class="log-entries" id="log-entries"></div>
-                </div>
-                <div id="competitor-panel">
-                    <div class="comp-title">RIVALS</div>
-                    <div id="competitor-list"></div>
-                </div>
-            </div>
-
-            <!-- LucasArts-style Verb Bar / Action Panel -->
+            <!-- Thin action bar at bottom -->
             <div id="verb-bar">
                 <div class="verb-row">
                     <button class="verb-btn" data-action="research">RESEARCH</button>

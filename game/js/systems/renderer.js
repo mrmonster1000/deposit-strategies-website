@@ -60,9 +60,9 @@ GAME.Systems.Renderer = (function() {
         }
     };
 
-    // Layout constants (Y axis unchanged, X axis now world coordinates)
-    var GROUND_Y = 200;
-    var BUILDING_FLOOR = 378;
+    // Layout constants (Y axis scales with 540px canvas height)
+    var GROUND_Y = 270;
+    var BUILDING_FLOOR = 510;
     var ROAD_W = 24;
 
     // Zone boundaries (world X coordinates) — 12000px world
