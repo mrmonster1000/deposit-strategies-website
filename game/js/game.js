@@ -10,6 +10,7 @@ window.GAME = window.GAME || {};
     var Crisis = GAME.Systems.Crisis;
     var AIOpponents = GAME.Systems.AIOpponents;
     var Sound = GAME.Systems.Sound;
+    var Tutorial = GAME.Systems.Tutorial;
 
     var currentScreen = 'title';
     var selectedCharacter = null;
@@ -262,6 +263,12 @@ window.GAME = window.GAME || {};
                 var canPlace = canPlaceBuilding(pm.buildingId, world.x, pm.isTown);
                 Renderer.updatePlacementCursor(world.x, canPlace);
             }
+
+            // NPC hover cursor
+            var worldPos = Renderer.screenToWorld(c.x, c.y);
+            var hoveredNPC = Renderer.hitTestNPC(worldPos.x, worldPos.y);
+            canvas.style.cursor = hoveredNPC ? 'pointer' : '';
+            if (Renderer.setHighlightedNPC) Renderer.setHighlightedNPC(hoveredNPC);
         });
 
         canvas.addEventListener('mouseup', function() {
@@ -414,6 +421,17 @@ window.GAME = window.GAME || {};
 
         var lastMoney = null;
         var floatTickCounter = 0;
+        var statFlashCooldowns = {};
+        var STAT_COLORS = {
+            safety: '#44ff88', adp: '#44ddff', research: '#6688ff',
+            townMood: '#ffaa44', publicTrust: '#ff88ff', cooperation: '#ffdd44',
+            money: '#44ff88', compute: '#44ddff'
+        };
+        var STAT_LABELS = {
+            safety: 'Safety', adp: 'ADP', research: 'Research',
+            townMood: 'Town', publicTrust: 'Trust', cooperation: 'Coop',
+            compute: 'Compute'
+        };
         State.on('stateChanged', function(data) {
             if (data.key === 'money' && lastMoney !== null) {
                 floatTickCounter++;
@@ -427,6 +445,31 @@ window.GAME = window.GAME || {};
                 }
             }
             lastMoney = (data.key === 'money') ? data.newValue : lastMoney;
+
+            // Floating text for significant stat changes
+            if (STAT_LABELS[data.key] && data.key !== 'money') {
+                var now = Date.now();
+                if (!statFlashCooldowns[data.key] || now - statFlashCooldowns[data.key] > 3000) {
+                    var delta = data.newValue - data.oldValue;
+                    if (Math.abs(delta) >= 2) {
+                        statFlashCooldowns[data.key] = now;
+                        var s = delta > 0 ? '+' : '';
+                        var c = delta > 0 ? (STAT_COLORS[data.key] || '#44ff88') : '#ff4444';
+                        var yOff = Object.keys(STAT_LABELS).indexOf(data.key) * 8;
+                        Renderer.addFloatingText(STAT_LABELS[data.key] + ' ' + s + Math.floor(delta), 80, 40 + yOff, c);
+                    }
+                }
+            }
+
+            // Flash stat value in DOM
+            var statEl = document.getElementById('stat-' + data.key);
+            if (statEl) {
+                var flashClass = data.newValue > data.oldValue ? 'stat-flash-up' : 'stat-flash-down';
+                statEl.classList.remove('stat-flash-up', 'stat-flash-down');
+                void statEl.offsetWidth;
+                statEl.classList.add(flashClass);
+                setTimeout(function() { statEl.classList.remove(flashClass); }, 600);
+            }
         });
     }
 
@@ -530,6 +573,9 @@ window.GAME = window.GAME || {};
 
         // Start ambient music
         Sound.playMusicLoop();
+
+        // Start tutorial hints
+        Tutorial.init();
 
         // Start intro dialogue
         var introId = 'intro_' + charId;
@@ -740,6 +786,29 @@ window.GAME = window.GAME || {};
                 options.appendChild(optEl);
             });
         }
+
+        // Victory conditions section
+        var vicLabel = document.createElement('div');
+        vicLabel.style.cssText = 'font-size:8px; color:#ffdd44; padding:10px 0 4px; border-top:1px solid #333; margin-top:10px;';
+        vicLabel.textContent = '— VICTORY CONDITIONS —';
+        options.appendChild(vicLabel);
+
+        var victories = [
+            { name: 'Radical Abundance', reqs: 'ADP 500+ & Town 70+ & Safety 60+', progress: Math.min(100, Math.floor(state.adp / 5)) },
+            { name: 'Safety Utopia', reqs: 'Safety 95+ & all meters 70+', progress: Math.min(100, Math.floor(state.safety * 100 / 95)) },
+            { name: 'Tech Singularity', reqs: 'ADP 1000+', progress: Math.min(100, Math.floor(state.adp / 10)) },
+            { name: 'Beloved Leader', reqs: 'Town 95+ & Pop 10000+', progress: Math.min(100, Math.floor(state.townMood * 100 / 95)) }
+        ];
+        victories.forEach(function(v) {
+            var vEl = document.createElement('div');
+            vEl.style.cssText = 'padding:4px 8px; margin:2px 0; font-size:7px;';
+            var barColor = v.progress >= 100 ? '#44ff88' : '#446688';
+            vEl.innerHTML = '<div style="color:#aaccff">' + v.name + '</div>' +
+                '<div style="color:#666; font-size:6px">' + v.reqs + '</div>' +
+                '<div style="background:#1a1a2a; height:4px; margin-top:2px; border-radius:2px">' +
+                '<div style="background:' + barColor + '; width:' + v.progress + '%; height:100%; border-radius:2px"></div></div>';
+            options.appendChild(vEl);
+        });
 
         // Close button
         var closeBtn = document.createElement('div');

@@ -2265,6 +2265,67 @@ GAME.Systems.Renderer = (function() {
             ctx.textAlign = 'left';
             ctx.fillText('AI CAMPUS', campusLeft + 14, GROUND_Y - 6);
         }
+
+        // Entrance gate with boom barrier
+        if (isVisible(campusLeft - 10, 60)) {
+            drawRect(campusLeft - 4, GROUND_Y - 22, 4, 24, '#505868');
+            drawRect(campusLeft + 20, GROUND_Y - 22, 4, 24, '#505868');
+            drawRect(campusLeft - 2, GROUND_Y - 24, 24, 4, '#606878');
+            drawRect(campusLeft + 22, GROUND_Y - 18, 30, 2, '#cc4444');
+            drawRect(campusLeft + 22, GROUND_Y - 18, 6, 2, '#ffffff');
+        }
+
+        // Flagpole with animated flag
+        if (isVisible(campusLeft + 40, 20)) {
+            drawRect(campusLeft + 48, GROUND_Y - 50, 2, 52, '#808890');
+            drawRect(campusLeft + 48, GROUND_Y - 50, 1, 2, '#c0c0c0');
+            var flagWave = Math.sin(time * 0.003) * 2;
+            drawRect(campusLeft + 50, GROUND_Y - 49 + flagWave, 12, 7, '#3355cc');
+            drawRect(campusLeft + 51, GROUND_Y - 48 + flagWave, 4, 3, '#ffffff');
+        }
+
+        // Parking lot with cars
+        if (isVisible(campusLeft + 80, 180)) {
+            drawRect(campusLeft + 90, GROUND_Y + 2, 160, 30, '#2a2a28');
+            for (var pk = 0; pk < 5; pk++) {
+                drawRect(campusLeft + 95 + pk * 30, GROUND_Y + 4, 1, 26, '#444440');
+            }
+            var carColors = ['#cc3333', '#3366cc', '#33aa33', '#888888', '#ccaa33'];
+            for (var ci = 0; ci < 4; ci++) {
+                var cx = campusLeft + 100 + ci * 30;
+                var carSeed = (ci * 7919 + 42) % 5;
+                drawRect(cx, GROUND_Y + 8, 20, 10, carColors[carSeed]);
+                drawRect(cx + 2, GROUND_Y + 6, 16, 4, carColors[carSeed]);
+                drawRect(cx + 3, GROUND_Y + 7, 6, 2, '#8888aa');
+                drawRect(cx + 11, GROUND_Y + 7, 6, 2, '#8888aa');
+                drawRect(cx + 1, GROUND_Y + 18, 4, 2, '#222222');
+                drawRect(cx + 15, GROUND_Y + 18, 4, 2, '#222222');
+            }
+        }
+
+        // Concrete building pads (where buildings will go)
+        var padPositions = [1100, 1500, 1900, 2300, 2700, 3100];
+        for (var pi = 0; pi < padPositions.length; pi++) {
+            var padX = padPositions[pi];
+            if (!isVisible(padX, 80)) continue;
+            drawRect(padX, GROUND_Y + 2, 80, 2, '#2a2a28');
+            drawRect(padX + 2, GROUND_Y + 4, 76, 1, '#222220');
+        }
+
+        // Server room trailer (early-stage temporary building)
+        if (isVisible(campusLeft + 300, 60)) {
+            var tx = campusLeft + 310;
+            drawRect(tx, BUILDING_FLOOR - 22, 40, 22, '#6a6a68');
+            drawRect(tx + 1, BUILDING_FLOOR - 21, 38, 20, '#7a7a78');
+            drawRect(tx + 4, BUILDING_FLOOR - 18, 8, 6, '#3a3a4a');
+            drawRect(tx + 28, BUILDING_FLOOR - 18, 8, 6, '#3a3a4a');
+            drawRect(tx + 16, BUILDING_FLOOR - 12, 8, 12, '#505050');
+            drawRect(tx + 40, BUILDING_FLOOR - 8, 4, 4, '#445566');
+            ctx.font = '3px "Press Start 2P", monospace';
+            ctx.fillStyle = '#888888';
+            ctx.textAlign = 'center';
+            ctx.fillText('TEMP', tx + 20, BUILDING_FLOOR - 1);
+        }
     }
 
     // =========================================================================
@@ -2486,6 +2547,8 @@ GAME.Systems.Renderer = (function() {
     }
 
     // Named NPC positions and data
+    var highlightedNPCId = null;
+
     var TOWN_NPCS = [
         { id: 'betty_cafe', x: 4400, name: 'Betty', portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#a03030', glasses: false, beard: false } },
         { id: 'pub_landlord', x: 4320, name: 'Mick', portrait: { skinTone: '#e8c090', hairColor: '#604020', hairStyle: 'short', shirtColor: '#a06030', glasses: false, beard: true } },
@@ -2644,6 +2707,16 @@ GAME.Systems.Renderer = (function() {
             var npc = TOWN_NPCS[ni];
             if (!isVisible(npc.x - 15, 40)) continue;
             drawNamedNPC(npc.x, SIDEWALK_Y + SIDEWALK_H + 2, npc.portrait, npc.name, time, ni, al);
+            if (highlightedNPCId === npc.id) {
+                var hx = npc.x + 5;
+                var hy = SIDEWALK_Y + SIDEWALK_H - 26;
+                var hAlpha = 0.6 + Math.sin(time * 0.005) * 0.3;
+                ctx.globalAlpha = hAlpha;
+                drawRect(hx - 6, hy - 4, 12, 8, '#ffdd44');
+                drawRect(hx - 4, hy - 6, 8, 12, '#ffdd44');
+                drawRect(hx - 3, hy - 2, 6, 4, '#0a0a2a');
+                ctx.globalAlpha = 1;
+            }
         }
 
         // Town people (generic walkers) — abundance-aware
@@ -3193,6 +3266,9 @@ GAME.Systems.Renderer = (function() {
         getPermanentBuildings: function() { return PERMANENT_BUILDINGS; },
 
         // Floating text feedback
-        addFloatingText: addFloatingText
+        addFloatingText: addFloatingText,
+
+        // NPC highlight
+        setHighlightedNPC: function(id) { highlightedNPCId = id || null; }
     };
 })();

@@ -137,7 +137,11 @@ GAME.Systems.State = (function() {
     }
 
     function adjust(key, delta) {
-        if (!state || state[key] === undefined) return;
+        if (!state) return;
+        if (state[key] === undefined) {
+            console.warn('State.adjust: unknown key "' + key + '"');
+            return;
+        }
         set(key, state[key] + delta);
     }
 

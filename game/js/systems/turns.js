@@ -72,7 +72,7 @@ GAME.Systems.Simulation = (function() {
     function calculateProduction() {
         var state = State.get();
         var production = {
-            money: 2, // base income
+            money: 3, // base income
             research: 0,
             compute: 0,
             power: 0,
@@ -139,7 +139,9 @@ GAME.Systems.Simulation = (function() {
         // ADP generation formula: research * compute * safety factor
         var safetyFactor = Math.pow(state.safety / 100, 2);
         var computeFactor = Math.max(1, state.compute) / 10;
-        production.adp += (production.research * computeFactor * safetyFactor) / 10;
+        var researchAdp = (production.research * computeFactor * safetyFactor) / 10;
+        var trickleAdp = production.research * 0.03 * safetyFactor;
+        production.adp += researchAdp + trickleAdp;
 
         // Apply production
         State.adjust('money', production.money);
