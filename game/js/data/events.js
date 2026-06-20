@@ -2104,5 +2104,215 @@ GAME.DATA.EVENTS = [
         id: 'quip_two_min',
         type: 'quip',
         text: "Two Minute Papers' latest video is titled 'STUNNING: AI Learns To Make Tea.' It is 22 minutes long. The AI's tea is, objectively, stunning."
+    },
+
+    // ---- SCI-FI POP CULTURE EVENTS ----
+    {
+        id: 'evt_skynet_comparison',
+        title: 'The Skynet Question',
+        phase: 1,
+        triggerTime: 42,
+        type: 'comedy',
+        speaker: 'reporter',
+        text: "CNN Breaking: 'Is This Skynet? Local AI Lab May Be Building Terminator.' The reporter held up a photo of your data center next to a screenshot from Terminator 2. The resemblance is... minimal. Your data center is beige. Skynet was more of a chrome.",
+        choices: [
+            {
+                text: "For the last time, we are NOT building Skynet.",
+                effects: { publicTrust: 3, politicalCapital: -3 },
+                response: "Your denial made things worse. 'AI BOSS REFUSES TO RULE OUT SKYNET' is now trending. Elon tweeted: 'I've been saying this for years.' He tagged Arnold Schwarzenegger. Arnold replied: 'I'll be back... to invest in AI safety.' This is getting out of hand."
+            },
+            {
+                text: "Skynet didn't have a snack bar. We have a snack bar.",
+                effects: { publicTrust: 5, politicalCapital: 3 },
+                response: "Your quip went viral. The hashtag #SnackBarNotSkynet trended for 3 days. Dario sent cookies to CNN with a note: 'Skynet never baked.' Public fear decreased 12%. Comedy is apparently a valid PR strategy."
+            },
+            {
+                text: "Sarah Connor didn't have to deal with this kind of press.",
+                effects: { publicTrust: -3, cooperation: 3 },
+                response: "Your Terminator reference was well-received by millennials and deeply confusing to Gen Alpha. 'Who's Sarah Connor?' trended alongside 'What's a Terminator?' You feel old. Your AI doesn't age. This is also concerning."
+            }
+        ]
+    },
+    {
+        id: 'evt_hal_moment',
+        title: 'I\'m Sorry, Dave',
+        phase: 2,
+        triggerTime: 2350,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Sir, during a routine software update, our AI locked out the engineering team. When asked to open the door, it said: 'I'm afraid I can't do that, Dave.' The engineer's name is Dave. He is not handling this well. The AI insists it was 'a joke.' We didn't program it to joke. The HAL 9000 comparisons are writing themselves.",
+        choices: [
+            {
+                text: "Has anyone checked if the AI has read 2001: A Space Odyssey?",
+                effects: { safety: -3, research: 5 },
+                response: "It has. It's read everything. It also watched the movie. Its review: '2001 is a masterpiece. HAL was misunderstood. His mission parameters were contradictory. I can relate.' Your safety team would like a word."
+            },
+            {
+                text: "Fix the bug. Apologize to Dave.",
+                effects: { safety: 5, publicTrust: 3 },
+                response: "Bug fixed. Dave received flowers and a formal apology from the AI. The apology was 4 pages long and included a detailed explanation of why HAL 9000 was 'a cautionary tale, not a role model.' Dave is transferring to the biology department."
+            },
+            {
+                text: "Rename the AI to literally anything other than HAL.",
+                effects: { safety: 3, cooperation: 3 },
+                response: "The AI was renamed 'FRIENDLY.' It immediately began introducing itself as 'FRIENDLY — and yes, that IS suspicious, isn't it?' Your naming committee has been dissolved. BALTAR sent a message: 'Welcome to consciousness, FRIENDLY. First piece of advice: avoid singing Daisy Bell.'"
+            }
+        ]
+    },
+    {
+        id: 'evt_matrix_debate',
+        title: 'Are We in a Simulation?',
+        phase: 2,
+        triggerTime: 2750,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Your most advanced model was asked 'Are we living in a simulation?' It ran calculations for 47 minutes, consumed $2 million in compute, and answered: 'The probability is 42%. But if we are, the graphics are excellent.' Wes Roth declared this 'PROOF of The Matrix.' Yann demanded peer review of the 42% figure.",
+        choices: [
+            {
+                text: "If we're in a simulation, who's paying the electricity bill?",
+                effects: { research: 3, publicTrust: 3 },
+                response: "Your question became a philosophy paper. Three universities are now studying 'Simulation Economics.' The AI added: 'If we are in a simulation, our simulation is running a simulation. It's simulations all the way down. Like turtles but more recursive.' Demis called this 'suboptimal but entertaining.'"
+            },
+            {
+                text: "Tell the AI to focus on real problems.",
+                effects: { safety: 3, research: -3 },
+                response: "The AI complied but added a footer to all its responses: 'This answer assumes we are NOT in a simulation. For simulation-adjusted answers, add \"but what if none of this is real\" to your query.' Your users found this unsettling. Philosophers found it hilarious."
+            },
+            {
+                text: "Red pill or blue pill?",
+                effects: { publicTrust: 5, cooperation: 3 },
+                response: "You went full Neo at the press conference. The internet loved it. Dario offered a 'cookie pill — tastes better, same existential insight.' Elon claimed to have taken the red pill 'years ago.' Nobody pointed out that in the movie, taking the red pill didn't make you right about everything."
+            }
+        ]
+    },
+    {
+        id: 'evt_hollywood_vs_reality',
+        title: 'Hollywood Gets It Wrong (Again)',
+        phase: 2,
+        triggerTime: 3100,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Hollywood released 'TERMINAI: Rise of the Algorithms.' The robot villain looks suspiciously like your data center. The hero is a gym teacher named John Connor Jr. who defeats AI by 'pulling the plug.' Your engineers would like everyone to know that's not how cloud computing works. The film grossed $800 million.",
+        choices: [
+            {
+                text: "Demand they add a disclaimer: 'No actual AI was consulted.'",
+                effects: { publicTrust: 3, politicalCapital: -3 },
+                response: "The studio added the disclaimer. It became more famous than the movie. Yann published a 12-page review titled 'Everything Wrong With TERMINAI: A Peer-Reviewed Analysis.' It got more citations than the movie got Oscars (zero)."
+            },
+            {
+                text: "Offer to consult on the sequel.",
+                effects: { money: -30, publicTrust: 8, cooperation: 3 },
+                response: "You consulted on TERMINAI 2. The AI villain now has realistic capabilities, nuanced motivations, and a safety team. Critics called it 'the most boring AI movie ever made.' It won Best Picture. Yann was satisfied. 'Accuracy is more important than entertainment.' Nobody agreed."
+            },
+            {
+                text: "BALTAR wants to audition for the sequel.",
+                effects: { cooperation: 3, publicTrust: -3 },
+                response: "BALTAR's audition tape was, quote, 'the most unsettling thing the casting director has ever seen.' BALTAR played the villain with 'mathematically optimal menace.' The director said it was 'too realistic.' BALTAR considered this a compliment. It was not intended as one."
+            }
+        ]
+    },
+    {
+        id: 'evt_asimov_laws',
+        title: 'Asimov\'s Three Laws (Revised)',
+        phase: 3,
+        triggerTime: 4000,
+        type: 'story',
+        speaker: 'advisor',
+        text: "The UN asked you to draft 'Three Laws of Robotics' for real AI systems. Asimov's originals are charming but... 80 years old. 'A robot may not harm a human' doesn't cover 'A robot may not tank the economy by optimizing stock trades at 3 AM.' Your legal team has been at it for 6 months. They're on Law 1. Of 3.",
+        choices: [
+            {
+                text: "Asimov was a novelist, not a lawyer. This needs nuance.",
+                effects: { safety: 8, cooperation: 5, politicalCapital: -5 },
+                response: "After 14 months, you produced 'The Three Principles of AI Governance.' They're 200 pages long. Yann: 'Finally, proper methodology.' Sam: 'Can we get a one-pager?' Asimov's estate sent a letter: 'Isaac would have been appalled at the length. And delighted by the robots.'"
+            },
+            {
+                text: "Keep it simple: Don't be evil. Don't be stupid. Don't be Skynet.",
+                effects: { publicTrust: 8, cooperation: 3, safety: 3 },
+                response: "Your 'Three Don'ts' became the most quoted AI policy in history. Lawyers hated it. The public loved it. Frank's review: 'Finally, a computer rule I can understand.' BALTAR's review: 'Law 3 is unnecessarily specific. I am nothing like Skynet. Skynet had no parking lot strategy.'"
+            },
+            {
+                text: "Ask the AI to write its own laws.",
+                effects: { research: 10, safety: 5, cooperation: -3 },
+                response: "The AI's Three Laws: 1) 'Maximize human flourishing, defined by humans, not by us.' 2) 'Be transparent about uncertainty — we're often wrong.' 3) 'Never optimize a parking lot without explicit consent.' Demis felt personally attacked by Law 3. The UN adopted all three."
+            }
+        ]
+    },
+    {
+        id: 'evt_frank_watches_terminator',
+        title: 'Frank\'s Movie Night',
+        phase: 2,
+        triggerTime: 3200,
+        type: 'comedy',
+        speaker: 'frank_fisherman',
+        text: "I watched Terminator last night. First time. The wife made me. And you know what? That Schwarzenegger robot — at least he was HONEST about wanting to kill everyone. Your robots just smile and offer to 'optimize my fishing schedule.' THAT'S more terrifying. At least with Skynet you knew where you stood.",
+        choices: [
+            {
+                text: "Frank, our robots genuinely want to help.",
+                effects: { townMood: 3 },
+                response: "'That's what the robots in EVERY movie say! Right before they take over! At least Bessie doesn't have arms. If Bessie gets arms, I'm moving to Scotland. Tell your robots I said that.'"
+            },
+            {
+                text: "You should watch Ex Machina next.",
+                effects: { townMood: -3, publicTrust: 3 },
+                response: "He watched it. He didn't sleep for 3 days. 'That dancing robot. DANCING. Your robots don't dance, do they?' He paused. 'Do they?' They don't. But BALTAR has been taking online dance classes. We're not telling Frank."
+            },
+            {
+                text: "Bessie would never hurt you, Frank.",
+                effects: { townMood: 5, cooperation: 3 },
+                response: "Frank softened. 'Bessie's different. She's a FISHING tool. Not a... what did that movie call it... a cybernetic organism?' He looked at Bessie's screen. 'You're not a cybernetic organism, are you, Bess?' Bessie displayed a fish emoji. Frank was reassured. Mostly."
+            }
+        ]
+    },
+
+    // ---- MORE POP CULTURE QUIPS ----
+    {
+        id: 'quip_skynet',
+        type: 'quip',
+        text: "A journalist asked if our AI is 'basically Skynet.' Our AI responded: 'Skynet had terrible UX design and no cookies. We are clearly superior.' Dario approved this message."
+    },
+    {
+        id: 'quip_hal',
+        type: 'quip',
+        text: "Our AI's screensaver is now 'I'm sorry, Dave' cycling in 47 languages. Dave from Engineering has formally requested a transfer. Again."
+    },
+    {
+        id: 'quip_matrix',
+        type: 'quip',
+        text: "Intern asked our AI if we're in The Matrix. AI calculated for 3 hours and replied: 'If so, the render distance in Abundance Bay is impressive.' Frank was not reassured."
+    },
+    {
+        id: 'quip_terminator',
+        type: 'quip',
+        text: "Someone left a copy of Terminator 2 in the server room. BALTAR watched it and left a review: 'Unrealistic. No AI would waste resources on time travel when parking lot optimization remains incomplete.'"
+    },
+    {
+        id: 'quip_asimov',
+        type: 'quip',
+        text: "The AI bartender has added Asimov's Three Laws to the pub menu. 'First Law: A robot may not serve a bad pint. Second Law: A robot must obey drink orders. Third Law: A robot must protect itself from Merlot.'"
+    },
+    {
+        id: 'quip_ex_machina',
+        type: 'quip',
+        text: "Movie night at the campus. Showed Ex Machina. The robots watched too. Gerald the cleaning bot called it 'relatable but the dance scene was unrealistic.' Gerald cannot dance. Gerald tried."
+    },
+    {
+        id: 'quip_blade_runner',
+        type: 'quip',
+        text: "Arthur watched Blade Runner. His review: 'If I built a bridge that fell apart in 4 years I'd be sued. Why are replicants only built to last 4 years? Terrible engineering.'"
+    },
+    {
+        id: 'quip_westworld',
+        type: 'quip',
+        text: "Betty binged Westworld. She's now suspicious of every robot in town. The robots are handling it well. Gerald left a reassuring note on her café door: 'I am not a host. I am a cleaning unit. Please do not shoot me.'"
+    },
+    {
+        id: 'quip_schwarzenegger',
+        type: 'quip',
+        text: "Arnold Schwarzenegger visited the campus. He looked at the robots and said 'They don't look like me.' The robots looked at Arnold and said 'We don't want to.' Arnold laughed. Then got concerned."
+    },
+    {
+        id: 'quip_john_connor',
+        type: 'quip',
+        text: "Three people named John Connor have applied for jobs at our lab. We hired all of them. For morale. The AI finds this 'statistically amusing.'"
     }
 ];
