@@ -218,6 +218,42 @@ GAME.DATA.TOWN = {
             ],
             mood: 90,
             concerns: ['gpu_supply', 'leather_jacket_integrity', 'compute_dominance']
+        },
+        michael_eisner: {
+            id: 'michael_eisner',
+            name: 'Michael Eisner',
+            role: 'Entertainment Visionary — Visiting Investor',
+            personality: 'Sees everything as a franchise opportunity. Has already pitched three theme park rides based on your safety protocols.',
+            portrait: { skinTone: '#e8c8a0', hairColor: '#888888', hairStyle: 'short', shirtColor: '#1a1a6a', glasses: true, beard: false, features: 'enthusiastic' },
+            color: '#4a86c8',
+            quotes: [
+                "Your AI campus would make an INCREDIBLE theme park. I'm thinking 'AI Mountain.' It's like Space Mountain but scarier.",
+                "BALTAR could host a live show. 'BALTAR's Optimization Spectacular.' Tickets: $200. Merchandise: $400. Regret: priceless.",
+                "I once turned a mouse into a billion-dollar empire. Imagine what I can do with an AI that actually talks back.",
+                "Every great story needs a villain. Your safety protocols are very villainous. In a marketable way.",
+                "The AI gift shop alone would gross $50 million. I've done the projections. On a napkin. In crayon. It's still accurate.",
+                "Disney had Imagineers. You have AI engineers. Same thing, except yours occasionally threaten humanity."
+            ],
+            mood: 85,
+            concerns: ['franchise_potential', 'merchandise_margins', 'narrative_arc']
+        },
+        jamie_dimon: {
+            id: 'jamie_dimon',
+            name: 'Jamie Dimon',
+            role: 'Banking Titan — Visiting Investor',
+            personality: 'Believes everything can be quantified, leveraged, and turned into a financial product. Wears suits that cost more than your first server.',
+            portrait: { skinTone: '#e0b890', hairColor: '#606060', hairStyle: 'short', shirtColor: '#1a1a2e', glasses: false, beard: false, features: 'stern' },
+            color: '#c0a040',
+            quotes: [
+                "Your AI is impressive. But can it predict quarterly earnings? THAT'S the real Turing test.",
+                "I've structured CDOs, survived 2008, and testified before Congress 14 times. Your rogue AI doesn't scare me. Much.",
+                "The financial applications alone are worth $3 trillion. I did the math during your safety briefing. Sorry I wasn't listening.",
+                "Risk management is my middle name. Actually it's William. But risk management is my spiritual middle name.",
+                "Every AI startup wants my money. Only the ones with proper compliance get it. And cookies. Dario's cookies help.",
+                "Blockchain was the future. AI is the future. At this rate, the present is severely underfunded."
+            ],
+            mood: 70,
+            concerns: ['regulatory_compliance', 'quarterly_returns', 'systemic_risk']
         }
     },
 

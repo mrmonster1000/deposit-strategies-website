@@ -907,7 +907,9 @@ window.GAME = window.GAME || {};
             'teen_zara': ['npc_zara_openaccess', 'npc_zara_aisafety'],
             'old_arthur': ['npc_arthur_automation', 'npc_arthur_trust'],
             'pub_landlord': ['npc_mick_aibias'],
-            'jensen_huang': ['npc_jensen_compute', 'npc_jensen_future']
+            'jensen_huang': ['npc_jensen_compute', 'npc_jensen_future'],
+            'michael_eisner': ['npc_eisner_franchise', 'npc_eisner_storytelling'],
+            'jamie_dimon': ['npc_dimon_finance', 'npc_dimon_risk']
         };
 
         var options = dialogueOptions[npcId];

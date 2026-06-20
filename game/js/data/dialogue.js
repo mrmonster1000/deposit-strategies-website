@@ -557,5 +557,65 @@ GAME.DATA.DIALOGUES = {
                 ]
             }
         ]
+    },
+
+    npc_eisner_franchise: {
+        id: 'npc_eisner_franchise',
+        nodes: [
+            {
+                speaker: 'michael_eisner',
+                text: "I've been studying your operation. You've got characters, storylines, a villain — Frank — and a plucky underdog — also Frank. This is a FRANCHISE. Let me show you the pitch deck.",
+                choices: [
+                    { text: "We're a research lab, not a movie studio.", effects: { publicTrust: 5, safety: 3 }, response: "That's what Walt said about his garage. Look, every great IP starts with someone saying 'this isn't entertainment.' Then it becomes entertainment. Then it becomes a cruise line. I have cruise line projections." },
+                    { text: "What would an AI theme park even look like?", effects: { money: 30, townMood: 5 }, response: "Picture this: you enter through a giant neural network gate. Each ride is a different AI scenario. 'The Alignment Coaster' — it goes exactly where you want! 'The Hallucination House' — it DOESN'T go where you want! The gift shop sells plush BALTARs. I've already ordered 50,000." },
+                    { text: "How does this help actual AI development?", effects: { publicTrust: 8, money: 20 }, response: "Public engagement! Education through entertainment! People fear what they don't understand. Give them a BALTAR plushie and suddenly AI is their friend. Disney did this with animals. You'll do it with algorithms. The merchandise margins are nearly identical." }
+                ]
+            }
+        ]
+    },
+
+    npc_eisner_storytelling: {
+        id: 'npc_eisner_storytelling',
+        nodes: [
+            {
+                speaker: 'michael_eisner',
+                text: "Every technology needs a narrative. The automobile had the open road. Television had the family living room. AI needs its story. Right now, AI's story is 'Terminator.' That's a TERRIBLE brand story. Let me fix it.",
+                choices: [
+                    { text: "AI's story should be about safety and progress.", effects: { publicTrust: 8, safety: 5 }, response: "Safety is ACT TWO. Act one is wonder. Act three is transformation. You're trying to start with act two. Nobody watches act two first. Except Yann, who starts with the peer review of act two." },
+                    { text: "Maybe the public needs the Terminator story as a warning.", effects: { safety: 8, publicTrust: -3 }, response: "Warnings don't build franchises. Hope builds franchises. Fear builds cable news. You want to be Disney, not CNN. Although CNN did have great graphics. Your BALTAR could do better graphics. I've done the analysis." },
+                    { text: "Tell me about the cruise line projections.", effects: { money: 40, townMood: 8 }, response: "The S.S. Abundance. AI-optimized itineraries. Robot bartenders — better than Mick, sorry Mick. Each cabin has a personal AI concierge. The hull is shaped like a neural network. Jensen wants to sponsor the engine room. It'll be covered in leather. I am not joking about any of this." }
+                ]
+            }
+        ]
+    },
+
+    npc_dimon_finance: {
+        id: 'npc_dimon_finance',
+        nodes: [
+            {
+                speaker: 'jamie_dimon',
+                text: "I've run the numbers on your operation. Your burn rate is aggressive, your safety spending is — respectfully — not generating returns, and your cookie budget is... actually that one makes sense. Morale matters. But we need to talk about financial sustainability.",
+                choices: [
+                    { text: "Safety spending IS the return. It prevents catastrophe.", effects: { safety: 5, money: -20 }, response: "I understand the argument. Insurance companies make the same one. But insurance companies have actuarial tables. You have... optimism and cookies. Show me the risk models. Real ones. With numbers. Not Dario's napkin sketches." },
+                    { text: "What financial structure would you recommend?", effects: { money: 50, politicalCapital: 5 }, response: "Diversified revenue streams. License the technology. Create an AI-as-a-service tier. Securitize the compute contracts — I know people who'll buy those. And for the love of quarterly earnings, stop giving away cookies. Charge for the cookies. Premium cookies. 'Safety-Certified Artisanal AI Cookies.' $12 each." },
+                    { text: "Are you here to invest or to audit us?", effects: { money: 30, publicTrust: 3 }, response: "Both. I invest in things I understand. Right now I understand your revenue model about as well as I understand Yann's Twitter threads — which is to say, not at all. But the potential is staggering. I survived 2008. I can survive AI. Probably." }
+                ]
+            }
+        ]
+    },
+
+    npc_dimon_risk: {
+        id: 'npc_dimon_risk',
+        nodes: [
+            {
+                speaker: 'jamie_dimon',
+                text: "Let me tell you about systemic risk. In 2008, nobody thought housing could collapse everywhere simultaneously. Now you're building AI that connects to everything simultaneously. See where I'm going with this?",
+                choices: [
+                    { text: "That's exactly why we have safety protocols.", effects: { safety: 8, cooperation: 5 }, response: "Good answer. The banks had protocols too. They were 400 pages long. Nobody read page 12. Page 12 was important. What's on YOUR page 12? Don't answer that — I'll send a compliance team. They're very thorough. And very expensive. But less expensive than a meltdown." },
+                    { text: "AI risk is fundamentally different from financial risk.", effects: { research: 5, publicTrust: 5 }, response: "Every sector says that. 'Our risk is different.' Then it's not. The mechanism changes, the human overconfidence stays the same. You know what I've learned in 40 years of banking? The smartest people in the room are usually the ones who cause the crash. No offence." },
+                    { text: "Would you support global AI financial regulations?", effects: { cooperation: 8, politicalCapital: 8, money: -30 }, response: "Support them? I'll WRITE them. I've written more financial regulation than most regulators. They don't always like my versions. But my versions work. Get me in a room with your safety team, Jensen's supply chain people, and a good lawyer. We'll have a framework by Tuesday. I don't do things slowly." }
+                ]
+            }
+        ]
     }
 };

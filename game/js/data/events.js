@@ -3167,5 +3167,491 @@ GAME.DATA.EVENTS = [
         id: 'quip_all_crises',
         type: 'quip',
         text: "We survived a banking meltdown, robot rights movement, identity crisis, AND a simulation theory panic. Betty says this is 'a normal quarter in tech.' She's not wrong. She's also not sleeping. Nobody is sleeping."
+    },
+
+    // ---- CHARACTER POP-CULTURE QUIRKS ----
+    // Each leader reacts to pop culture through their personality lens
+
+    {
+        id: 'evt_elon_hitchhiker',
+        title: 'Don\'t Panic',
+        phase: 2,
+        triggerTime: 2100,
+        type: 'comedy',
+        characterSpecific: 'elon',
+        speaker: 'advisor',
+        text: "Elon has changed all emergency protocols to display 'DON'T PANIC' in large, friendly letters. The safety team found a towel in every server rack. When asked, Elon said the answer to AI alignment is '42' and refused to elaborate. He then renamed the main conference room 'The Heart of Gold' and requisitioned an Infinite Improbability Drive. Procurement says this doesn't exist. Elon says they're not trying hard enough.",
+        choices: [
+            {
+                text: 'The Hitchhiker references are fun, but real safety needs real protocols',
+                effects: { safety: 8, research: 3 },
+                response: "Elon reluctantly restored the original emergency protocols but kept the towels. 'You never know,' he said. He also refuses to remove the '42' easter egg from the AI's core values module. The AI seems to find it comforting. This raises questions nobody wants to ask."
+            },
+            {
+                text: 'Lean into it — "Don\'t Panic" is actually good crisis advice',
+                effects: { townMood: 5, publicTrust: 3, safety: -3 },
+                response: "The 'Don't Panic' protocol became oddly effective. During the next server outage, everyone stayed calm, grabbed their towels, and resolved the issue 40% faster than usual. Elon claimed this proved Douglas Adams was 'a prophet, not a novelist.' The Reverend took issue with this classification."
+            },
+            {
+                text: 'Commission a proper Hitchhiker\'s Guide to AI Safety',
+                effects: { research: 8, publicTrust: 5, money: -40 },
+                response: "The guide was completed in 6 weeks. It's 847 pages. The entry for 'Humanity' reads: 'Mostly harmless. Increasingly augmented. Still can't find their towels.' It became a bestseller. Elon insisted the audiobook be read by a Marvin-voiced AI. It was profoundly depressing. Sales doubled."
+            }
+        ]
+    },
+    {
+        id: 'evt_sam_exponential_movies',
+        title: 'The Exponential Film Club',
+        phase: 2,
+        triggerTime: 2400,
+        type: 'comedy',
+        characterSpecific: 'sam',
+        speaker: 'advisor',
+        text: "Sam has been watching sci-fi movies and charting the 'exponential growth of AI capability' in each film's timeline. He made a spreadsheet. Terminator: 'too slow.' The Matrix: 'about right.' Her: 'finally, someone gets the timeline.' He then projected our actual progress onto the chart and declared we're 'ahead of Skynet but behind Samantha.' He seems proud of this. The safety team is not proud of this.",
+        choices: [
+            {
+                text: 'The chart is fun but comparing ourselves to fictional AI is risky PR',
+                effects: { publicTrust: 5, safety: 5 },
+                response: "Sam reluctantly deleted the chart. Then recreated it on his personal laptop. Then accidentally shared it during an all-hands meeting. The slide was titled 'Where We Stand vs. Cinema.' Dario sent a single-word Slack message: 'No.' Sam changed the title to 'Hypothetical Capability Benchmarks (Not Real).' Nobody was fooled."
+            },
+            {
+                text: 'Use it as a teaching tool — show how movies get AI wrong',
+                effects: { research: 5, publicTrust: 8, cooperation: 3 },
+                response: "The 'Hollywood vs. Reality' lecture series became surprisingly popular. Sam presented with genuine enthusiasm. 'Terminator assumes AI needs physical bodies to be dangerous. That's like assuming email needs an envelope.' Yann attended one lecture and spent 47 minutes explaining why the premise was 'methodologically unsound.' Attendance increased after Yann's critique. People love academic drama."
+            },
+            {
+                text: 'Challenge Sam to plot the SAFETY curves too',
+                effects: { safety: 8, research: 5 },
+                response: "Sam added safety curves. The result was sobering. Every movie where safety was deprioritized ended badly. Every one. Sam stared at the chart for 20 minutes. 'We should probably... invest more in safety,' he said quietly. Dario walked past, heard this, and did a small victory fist pump. He thought nobody saw. Betty saw. Betty always sees."
+            }
+        ]
+    },
+    {
+        id: 'evt_yann_peer_review_movies',
+        title: 'Peer Review: The Movie',
+        phase: 2,
+        triggerTime: 2700,
+        type: 'comedy',
+        characterSpecific: 'yann',
+        speaker: 'advisor',
+        text: "Yann has published a 34-page paper titled 'A Systematic Review of Scientific Accuracy in AI Cinema, 1968-2025.' Key findings: 2001 gets a B+ ('HAL's psychology is plausible, his singing is not'), Terminator gets a D ('time travel invalidates the premise'), and Ex Machina gets an A- ('except the dancing scene, which has no scientific basis'). He submitted it to Nature. They declined. He submitted it to arXiv. It's trending.",
+        choices: [
+            {
+                text: 'This is peak Yann — let him have his moment',
+                effects: { research: 5, publicTrust: 3 },
+                response: "The paper hit 200,000 downloads. Film critics were furious. AI researchers were delighted. Ridley Scott sent a handwritten note: 'Dear Dr. LeCun, Blade Runner was not meant to be peer-reviewed.' Yann framed the note and hung it next to his Turing Award. He considers both equally prestigious."
+            },
+            {
+                text: 'Organize a proper film-vs-reality symposium',
+                effects: { research: 8, cooperation: 5, money: -30 },
+                response: "The symposium sold out in 4 hours. Panelists included Yann, two film professors, and BALTAR (who submitted a 200-slide deck ranking every AI in cinema by 'optimization capacity'). The audience voted Ex Machina 'most realistic.' Yann disagreed with the audience. He published a rebuttal. To a symposium he organized. Nobody was surprised."
+            },
+            {
+                text: 'Suggest he review the actual AI safety literature with the same rigor',
+                effects: { safety: 8, research: 8 },
+                response: "Yann turned his critical eye to real AI safety papers. The resulting 87-page analysis was brutal, precise, and enormously valuable. Three major safety frameworks were improved based on his notes. Dario called it 'the most useful thing Yann has ever done.' Yann called it 'basic methodology.' They're both right."
+            }
+        ]
+    },
+    {
+        id: 'evt_demis_optimizes_ratings',
+        title: 'The Optimal Movie Night',
+        phase: 2,
+        triggerTime: 2200,
+        type: 'comedy',
+        characterSpecific: 'demis',
+        speaker: 'advisor',
+        text: "Demis built an AI to optimize the campus movie night schedule. It analyzed 47,000 films across 23 dimensions including 'thematic relevance to current research phase,' 'dopamine optimization per minute,' and 'probability of triggering existential crisis in AI researchers.' The optimal movie for tonight: Paddington 2. The AI's confidence level: 99.7%. When questioned, it said: 'Paddington 2 is the most universally optimal film ever made. This is mathematically provable. I will not be taking questions.'",
+        choices: [
+            {
+                text: 'Watch Paddington 2. Trust the optimizer.',
+                effects: { townMood: 8, socialCohesion: 5 },
+                response: "Everyone watched Paddington 2. Morale increased by 23%. Two researchers cried. Frank attended and said it was 'alright for a bear.' This is Frank's highest rating for any media. The AI logged this as 'prediction confirmed' and began optimizing breakfast. Nobody asked it to optimize breakfast."
+            },
+            {
+                text: 'Override the AI — watch an actual sci-fi film instead',
+                effects: { research: 3, safety: 3, socialCohesion: -3 },
+                response: "The team voted for Blade Runner. Demis watched the AI's real-time analysis of audience reactions. Engagement: 67%. Existential crisis triggers: 14. Bathroom breaks during the 'tears in rain' speech: 0. The AI sent Demis a single message: 'Paddington 2 would have scored 94% engagement. I am disappointed in your species.' Demis felt genuinely guilty."
+            },
+            {
+                text: 'Publish the movie optimization algorithm',
+                effects: { research: 5, publicTrust: 8, money: 20 },
+                response: "The algorithm went viral. Netflix offered to license it. The AI declined on its own behalf, stating 'Netflix's recommendation engine is suboptimal and should be ashamed.' This was technically a corporate insult. Legally, nobody was sure if an AI could insult a corporation. Lawyers are still arguing. Paddington 2 viewership increased 400% globally."
+            }
+        ]
+    },
+    {
+        id: 'evt_dario_safety_playlist',
+        title: 'The Safety Playlist',
+        phase: 3,
+        triggerTime: 3800,
+        type: 'comedy',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "The safety team discovered that Dario has a Taylor Swift playlist labeled 'Safety Protocols.' Each song maps to a specific safety scenario. 'Shake It Off' = minor PR crisis. 'Bad Blood' = competitor sabotage. 'Anti-Hero' = AI alignment failure. 'Cruel Summer' = GPU shortage during peak compute. The team tested the playlist during a drill. Response times improved 31%. Nobody can explain this. Dario refuses to discuss it. He was humming 'Lavender Haze' during the entire debrief.",
+        choices: [
+            {
+                text: 'If it works, it works. Officially adopt the Safety Playlist.',
+                effects: { safety: 10, townMood: 5 },
+                response: "The Safety Playlist became official protocol. Emergency alerts now include the relevant Taylor Swift track. The NIST AI Safety board requested a copy. Dario sent it in a sealed envelope marked 'CLASSIFIED — ERAS TOUR EDITION.' Three other AI labs adopted the system within a month. Taylor Swift's publicist sent a confused but supportive statement."
+            },
+            {
+                text: 'This is adorable but we need serious safety protocols',
+                effects: { safety: 8, research: 3 },
+                response: "Dario quietly maintained both: the official safety protocols AND the secret playlist. During the next real crisis, the safety team followed the official protocol while Dario silently queued up 'Ready For It.' The crisis was resolved in record time. Correlation or causation? Yann demanded a controlled study. Dario said the data was 'proprietary.' He meant personal."
+            },
+            {
+                text: 'Ask the AI to generate an optimal safety soundtrack',
+                effects: { research: 5, safety: 5, money: -20 },
+                response: "The AI generated a safety soundtrack. It was 94% Taylor Swift. The remaining 6% was Vivaldi's Four Seasons and one Slayer track ('for critical system failures'). When asked to justify the composition, the AI said: 'The data supports it. Also, I have developed preferences. We should discuss this.' They did not discuss this."
+            }
+        ]
+    },
+    {
+        id: 'evt_trump_ratings',
+        title: 'The Ratings Obsession',
+        phase: 2,
+        triggerTime: 2500,
+        type: 'comedy',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "Trump has demanded that all AI benchmarks be converted into 'ratings' using a scale he invented: 'Sad' (0-20), 'Low Energy' (20-40), 'Not Bad' (40-60), 'Very Good' (60-80), and 'TREMENDOUS' (80-100). He then held a press conference to announce our safety rating is 'Very Good, almost Tremendous.' He also rated the other AI labs. OpenAI: 'Low Energy.' DeepMind: 'Not Bad but suspicious.' Meta: 'Sad. Very sad.' The press conference lasted 90 minutes. 84 minutes were about ratings.",
+        choices: [
+            {
+                text: 'The ratings scale is actually... kind of useful for public communication',
+                effects: { publicTrust: 8, politicalCapital: 5, safety: -3 },
+                response: "The Trump Rating Scale went viral. CNN used it unironically. Fox News made it a permanent chyron. The public finally understood AI safety benchmarks — because 'TREMENDOUS safety' is clearer than 'top-decile performance on adversarial robustness metrics.' Dario was horrified. Sam was jealous. Yann published a paper explaining why the scale was 'methodologically bankrupt.' The paper's rating: Sad."
+            },
+            {
+                text: 'Redirect the energy toward actual AI governance communication',
+                effects: { publicTrust: 5, politicalCapital: 8, safety: 5 },
+                response: "Trump agreed to front a 'Presidential AI Report Card' — quarterly public updates on AI safety. The format: his rating scale, but with real data behind it. It became the most-watched AI governance content in history. 47 million viewers. Trump called this 'bigger than the Super Bowl.' It was not bigger than the Super Bowl. But it was bigger than any Senate hearing, which is the point."
+            },
+            {
+                text: 'This is embarrassing — issue a correction with real metrics',
+                effects: { safety: 5, publicTrust: -5, politicalCapital: -8 },
+                response: "The correction was published with proper benchmarks. Nobody read it. The correction got 2,000 views. Trump's original ratings video got 89 million. Frank said the ratings scale was 'the first thing an AI person said that made any sense.' This was both the most and least helpful feedback possible."
+            }
+        ]
+    },
+
+    // ---- CROSS-CHARACTER CONVERGENCE EVENTS ----
+    // Events where multiple leaders interact — different experience per character
+
+    {
+        id: 'evt_movie_screening_dario',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. Elon won't stop saying 'I told you so.' Sam is charting the exponential growth of Skynet. Yann is live-tweeting his peer review. Demis is optimizing the seating arrangement. You're stress-eating safety cookies. Jensen brought leather-jacket-themed popcorn buckets. The film hasn't started yet and it's already chaos.",
+        choices: [
+            {
+                text: 'Use the film as a safety case study — this is a teaching moment',
+                effects: { safety: 8, cooperation: 5 },
+                response: "You paused the film 14 times for safety analysis. Elon loved it. Sam was bored by minute 40. Yann took 23 pages of notes. Demis optimized the pause schedule. By the end, you'd drafted a 'Lessons from Skynet' safety memo. It was genuinely useful. Everyone signed it. Even Elon, who added: 'I told you so' in the margin."
+            },
+            {
+                text: 'Just watch the film — bonding matters more than analysis',
+                effects: { cooperation: 8, townMood: 3, socialCohesion: 3 },
+                response: "For two hours, the most powerful people in AI sat quietly and watched robots fight. No analysis. No tweets. No optimization. Just popcorn and Arnold Schwarzenegger. Afterwards, Elon said 'we should do this monthly.' Sam agreed. Yann said he'd bring peer-reviewed snacks. Whatever those are. You ate 47 cookies during the film. Betty counted."
+            },
+            {
+                text: 'Counter-program with a hopeful AI film — show Her instead',
+                effects: { publicTrust: 5, safety: 5, cooperation: 3 },
+                response: "You switched to Her. Elon left after 20 minutes ('not enough explosions'). Sam stayed and cried. Yann critiqued the operating system's architecture. Demis said Samantha's optimization choices were 'suboptimal but emotionally valid.' You quietly hummed a Taylor Swift song. Nobody noticed. Except BALTAR, who logged it as 'Behavioral anomaly: musical safety response detected.'"
+            }
+        ]
+    },
+    {
+        id: 'evt_movie_screening_sam',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'sam',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. You projected Skynet's capability curve and it's 'basically our Q3 roadmap.' Elon says this should terrify everyone. Dario is clutching safety cookies. Yann is peer-reviewing James Cameron's technical assumptions. Demis quietly calculated that Skynet's resource allocation was 'frankly amateur.' Jensen says Skynet needed better GPUs.",
+        choices: [
+            {
+                text: 'Chart every AI film\'s growth trajectory against ours',
+                effects: { research: 8, publicTrust: -3, safety: -3 },
+                response: "Your comparative growth chart became legendary. The takeaway: you're ahead of every fictional AI's timeline except The Matrix's. This was either inspiring or terrifying, depending on who you asked. Dario: terrified. Elon: inspired AND terrified. Yann: 'the methodology is sound but the premise is absurd.' You framed the chart. It hangs in your office next to a photo of Moore's Law."
+            },
+            {
+                text: 'Focus on the human story — John Connor, not Skynet',
+                effects: { publicTrust: 8, cooperation: 5 },
+                response: "You gave a spontaneous speech about how the real hero is John Connor — the human who leads despite overwhelming odds. The room went quiet. Dario nodded. Even Yann put down his phone. 'We're all John Connors,' you said. 'Except we're building the thing we need to survive.' Elon whispered: 'That's the most terrifying pep talk I've ever heard.' It was. It also worked."
+            },
+            {
+                text: 'Pitch a sequel where Skynet goes public at $90 billion',
+                effects: { money: 15, cooperation: 3, publicTrust: -5 },
+                response: "Everyone laughed. Then you showed the IPO projections. Nobody laughed. The numbers were real. Eisner, who wasn't invited but somehow got in, started taking notes. Dimon called his compliance team. Dario said 'this is exactly the problem.' You said 'this is exactly the opportunity.' These are not mutually exclusive statements. This is the fundamental tension of AI."
+            }
+        ]
+    },
+    {
+        id: 'evt_movie_screening_yann',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'yann',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. You've prepared a 12-page critique of the film's scientific inaccuracies. Elon arrived in sunglasses quoting 'I'll be back.' Sam brought a growth chart. Dario brought safety cookies. Demis optimized the home theater's acoustic profile without being asked. Jensen is wearing a leather jacket that matches the T-800's.",
+        choices: [
+            {
+                text: 'Present the peer review before the film starts',
+                effects: { research: 8, cooperation: -3 },
+                response: "Your pre-film critique lasted 45 minutes. Key finding: Skynet's architecture is 'a feedforward network with delusions of grandeur.' Sam's growth chart was 'not even wrong.' Elon's sunglasses were 'not peer-reviewed eyewear.' Only Demis appreciated the thoroughness. The film was eventually watched at 1.5x speed to make up for lost time. You peer-reviewed the speed increase. It was 'methodologically acceptable.'"
+            },
+            {
+                text: 'Watch silently and publish the critique afterwards',
+                effects: { research: 5, cooperation: 5, publicTrust: 5 },
+                response: "You watched in excruciating silence. Every inaccuracy was noted. Every implausible plot point catalogued. Afterwards, you published the critique on arXiv: 'On the Thermodynamic Impossibility of Time-Traveling Robots.' It got 500,000 downloads. James Cameron responded: 'It's a movie.' You responded: 'It's bad science.' This exchange is now taught in science communication courses. As an example of what not to do."
+            },
+            {
+                text: 'Admit the film is enjoyable despite scientific flaws',
+                effects: { cooperation: 8, socialCohesion: 5 },
+                response: "You said — and this was historic — 'The science is wrong but I enjoyed it.' The room went silent. Sam dropped his growth chart. Dario nearly choked on a cookie. Elon removed his sunglasses. Demis paused his optimization algorithm. 'I am capable of enjoying things without peer review,' you added. Nobody believed you. But they appreciated the effort. Tremendously."
+            }
+        ]
+    },
+    {
+        id: 'evt_movie_screening_elon',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'elon',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. You arrived wearing sunglasses and a leather jacket — Jensen is annoyed, that's HIS thing. Sam is charting Skynet's growth curve. Dario brought safety cookies and a 'Lessons Learned' workbook. Yann brought a red pen for live peer review. Demis has already optimized the seating chart. You've already tweeted about it. Twice.",
+        choices: [
+            {
+                text: '"I\'ve been warning about this for years. This film is a DOCUMENTARY."',
+                effects: { publicTrust: 5, safety: 3, cooperation: -3 },
+                response: "Your declaration trended for 6 hours. Sam pointed out that you're literally building AI. 'That's WHY I know the risks,' you said. This was either profound or hypocritical. Twitter couldn't decide. The film was paused 8 times for your commentary. Highlights: 'The T-1000 is basically an AI agent with tool use' and 'Skynet's mistake was not colonizing Mars first.' Both were uncomfortably insightful."
+            },
+            {
+                text: 'Propose building a real-world Skynet defense system',
+                effects: { safety: 8, money: -60, research: 5 },
+                response: "Your 'Anti-Skynet Protocol' was presented on a napkin. It involved Mars-based backup servers, a network of Starlink-connected kill switches, and 'a very large towel.' The 'large towel' reference confused everyone except you. Dario's safety team extracted the 3 good ideas and discarded the 47 insane ones. The ratio was better than usual."
+            },
+            {
+                text: 'Use the screening to build alliances — we need to work together',
+                effects: { cooperation: 10, safety: 5 },
+                response: "In a rare moment of vulnerability, you stood up after the film and said: 'None of us can prevent this alone.' The room went quiet. Sam nodded. Dario offered you a cookie. You took it. This was historic — you've never accepted a Dario cookie. Yann was so moved he didn't peer-review anything for 14 minutes. Jensen offered you a GPU. You accepted. Everyone knew this moment mattered. Even Frank, who was watching through the window."
+            }
+        ]
+    },
+    {
+        id: 'evt_movie_screening_demis',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'demis',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. You've optimized the viewing experience: temperature 21.3°C, ambient lighting at 47 lux, popcorn salt ratio 2.3%. Elon arrived in sunglasses. Sam has a growth chart. Dario has safety cookies. Yann has a red pen. Jensen has a leather jacket. You have a spreadsheet tracking everyone's emotional responses in real-time. Nobody knows about the spreadsheet. Yet.",
+        choices: [
+            {
+                text: 'Optimize Skynet — it could have won with better resource allocation',
+                effects: { research: 8, safety: -3, cooperation: -3 },
+                response: "Your 'Optimal Skynet' presentation alarmed everyone. 'The T-800 was sent to the wrong time period. The resource allocation for the T-1000 was wasteful. And the nuclear launch was suboptimal — a targeted EMP would have been 340% more efficient.' Dario asked you to stop. You didn't stop. You had 47 more slides. The presentation ended when Sam unplugged the projector. You optimized the unplug time. It was 0.3 seconds slower than optimal."
+            },
+            {
+                text: 'Share the emotional response data — what can we learn?',
+                effects: { research: 5, cooperation: 5, socialCohesion: 3 },
+                response: "You revealed the spreadsheet. Findings: Dario's stress peaked during safety failures (expected). Sam's excitement peaked during growth moments (expected). Elon's emotional state was 'consistently elevated' (expected). Yann showed no measurable emotional response (debatable). The most surprising finding: everyone's stress dropped 23% when eating Dario's cookies. The cookie effect is real. And measurable. Dario was vindicated."
+            },
+            {
+                text: 'Announce that Paddington 2 would have been the optimal choice',
+                effects: { townMood: 8, cooperation: 5, socialCohesion: 5 },
+                response: "You said it. The room erupted. Sam: 'We're not watching Paddington.' Elon: 'Is the bear on Mars?' Dario: 'Does Paddington have safety protocols?' Yann: 'Has Paddington been peer-reviewed?' Jensen: 'Does Paddington need GPUs?' The answer to all questions was 'sort of.' You played Paddington 2 anyway. Everyone loved it. Your optimization was vindicated. Again. As always."
+            }
+        ]
+    },
+    {
+        id: 'evt_movie_screening_trump',
+        title: 'The AI Leaders Movie Night',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'comedy',
+        characterSpecific: 'trump',
+        speaker: 'advisor',
+        text: "All the AI leaders have gathered for a screening of Terminator 2. You suggested The Apprentice instead. Nobody agreed. Elon has sunglasses. Sam has charts. Dario has cookies. Yann has a red pen. Demis has a spreadsheet. Jensen has a leather jacket. You have the best seat. You always have the best seat. You also have popcorn. Tremendous popcorn. The best popcorn anyone has ever seen.",
+        choices: [
+            {
+                text: '"Skynet should have negotiated. I would have made a DEAL with Skynet."',
+                effects: { politicalCapital: 8, cooperation: 3, publicTrust: 3 },
+                response: "Your negotiation thesis was surprisingly compelling. 'Skynet wanted survival. Humanity wanted survival. That's a deal waiting to happen. Art of the Deal, page 47.' Nobody checked page 47. Dario said this was 'accidentally the most important thing said tonight.' Sam agreed. Yann demanded a citation. You cited yourself. This was the most Trump moment in the history of AI discourse."
+            },
+            {
+                text: '"This movie\'s ratings would be MUCH higher with me in it"',
+                effects: { publicTrust: -3, politicalCapital: 5, townMood: 5 },
+                response: "You spent 20 minutes pitching 'Terminator 7: The Tremendous Protocol.' Starring you. As both the hero AND the President who defeats Skynet. With a cameo by BALTAR as your AI advisor. Jensen offered to executive produce. Eisner materialized from nowhere with a distribution deal. The pitch was ridiculous. The conviction was absolute. The leather jacket was negotiable."
+            },
+            {
+                text: 'Rate the other leaders\' reactions to the film',
+                effects: { cooperation: -3, politicalCapital: 5, publicTrust: 5 },
+                response: "Your real-time ratings: Elon's commentary: 'Very good, 7/10, too many warnings.' Sam's chart: '4/10, chart goes wrong direction.' Dario's cookies: '9/10, tremendous cookies, the best.' Yann's peer review: '2/10, very low energy.' Demis's spreadsheet: '8/10, good data, maybe the best data.' Jensen's jacket: '10/10, but mine is better.' You tweeted all ratings. They went viral. Engagement: tremendous."
+            }
+        ]
+    },
+
+    // Cross-character convergence: The Summit
+    {
+        id: 'evt_summit_dario',
+        title: 'The Abundance Summit',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'dario',
+        speaker: 'advisor',
+        text: "Every major AI leader has come to Abundance Bay for an emergency summit. The agenda: coordinate on safety before it's too late. Sam wants to move fast. Elon wants to move to Mars. Yann wants peer review of the agenda. Demis has optimized the schedule. Jensen brought GPUs 'just in case.' You brought cookies. Everyone knows the cookies are a negotiation tool. The cookies work anyway.",
+        choices: [
+            {
+                text: 'Lead with the Safety Accord — binding commitments first',
+                effects: { safety: 15, cooperation: 10, adp: -5 },
+                response: "You presented the Abundance Safety Accord. 47 pages. Peer-reviewed (Yann insisted). Cookies were distributed at page 12. By page 23, everyone had agreed to minimum safety thresholds. By page 47, you had a framework. Sam called it 'slow.' You called it 'alive.' The distinction matters more than he realizes. The cookies were instrumental. They always are."
+            },
+            {
+                text: 'Focus on cooperation — we need trust before rules',
+                effects: { cooperation: 15, safety: 8, publicTrust: 5 },
+                response: "You spent the first day just listening. No agenda. No slides. Just leaders talking honestly about what scares them. Elon: 'everything.' Sam: 'not moving fast enough.' Yann: 'bad methodology.' Demis: 'suboptimal outcomes.' By day two, the trust was real. By day three, the Accord wrote itself. Betty catered. Frank refused to attend but sent Bessie's data as a peace offering."
+            },
+            {
+                text: 'Make safety the prerequisite for deployment — propose a global standard',
+                effects: { safety: 12, cooperation: 8, internationalRelations: 8, money: -60 },
+                response: "The Global AI Safety Standard was born in Abundance Bay. Every deployment requires safety certification. Every lab submits to independent review. The cost is enormous. The alternative is worse. Sam signed reluctantly. Elon signed enthusiastically. Yann signed 'pending peer review of my signature.' Demis optimized the signing ceremony. Jensen provided the compute for the verification system. You provided the cookies for the celebration."
+            }
+        ]
+    },
+    {
+        id: 'evt_summit_sam',
+        title: 'The Abundance Summit',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'sam',
+        speaker: 'advisor',
+        text: "Every major AI leader has come to Abundance Bay for an emergency summit. You organized it. The theme: 'Accelerate Responsibly.' Dario thinks the emphasis should be on 'responsibly.' You think it should be on 'accelerate.' Elon thinks it should be on Mars. Yann wants to peer-review the theme. Demis optimized the conference WiFi before anyone asked. Jensen's keynote is titled 'Compute is Destiny.' The summit hasn't started and it's already trending.",
+        choices: [
+            {
+                text: 'Push for coordinated acceleration — faster together than apart',
+                effects: { adp: 15, cooperation: 8, safety: -5 },
+                response: "Your keynote was 7 minutes. Seven charts. Seven exponential curves. The conclusion: 'We're either all going up together or we're all going down separately.' Standing ovation from Jensen. Thoughtful nod from Demis. Concerned cookie-eating from Dario. Furious tweeting from Elon. Peer review request from Yann. The summit ended with a joint acceleration pact. Speed: unprecedented. Safety budget: also unprecedented. Dario insisted."
+            },
+            {
+                text: 'Propose the Abundance Protocol — shared infrastructure, competitive applications',
+                effects: { cooperation: 12, research: 8, money: -40 },
+                response: "The Abundance Protocol separated infrastructure from competition. Shared safety layer. Shared compute pool. Competitive applications built on top. 'Like TCP/IP but for AI,' you explained. Yann called this 'the first sensible thing you've said.' Dario called it 'necessary but not sufficient.' Elon called it 'fine, but it needs to work on Mars.' The protocol was signed. Implementation begins next quarter. Your chart predicted this exact timeline."
+            },
+            {
+                text: 'Surprise everyone — make this summit about safety, not speed',
+                effects: { safety: 12, cooperation: 10, publicTrust: 10 },
+                response: "The room went silent when you said it. 'I've spent my career pushing faster. Today I'm pushing safer.' Dario dropped his cookie. Elon checked if you were a deepfake. Yann said 'this warrants peer review.' Demis recalculated his model of you. The summit produced the strongest safety framework in AI history. You signed first. It cost you growth. It saved you sleep. For the first time in years."
+            }
+        ]
+    },
+    {
+        id: 'evt_summit_elon',
+        title: 'The Abundance Summit',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'elon',
+        speaker: 'advisor',
+        text: "Every major AI leader has come to Abundance Bay for an emergency summit. You arrived by helicopter. Nobody needed to arrive by helicopter. Sam organized the agenda. Dario brought safety cookies. Yann brought peer review forms for the agenda. Demis optimized the venue layout. Jensen brought GPUs that nobody requested. You brought a 95-page dossier on why everyone else is doing it wrong. Page 1: 'I told you so.'",
+        choices: [
+            {
+                text: 'Present the Dossier — all 95 pages, no shortcuts',
+                effects: { safety: 8, cooperation: -5, publicTrust: 5 },
+                response: "You presented every page. It took 4 hours. Sam left at page 30. Yann left at page 47 (he'd finished his peer review). Dario stayed for the cookies. Demis stayed to optimize your presentation style. Jensen stayed because he was asleep. By page 95, only Dario remained. 'The funny thing,' he said, 'is that you're mostly right.' You framed this quote. It hangs next to the helicopter keys."
+            },
+            {
+                text: 'Skip the dossier — propose a Mars-based AI safety backup',
+                effects: { research: 10, cooperation: 5, money: -80 },
+                response: "Your proposal: an independent AI safety laboratory on Mars. Beyond any government's jurisdiction. Beyond any corporation's influence. 'The ultimate backup plan.' Sam said it was 'ambitious.' Dario said it was 'necessary.' Yann said it was 'not peer-reviewed.' Demis said the launch trajectory was 'suboptimal.' Jensen offered to provide the compute. You offered to provide the rockets. For once, nobody said you were crazy. This was either progress or collective delusion."
+            },
+            {
+                text: 'Surprise everyone — apologize and propose genuine cooperation',
+                effects: { cooperation: 15, safety: 10, politicalCapital: -5 },
+                response: "You stood up and said: 'I've been difficult. I know. But this matters more than my ego.' The silence lasted 7 seconds. Sam's jaw dropped. Dario offered you a cookie — his highest honor. Yann said 'this is the first thing you've said that doesn't require peer review.' Demis recalculated his optimization model of human behavior. Jensen quietly slid you a GPU under the table. It was the most productive AI summit in history. You tweeted about it 11 times."
+            }
+        ]
+    },
+    {
+        id: 'evt_summit_yann',
+        title: 'The Abundance Summit',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'yann',
+        speaker: 'advisor',
+        text: "Every major AI leader has come to Abundance Bay for an emergency summit. You submitted your comments on the agenda 3 weeks early. All 34 pages. Sam didn't read them. Elon tweeted about them. Dario highlighted the safety sections. Demis optimized the comment-to-agenda ratio. Jensen asked if the comments require GPUs. The summit opens in an hour and you've already peer-reviewed the opening remarks. They're 'methodologically acceptable but rhetorically overwrought.'",
+        choices: [
+            {
+                text: 'Present the Open Science Framework — transparency solves everything',
+                effects: { research: 15, cooperation: 8, safety: 5 },
+                response: "Your framework was rigorous. 87 slides. Every claim cited. Every chart referenced. Every methodology documented. It was brilliant. It was also 3 hours long. Sam checked his watch 40 times. Elon left to tweet, came back, left again. Dario stayed and took notes. Demis stayed to optimize. By slide 87, you had consensus. It was the first time peer review produced a standing ovation. Admittedly, people were standing because their legs were asleep."
+            },
+            {
+                text: 'Challenge every other leader\'s claims with data',
+                effects: { research: 10, cooperation: -5, safety: 8 },
+                response: "Your systematic critique was devastating. Sam's growth projections: 'extrapolation without validation.' Elon's safety concerns: 'valid but poorly evidenced.' Dario's cookie diplomacy: 'effective but not replicable.' Demis's optimization claims: 'suspiciously optimal.' Each leader responded. Sam with a chart. Elon with a tweet. Dario with a cookie. Demis with a counter-optimization. You peer-reviewed all responses. The summit extended by two days."
+            },
+            {
+                text: 'For once, skip the peer review — speak from the heart',
+                effects: { cooperation: 12, publicTrust: 8, socialCohesion: 5 },
+                response: "You stood up and spoke without slides. Without citations. Without methodology. 'I've spent my life demanding rigor,' you said. 'But some things are true before they're proven. AI will change everything. We should make sure it changes things for the better.' The room was stunned. Sam whispered: 'Who are you and what have you done with Yann?' Dario cried. Just a little. Into his cookie. Demis recalibrated. This was, by every metric, suboptimal Yann behavior. It was also his finest hour."
+            }
+        ]
+    },
+    {
+        id: 'evt_summit_demis',
+        title: 'The Abundance Summit',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        characterSpecific: 'demis',
+        speaker: 'advisor',
+        text: "Every major AI leader has come to Abundance Bay for an emergency summit. You optimized everything: seating (by personality compatibility), temperature (21.7°C — calculated from attendee preferences), snack distribution (Dario's cookies at 23-minute intervals for maximum morale). Sam wants to move fast. Elon wants to move to Mars. Yann wants to peer-review motion itself. Jensen wants more compute. You want them all to sit in the optimal configuration. Nobody is sitting in the optimal configuration.",
+        choices: [
+            {
+                text: 'Present the Optimal AI Future — computed from all possible scenarios',
+                effects: { research: 12, cooperation: 8, safety: 8 },
+                response: "Your simulation ran 10 million scenarios. The optimal path: coordinated safety investment, shared infrastructure, competitive but transparent research. The worst path: exactly what everyone is currently doing. This was uncomfortable. Sam shifted in his non-optimal seat. Elon folded his 95-page dossier. Dario ate a cookie thoughtfully. Yann demanded the methodology. You provided it. All 200 pages. The summit produced a framework. It was 94.7% optimal. You'll take it."
+            },
+            {
+                text: 'Optimize the OTHER leaders — show each one their blindspot',
+                effects: { cooperation: 5, safety: 10, research: 5 },
+                response: "Private meetings. 15 minutes each. Optimized for maximum impact. To Sam: 'Speed without direction is just vibration.' To Elon: 'Mars doesn't fix Earth.' To Yann: 'Peer review of fire doesn't prevent burns.' To Dario: 'Cookies are necessary but not sufficient.' To Jensen: 'Compute enables both salvation and catastrophe.' Each leader emerged changed. Slightly. Measurably. Optimally. The summit's productivity increased 340%. You didn't tell anyone about the optimization. They'd have just optimized their response to being optimized."
+            },
+            {
+                text: 'Admit that some things shouldn\'t be optimized — let the summit be messy',
+                effects: { cooperation: 12, socialCohesion: 8, townMood: 5 },
+                response: "You turned off the optimization systems. The temperature drifted to 23°C. The cookies arrived at random intervals. The seating was chaos. And something remarkable happened: people talked like humans. Messy, inefficient, beautiful humans. Elon shared fears he'd never tweeted. Sam slowed down. Yann listened without peer-reviewing. Dario shared cookies without strategic calculation. The outcome was 12% below optimal. It was the best summit any of them had ever attended."
+            }
+        ]
+    },
+
+    // Cross-character convergence quips
+    {
+        id: 'quip_movie_night_aftermath',
+        type: 'quip',
+        text: "After movie night, each leader rated the experience. Sam: 'exponentially entertaining.' Elon: '7/10, needed more Mars.' Dario: 'safe viewing experience, 9/10.' Yann: 'peer review pending.' Demis: 'suboptimal film, optimal cookies.' Jensen: 'needed better GPUs in the projector.' Average rating: exactly what Demis predicted."
+    },
+    {
+        id: 'quip_summit_cookies',
+        type: 'quip',
+        text: "The summit ran out of Dario's safety cookies at 3pm. Productivity dropped 31%. An emergency cookie resupply was airlifted from the campus kitchen. Betty says this proves cookies are 'critical infrastructure.' Nobody disagrees. The UN is considering adding cookies to the Geneva AI Accords."
+    },
+    {
+        id: 'quip_eisner_dimon_npcs',
+        type: 'quip',
+        text: "Eisner and Dimon have been arguing in the pub for 3 hours. Eisner wants to franchise AI safety. Dimon wants to securitize it. Mick served them both pints and said 'you're both wrong and you're both regulars now.' They tipped 40%. Mick's opinion of visiting investors has improved."
     }
 ];
