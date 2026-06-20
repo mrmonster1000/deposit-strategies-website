@@ -2681,7 +2681,7 @@ GAME.Systems.Renderer = (function() {
     // =========================================================================
 
     function drawPerson(wx, wy, bounce, skinColor, shirtColor, time, idx, large, abundanceLevel) {
-        var sz = large ? 3.5 : 3.0;
+        var sz = large ? 4.0 : 3.8;
         var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(5 * sz);
@@ -2751,7 +2751,7 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawNamedNPC(wx, wy, portrait, name, time, idx, abundanceLevel) {
-        var sz = 4.5;
+        var sz = 4.2;
         var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(6 * sz);
