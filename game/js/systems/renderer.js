@@ -637,35 +637,58 @@ GAME.Systems.Renderer = (function() {
     }
 
     function drawLamppost(x, y, time) {
-        // Pole — taller, thicker
-        drawRect(x, y - 44, 3, 44, '#505058');
-        drawRect(x + 1, y - 44, 1, 44, '#606068');
+        // Pole — tall with decorative detail
+        drawRect(x, y - 46, 3, 46, '#505058');
+        drawGradientRect(x, y - 46, 3, 46, '#404048', '#606068');
+        // Pole detail band
+        drawRect(x - 1, y - 20, 5, 2, '#606068');
         // Base plate
-        drawRect(x - 2, y - 2, 7, 3, '#404048');
+        drawRect(x - 3, y - 2, 9, 4, '#404048');
+        drawRect(x - 2, y - 1, 7, 2, '#4a4a50');
         // Curved arm
-        drawRect(x - 8, y - 46, 12, 3, '#606068');
-        drawRect(x - 9, y - 45, 2, 2, '#505058');
+        drawRect(x - 10, y - 48, 14, 3, '#606068');
+        drawRect(x - 11, y - 47, 2, 2, '#505058');
         // Light fixture housing
-        drawRect(x - 10, y - 48, 14, 4, '#707078');
-        drawRect(x - 9, y - 47, 12, 2, '#808088');
+        drawRect(x - 12, y - 52, 16, 5, '#707078');
+        drawRect(x - 11, y - 51, 14, 3, '#808088');
+        drawRect(x - 12, y - 48, 16, 1, '#606068');
+        // Bulb glow halo
+        var bulbPulse = 0.9 + Math.sin(time * 0.004) * 0.1;
+        ctx.fillStyle = 'rgba(255, 220, 120, ' + (0.15 * bulbPulse) + ')';
+        ctx.fillRect(x - 14, y - 54, 20, 10);
         // Bulb
-        drawRect(x - 6, y - 44, 6, 2, '#ffdd80');
-        // Light cone — triangular beam to ground (Thimbleweed style)
-        var glowAlpha = 0.08 + Math.sin(time * 0.003) * 0.02;
+        drawRect(x - 8, y - 48, 8, 3, '#ffdd80');
+        drawRect(x - 7, y - 47, 6, 1, '#ffeeaa');
+        // Light cone — triangular beam to ground (wide, atmospheric)
+        var glowAlpha = 0.1 + Math.sin(time * 0.003) * 0.02;
         ctx.save();
-        ctx.globalAlpha = glowAlpha;
+        ctx.globalAlpha = glowAlpha * bulbPulse;
         ctx.fillStyle = '#ffeebb';
         ctx.beginPath();
-        ctx.moveTo(x - 8, y - 44);
-        ctx.lineTo(x + 2, y - 44);
-        ctx.lineTo(x + 22, y + 4);
-        ctx.lineTo(x - 28, y + 4);
+        ctx.moveTo(x - 10, y - 48);
+        ctx.lineTo(x + 2, y - 48);
+        ctx.lineTo(x + 30, y + 6);
+        ctx.lineTo(x - 38, y + 6);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
-        // Ground light pool
-        ctx.fillStyle = 'rgba(255, 220, 140, 0.04)';
-        ctx.fillRect(x - 30, y - 2, 54, 6);
+        // Inner brighter cone
+        ctx.save();
+        ctx.globalAlpha = glowAlpha * 0.6 * bulbPulse;
+        ctx.fillStyle = '#ffeedd';
+        ctx.beginPath();
+        ctx.moveTo(x - 6, y - 48);
+        ctx.lineTo(x - 2, y - 48);
+        ctx.lineTo(x + 14, y + 4);
+        ctx.lineTo(x - 18, y + 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        // Ground light pool — large warm circle
+        ctx.fillStyle = 'rgba(255, 220, 140, 0.06)';
+        ctx.fillRect(x - 38, y - 2, 70, 8);
+        ctx.fillStyle = 'rgba(255, 220, 140, 0.03)';
+        ctx.fillRect(x - 44, y + 4, 82, 6);
     }
 
     function drawWelcomeSign(x, y) {
@@ -3936,6 +3959,82 @@ GAME.Systems.Renderer = (function() {
     }
 
     // =========================================================================
+    //  BUILDING SHADOWS & ATMOSPHERE
+    // =========================================================================
+
+    function drawBuildingShadows(time) {
+        // Cast shadow trapezoids on ground extending to the right of each building
+        for (var bi = 0; bi < PERMANENT_BUILDINGS.length; bi++) {
+            var b = PERMANENT_BUILDINGS[bi];
+            if (!isVisible(b.x, b.w + 40)) continue;
+            var bScale = (b.name === 'Church') ? BLDG_SCALE_TALL : BLDG_SCALE;
+            var scaledW = b.w / bScale;
+            var shadowLen = scaledW * 0.4;
+            ctx.save();
+            ctx.globalAlpha = 0.12;
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.moveTo(b.x + b.w - 10, BUILDING_FLOOR);
+            ctx.lineTo(b.x + b.w + shadowLen, BUILDING_FLOOR + 4);
+            ctx.lineTo(b.x + b.w + shadowLen, BUILDING_FLOOR + 12);
+            ctx.lineTo(b.x + b.w - 10, BUILDING_FLOOR + 8);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function drawAtmosphere(time) {
+        // Subtle vignette darkening at screen edges
+        var vigGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.35, W / 2, H / 2, W * 0.7);
+        vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
+        vigGrad.addColorStop(1, 'rgba(0,0,0,0.25)');
+        ctx.fillStyle = vigGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // Ambient fireflies near lampposts (only in town zone, visible area)
+        var lampPositions = [830, 1600, 2400, 3200, 3600, 4350, 4780, 5150, 5600, 5980, 6400, 7650, 8050, 8550, 9000];
+        for (var fi = 0; fi < lampPositions.length; fi++) {
+            var lx = lampPositions[fi];
+            var screenX = (lx - camera.x) * camera.zoom;
+            if (screenX < -30 || screenX > W + 30) continue;
+            // 2-3 fireflies per lamp
+            for (var ff = 0; ff < 2; ff++) {
+                var fSeed = lx * 13 + ff * 41;
+                var phase = time * 0.001 + seededRandom(fSeed) * 6.28;
+                var flyX = screenX + Math.sin(phase * 1.3 + ff) * 20;
+                var flyY = (H - 130) * camera.zoom + Math.cos(phase + ff * 2) * 15;
+                var flyAlpha = Math.max(0, Math.sin(phase * 2) * 0.4 + 0.1);
+                if (flyAlpha > 0) {
+                    ctx.fillStyle = 'rgba(255, 255, 100, ' + flyAlpha + ')';
+                    ctx.fillRect(flyX, flyY, 2, 2);
+                    ctx.fillStyle = 'rgba(255, 255, 100, ' + (flyAlpha * 0.3) + ')';
+                    ctx.fillRect(flyX - 1, flyY - 1, 4, 4);
+                }
+            }
+        }
+
+        // Dust motes in light cones (very subtle)
+        for (var di = 0; di < 6; di++) {
+            var dSeed = di * 73 + Math.floor(time * 0.0005) * 31;
+            var dustX = seededRandom(dSeed) * W;
+            var dustY = H * 0.5 + seededRandom(dSeed + 1) * H * 0.4;
+            var dustAlpha = Math.sin(time * 0.001 + di) * 0.03 + 0.02;
+            if (dustAlpha > 0) {
+                ctx.fillStyle = 'rgba(255, 220, 160, ' + dustAlpha + ')';
+                ctx.fillRect(dustX, dustY, 1, 1);
+            }
+        }
+
+        // Atmospheric blue haze between foreground and far background
+        var hazeGrad = ctx.createLinearGradient(0, H * 0.2, 0, H * 0.5);
+        hazeGrad.addColorStop(0, 'rgba(30, 40, 80, 0.06)');
+        hazeGrad.addColorStop(1, 'rgba(30, 40, 80, 0)');
+        ctx.fillStyle = hazeGrad;
+        ctx.fillRect(0, H * 0.2, W, H * 0.3);
+    }
+
+    // =========================================================================
     //  FOREGROUND FOLIAGE LAYER
     // =========================================================================
 
@@ -4122,6 +4221,7 @@ GAME.Systems.Renderer = (function() {
         drawBaseTownFeatures(time);
         drawBaseCampus(time);
         drawRoad(time);
+        drawBuildingShadows(time);
         drawAllBuildings(state, time);
         drawSceneryDetails(time);
         drawEnvironmentProps(time);
@@ -4142,6 +4242,9 @@ GAME.Systems.Renderer = (function() {
 
         // PASS 2.5: Screen-edge foreground framing (screen-relative, over world)
         drawScreenEdgeFoliage(time);
+
+        // PASS 2.7: Atmospheric effects (screen-relative)
+        drawAtmosphere(time);
 
         // PASS 3: HUD (screen-relative, no translate)
         drawOverlay(state, time);
