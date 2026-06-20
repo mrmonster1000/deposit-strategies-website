@@ -300,6 +300,17 @@ window.GAME = window.GAME || {};
             Renderer.onMouseUp();
         });
 
+        // Mouse wheel zoom
+        canvas.addEventListener('wheel', function(e) {
+            if (currentScreen !== 'game') return;
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                Renderer.zoomIn();
+            } else {
+                Renderer.zoomOut();
+            }
+        }, { passive: false });
+
         // Keyboard scrolling
         document.addEventListener('keydown', function(e) {
             if (currentScreen !== 'game') return;
@@ -309,6 +320,12 @@ window.GAME = window.GAME || {};
                 Renderer.setCameraTarget(Renderer.getCameraX() + 200);
             } else if (e.key === 'Escape' && Renderer.isInPlacementMode()) {
                 Renderer.clearPlacementMode();
+            } else if (e.key === '=' || e.key === '+') {
+                Renderer.zoomIn();
+            } else if (e.key === '-' || e.key === '_') {
+                Renderer.zoomOut();
+            } else if (e.key === '0') {
+                Renderer.resetZoom();
             }
         });
     }
@@ -636,6 +653,13 @@ window.GAME = window.GAME || {};
             });
         }
 
+        // Setup zoom controls
+        var zoomIn = document.getElementById('btn-zoom-in');
+        var zoomOut = document.getElementById('btn-zoom-out');
+        var zoomReset = document.getElementById('btn-zoom-reset');
+        if (zoomIn) zoomIn.addEventListener('click', function() { Renderer.zoomIn(); });
+        if (zoomOut) zoomOut.addEventListener('click', function() { Renderer.zoomOut(); });
+        if (zoomReset) zoomReset.addEventListener('click', function() { Renderer.resetZoom(); });
     }
 
     // ---- ACTIONS ----

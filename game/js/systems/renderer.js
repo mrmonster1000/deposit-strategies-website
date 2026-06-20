@@ -18,7 +18,9 @@ GAME.Systems.Renderer = (function() {
         dragStartX: 0,
         dragStartCamX: 0,
         mouseX: 0,
-        mouseY: 0
+        mouseY: 0,
+        zoom: 1.0,
+        targetZoom: 1.0
     };
 
     // Placement mode state
@@ -189,13 +191,16 @@ GAME.Systems.Renderer = (function() {
     }
 
     function clampCamera() {
-        camera.x = Math.max(0, Math.min(WORLD_W - W, camera.x));
-        camera.targetX = Math.max(0, Math.min(WORLD_W - W, camera.targetX));
+        var viewW = W / camera.zoom;
+        camera.x = Math.max(0, Math.min(WORLD_W - viewW, camera.x));
+        camera.targetX = Math.max(0, Math.min(WORLD_W - viewW, camera.targetX));
     }
 
     function updateCamera() {
         camera.x += (camera.targetX - camera.x) * 0.12;
         if (Math.abs(camera.x - camera.targetX) < 0.5) camera.x = camera.targetX;
+        camera.zoom += (camera.targetZoom - camera.zoom) * 0.08;
+        if (Math.abs(camera.zoom - camera.targetZoom) < 0.005) camera.zoom = camera.targetZoom;
         clampCamera();
     }
 
@@ -3178,7 +3183,7 @@ GAME.Systems.Renderer = (function() {
 
         // Camera follows player
         if (cameraFollowPlayer && !camera.isDragging) {
-            camera.targetX = player.x - W / 2;
+            camera.targetX = player.x - W / (2 * camera.zoom);
         }
         updateCamera();
 
@@ -3186,8 +3191,12 @@ GAME.Systems.Renderer = (function() {
         drawSky(time);
         drawStars(time);
 
-        // PASS 2: World layer (translated by camera)
+        // PASS 2: World layer (zoomed and translated by camera)
         ctx.save();
+        var zoomPivotY = H;
+        ctx.translate(0, zoomPivotY);
+        ctx.scale(camera.zoom, camera.zoom);
+        ctx.translate(0, -zoomPivotY);
         ctx.translate(-camera.x, 0);
 
         drawOcean(time);
@@ -3511,10 +3520,28 @@ GAME.Systems.Renderer = (function() {
 
         // Camera API
         getCameraX: function() { return camera.x; },
-        setCameraX: function(x) { camera.x = Math.max(0, Math.min(WORLD_W - W, x)); camera.targetX = camera.x; },
-        setCameraTarget: function(x) { camera.targetX = Math.max(0, Math.min(WORLD_W - W, x)); },
-        screenToWorld: function(sx, sy) { return { x: sx + camera.x, y: sy }; },
-        worldToScreen: function(wx, wy) { return { x: wx - camera.x, y: wy }; },
+        setCameraX: function(x) { camera.x = Math.max(0, Math.min(WORLD_W - W / camera.zoom, x)); camera.targetX = camera.x; },
+        setCameraTarget: function(x) { camera.targetX = Math.max(0, Math.min(WORLD_W - W / camera.zoom, x)); },
+        screenToWorld: function(sx, sy) {
+            var pivotY = H;
+            return { x: sx / camera.zoom + camera.x, y: (sy - pivotY) / camera.zoom + pivotY };
+        },
+        worldToScreen: function(wx, wy) {
+            var pivotY = H;
+            return { x: (wx - camera.x) * camera.zoom, y: (wy - pivotY) * camera.zoom + pivotY };
+        },
+
+        // Zoom API
+        getZoom: function() { return camera.zoom; },
+        setZoom: function(z) {
+            var centerX = camera.x + W / (2 * camera.zoom);
+            camera.targetZoom = Math.max(0.35, Math.min(1.5, z));
+            camera.targetX = centerX - W / (2 * camera.targetZoom);
+            clampCamera();
+        },
+        zoomIn: function() { this.setZoom(camera.targetZoom * 1.2); },
+        zoomOut: function() { this.setZoom(camera.targetZoom / 1.2); },
+        resetZoom: function() { this.setZoom(1.0); },
 
         // Camera input handlers (call from game.js)
         onMouseDown: function(sx, sy) {
@@ -3526,7 +3553,7 @@ GAME.Systems.Renderer = (function() {
             camera.mouseX = sx;
             camera.mouseY = sy;
             if (camera.isDragging) {
-                var dx = camera.dragStartX - sx;
+                var dx = (camera.dragStartX - sx) / camera.zoom;
                 camera.targetX = camera.dragStartCamX + dx;
                 camera.x = camera.targetX;
                 clampCamera();
@@ -3538,7 +3565,7 @@ GAME.Systems.Renderer = (function() {
 
         // Placement mode API
         setPlacementMode: function(buildingId, isTown) {
-            placementMode = { buildingId: buildingId, isTown: isTown, worldX: camera.x + W / 2, canPlace: false };
+            placementMode = { buildingId: buildingId, isTown: isTown, worldX: camera.x + W / (2 * camera.zoom), canPlace: false };
         },
         updatePlacementCursor: function(worldX, canPlace) {
             if (placementMode) {

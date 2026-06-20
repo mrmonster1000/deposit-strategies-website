@@ -649,6 +649,32 @@ body {
     max-width: 260px;
 }
 
+#zoom-controls {
+    display: flex;
+    gap: 2px;
+    align-self: flex-end;
+}
+.zoom-btn {
+    font-family: var(--pixel-font);
+    font-size: 10px;
+    color: var(--text-primary);
+    background: rgba(10, 10, 26, 0.85);
+    border: 2px solid rgba(90, 90, 138, 0.6);
+    padding: 2px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    min-width: 28px;
+    text-align: center;
+}
+.zoom-btn:hover {
+    background: rgba(30, 30, 60, 0.9);
+    color: var(--text-highlight);
+    border-color: rgba(90, 90, 138, 0.9);
+}
+.zoom-btn:active {
+    background: rgba(50, 50, 80, 0.9);
+}
+
 #hud-log-toggle {
     font-size: 7px;
     color: var(--text-highlight);
