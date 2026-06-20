@@ -5,19 +5,19 @@
 ### Architecture
 - Pure HTML5 Canvas (960x540) + Vanilla JS, no dependencies
 - IIFE module pattern with `window.GAME` namespace
-- ~14,400 lines across 17 JS files
+- ~15,200 lines across 17 JS files
 - Real-time simulation (not turn-based), tick every 2s at 1x speed
 
 ### Content Totals
 | Content | Count |
 |---------|-------|
-| Story events | 107 |
-| Quips | 58 |
-| **Total events** | **165** |
+| Story events | 124 |
+| Quips | 61 |
+| **Total events** | **185** |
 | Crises | 26 (8 minor, 12 major, 6 global) |
 | Achievements | 22 |
-| Dialogue trees | 25 |
-| Town NPCs | 9 |
+| Dialogue trees | 29 |
+| Town NPCs | 11 |
 | Playable characters | 6 |
 | Campus buildings | 18 |
 | Town buildings | 11 |
@@ -40,7 +40,7 @@
 | 10 | Character Abilities | DONE | Passive/Active/Ultimate for all 6 characters |
 | 11 | Win/Lose Conditions | DONE | 4 victories + 4 defeats, endgame screen, 30 epilogues |
 | 12 | Save/Load | DONE | localStorage, full serialization, continue button |
-| 13 | Sound | DONE | Web Audio synth, 7 SFX, chiptune music loop |
+| 13 | Sound | DONE | Web Audio synth, 7 SFX, normal + crisis music themes (F minor 7/8) |
 | 14 | Tutorial | DONE | 10-step guided tutorial + 11 context-sensitive tips |
 | 15 | Camera/Zoom | DONE | Smooth zoom 0.35x-1.5x, pan, minimap, mouse wheel |
 | 16 | Renderer | DONE | 4650 lines, all buildings, characters, scenery, atmosphere |
@@ -49,6 +49,10 @@
 | 19 | Achievement System | DONE | 22 achievements, check/unlock engine, endgame display, toasts |
 | 20 | Sci-Fi Crisis Chain | DONE | 6 linked crises escalating from HAL to Convergence |
 | 21 | Pop Culture Layer | DONE | Classic sci-fi, music, celebrity, public disconnect themes |
+| 22 | Character Pop-Culture Quirks | DONE | 6 character-specific pop culture reaction events |
+| 23 | Cross-Character Convergence | DONE | Movie Night (6 variants) + Summit (5 variants) per leader |
+| 24 | Major NPC Visitors | DONE | Jensen, Eisner, Dimon — portraits, quotes, 8 dialogue trees |
+| 25 | Crisis Music Theme | DONE | Transcribed piano score (F minor 7/8), auto-switches on crisis/low safety |
 
 ---
 
@@ -113,26 +117,37 @@
 - Modified: state.js (achievements field), turns.js (check hook), game.js (toast + endgame display), index.html (script tags), crises.js (+6), events.js (+5)
 - Final totals: 165 events, 26 crises, 22 achievements
 
+### Gap Fill — Character Quirks, NPCs, Convergence ✅
+- **Character pop-culture quirks** (6 events): Elon/Hitchhiker's Guide, Sam/exponential film club, Yann/peer-reviews movies, Demis/Paddington 2 optimizer, Dario/Safety Playlist (Taylor Swift), Trump/ratings obsession
+- **Eisner & Dimon as full NPCs**: Portraits, 6 quotes each, 4 dialogue trees (franchise, storytelling, finance, systemic risk), wired to click handler
+- **Cross-character convergence** (11 events + 3 quips): Movie Night (6 variants per leader) + Abundance Summit (5 variants per leader) — same scenario, completely different experience per character
+- Totals: 185 events, 29 dialogues, 11 NPCs
+
+### Crisis Music Theme ✅
+- Transcribed piano score (F minor, 7/8 time, 95 BPM, arr. Anders Thue) into 44-bar chiptune melody with driving bass ostinato
+- Sound system supports theme switching via `Sound.setTheme('crisis'|'normal')`
+- Auto-switches to crisis theme on crisis trigger or safety < 35
+- Auto-reverts to normal theme on crisis resolution or safety > 45
+- Bass repeats to match melody length; sawtooth wave for darker tone
+
 ---
 
 ## Next Steps (Prioritized)
 
 ### High Impact — Gameplay Depth
 1. **Difficulty Levels** — Easy/Normal/Hard affecting crisis frequency, starting money, AI aggression, victory thresholds. Low effort, high replayability.
-2. **Character-Specific Pop Culture Quirks** — Each leader reacts differently to the same pop culture events (e.g., Elon quotes Hitchhiker's Guide, Dario hums Taylor Swift during crises). Some groundwork exists in characterSpecific events.
-3. **Cross-Character Convergence Events** — Events where 2+ AI leaders interact during the same scenario with different dialogue depending on who you're playing. Would add emergent storytelling.
+2. **Phase-Specific Music** — Different chiptune themes per game phase (Foundation=hopeful, Expansion=energetic, Transformation=complex, Legacy=epic). Crisis theme already exists.
 
 ### Medium Impact — Polish
-4. **Mobile Touch UX** — Touch input exists but building placement on mobile is awkward. Needs tap-to-select-then-tap-to-place flow.
-5. **Achievement Persistence** — Save unlocked achievements to localStorage so they persist across playthroughs. Add an achievements gallery on the title screen.
-6. **Art Quality Uplift** — Exterior props, character detail, building visual variety, final polish passes on the renderer.
-7. **Music Variety** — Additional chiptune tracks that change per phase or during crises.
+3. **Mobile Touch UX** — Touch input exists but building placement on mobile is awkward. Needs tap-to-select-then-tap-to-place flow.
+4. **Achievement Persistence** — Save unlocked achievements to localStorage so they persist across playthroughs. Add an achievements gallery on the title screen.
+5. **Art Quality Uplift** — Exterior props, character detail, building visual variety, final polish passes on the renderer.
 
 ### Nice-to-Have — Expansion Content
-8. **More NPCs** — Bob Iger (Eisner's rival), Lisa Su (AMD counter to Jensen), additional townsfolk with dialogue trees.
-9. **Branching Crisis Outcomes** — Crisis resolution affects which future crises/events can trigger (e.g., siding with Gerald in robot rights unlocks a Gerald advisor event later).
-10. **New Game+ Mode** — After first win, start with bonus resources but harder crises. Synergizes with Trump unlock mechanic.
-11. **Mod Support** — Document the event/crisis/NPC data formats so players can add their own content via JSON injection.
+6. **More NPCs** — Lisa Su (AMD counter to Jensen), additional townsfolk with dialogue trees.
+7. **Branching Crisis Outcomes** — Crisis resolution affects which future crises/events can trigger (e.g., siding with Gerald in robot rights unlocks a Gerald advisor event later).
+8. **New Game+ Mode** — After first win, start with bonus resources but harder crises. Synergizes with Trump unlock mechanic.
+9. **Mod Support** — Document the event/crisis/NPC data formats so players can add their own content via JSON injection.
 
 ---
 
