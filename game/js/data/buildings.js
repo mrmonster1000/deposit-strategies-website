@@ -370,5 +370,7 @@ GAME.DATA.BUILDING_CATEGORIES = {
     talent: { name: 'Talent', color: '#ff88ff', icon: '👥' },
     deployment: { name: 'Deployment', color: '#44ffdd', icon: '🚀' },
     cooperation: { name: 'Cooperation', color: '#ffdd44', icon: '🤝' },
-    special: { name: 'Special', color: '#ff4444', icon: '⭐' }
+    special: { name: 'Special', color: '#ff4444', icon: '⭐' },
+    community: { name: 'Community', color: '#88ddff', icon: '🏘' },
+    entertainment: { name: 'Entertainment', color: '#ffdd44', icon: '🎭' }
 };

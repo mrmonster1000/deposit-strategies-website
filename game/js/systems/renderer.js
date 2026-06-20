@@ -113,7 +113,7 @@ GAME.Systems.Renderer = (function() {
         { x: 4750, w: 340, name: 'Arcade' },
         { x: 5050, w: 400, name: 'Supermarket' },
         { x: 5400, w: 200, name: 'Church' },
-        { x: 5800, w: 300, name: 'Strip Club' },
+        { x: 5800, w: 300, name: 'Comedy Club' },
         { x: 7580, w: 270, name: 'Gun Shop' },
         { x: 7850, w: 500, name: 'Car Factory' },
         { x: 8300, w: 400, name: 'Motel' }
@@ -1345,6 +1345,22 @@ GAME.Systems.Renderer = (function() {
         drawWindows(bx, by + 14, bw, bh - 20, time, 980, '#eeeeff', '#4a4a58');
     }
 
+    function drawComedyClubUpgrade(bx, by, bw, bh, time) {
+        drawRect(bx, by, bw, bh, '#3a2040');
+        drawRect(bx + 1, by + 1, bw - 2, bh - 2, '#4a2850');
+        drawRect(bx - 1, by - 2, bw + 2, 4, '#2a1030');
+        for (var ml = bx; ml < bx + bw; ml += 5) {
+            var bulbOn = ((Math.floor(time * 0.005) + ml) % 3) === 0;
+            drawRect(ml, by - 1, 3, 2, bulbOn ? '#ffdd44' : '#2a1030');
+        }
+        ctx.font = '4px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffdd44';
+        ctx.textAlign = 'center';
+        ctx.fillText('HA HA', bx + bw / 2, by + 8);
+        drawRect(bx + bw / 2 - 3, by + bh - 10, 6, 10, '#2a1020');
+        drawWindows(bx, by + 12, bw, bh - 18, time, 870, '#ffcc44', '#2a1808');
+    }
+
     // Dispatch table: building type -> draw function
     var CAMPUS_DRAW = {
         small_lab: drawResearchLab,
@@ -1377,7 +1393,8 @@ GAME.Systems.Renderer = (function() {
         renewable_energy: drawRenewableEnergy,
         housing_development: drawHousing,
         town_beautification: drawTownBeautification,
-        medical_clinic: drawMedicalClinic
+        medical_clinic: drawMedicalClinic,
+        comedy_club: drawComedyClubUpgrade
     };
 
     // =========================================================================
@@ -1746,62 +1763,94 @@ GAME.Systems.Renderer = (function() {
         drawRect(x + bw - 3, by + 33, 1, 2, '#ff4040');
     }
 
-    function drawStripClub(x, time) {
+    function drawComedyClub(x, time) {
         var bw = 74, bh = 60;
         var by = BUILDING_FLOOR - bh;
         drawRect(x + 4, by + 4, bw, bh, 'rgba(0,0,0,0.3)');
-        // Dark exterior with pink accents
-        drawRect(x, by, bw, bh, '#2a1020');
-        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#3a1830');
-        drawRect(x + bw - 8, by, 8, bh, '#201018');
-        // Roof
-        drawRect(x - 2, by - 4, bw + 4, 6, '#1a0818');
-        drawRect(x - 1, by - 2, bw + 2, 2, '#2a1028');
-        // Chasing lights around roof
-        for (var rl = 0; rl < 10; rl++) {
-            var rlOn = ((Math.floor(time * 0.006) + rl) % 3) === 0;
-            drawRect(x + 4 + rl * 7, by - 3, 4, 2, rlOn ? '#ff44aa' : '#301020');
+        // Dark brick exterior
+        drawRect(x, by, bw, bh, '#2a1828');
+        drawRect(x + 2, by + 2, bw - 4, bh - 4, '#3a2838');
+        drawRect(x + bw - 8, by, 8, bh, '#221420');
+        // Brick texture
+        for (var br = 0; br < 6; br++) {
+            for (var bc = 0; bc < 5; bc++) {
+                var brickOff = (br % 2) * 7;
+                drawRect(x + 4 + bc * 14 + brickOff, by + 24 + br * 6, 11, 4, '#321828');
+            }
         }
-        // "FOXY'S" big neon sign
-        var pinkNeon = Math.sin(time * 0.006) > 0;
-        drawRect(x + 6, by + 6, bw - 12, 16, '#100810');
-        ctx.font = '8px "Press Start 2P", monospace';
-        ctx.fillStyle = pinkNeon ? '#ff44aa' : '#401028';
+        // Roof with marquee bulbs
+        drawRect(x - 3, by - 5, bw + 6, 7, '#1a0a20');
+        drawRect(x - 2, by - 3, bw + 4, 3, '#2a1830');
+        for (var ml = 0; ml < 12; ml++) {
+            var bulbPhase = ((Math.floor(time * 0.005) + ml) % 4);
+            var bulbColor = bulbPhase === 0 ? '#ffdd44' : bulbPhase === 1 ? '#ff4444' : bulbPhase === 2 ? '#44ddff' : '#301020';
+            drawRect(x - 1 + ml * 6.3, by - 4, 4, 3, bulbColor);
+        }
+        // "COMEDY" neon sign
+        var neonPulse = Math.sin(time * 0.005) > -0.2;
+        drawRect(x + 4, by + 4, bw - 8, 16, '#0a0810');
+        ctx.font = '7px "Press Start 2P", monospace';
+        ctx.fillStyle = neonPulse ? '#ffdd44' : '#403018';
         ctx.textAlign = 'center';
-        ctx.fillText("FOXY'S", x + bw / 2, by + 12);
-        if (pinkNeon) {
-            ctx.fillStyle = 'rgba(255, 68, 170, 0.08)';
-            ctx.fillRect(x - 4, by - 4, bw + 8, 30);
+        ctx.fillText('COMEDY', x + bw / 2, by + 10);
+        if (neonPulse) {
+            ctx.fillStyle = 'rgba(255, 220, 68, 0.08)';
+            ctx.fillRect(x - 4, by - 2, bw + 8, 24);
         }
-        // Neon cocktail glass
-        var glassOn = Math.sin(time * 0.004 + 1) > 0;
-        if (glassOn) {
-            drawRect(x + bw - 18, by + 8, 8, 1, '#ff44aa');
-            drawRect(x + bw - 16, by + 9, 4, 1, '#ff44aa');
-            drawRect(x + bw - 15, by + 10, 2, 4, '#ff44aa');
-            drawRect(x + bw - 17, by + 14, 6, 1, '#ff44aa');
+        // Neon microphone icon
+        var micOn = Math.sin(time * 0.004 + 1.5) > 0;
+        if (micOn) {
+            drawRect(x + bw - 16, by + 6, 4, 6, '#ffdd44');
+            drawRect(x + bw - 17, by + 5, 6, 2, '#ffdd44');
+            drawRect(x + bw - 15, by + 12, 2, 4, '#ffdd44');
+            drawRect(x + bw - 17, by + 16, 6, 1, '#ffdd44');
         }
-        // Blacked-out windows with curtains
-        drawRect(x + 6, by + 28, 14, 12, '#0a0408');
-        drawRect(x + 7, by + 29, 12, 10, '#140810');
-        drawRect(x + 7, by + 29, 3, 10, '#3a1020');
-        drawRect(x + bw - 22, by + 28, 14, 12, '#0a0408');
-        drawRect(x + bw - 21, by + 29, 12, 10, '#140810');
-        // Heavy door with velvet rope
-        drawRect(x + bw / 2 - 8, by + bh - 28, 16, 28, '#101010');
-        drawRect(x + bw / 2 - 6, by + bh - 26, 12, 26, '#181018');
-        // Velvet rope
-        drawRect(x + bw / 2 - 14, BUILDING_FLOOR - 2, 2, 8, '#808040');
-        drawRect(x + bw / 2 + 12, BUILDING_FLOOR - 2, 2, 8, '#808040');
-        drawRect(x + bw / 2 - 12, BUILDING_FLOOR - 1, 24, 1, '#cc2040');
-        // Bouncer (big person, detailed)
-        drawRect(x + bw / 2 + 16, BUILDING_FLOOR - 22, 8, 6, '#d0a060');
-        drawRect(x + bw / 2 + 17, BUILDING_FLOOR - 19, 6, 2, '#101010');
-        drawRect(x + bw / 2 + 15, BUILDING_FLOOR - 16, 10, 10, '#101010');
-        drawRect(x + bw / 2 + 14, BUILDING_FLOOR - 14, 3, 6, '#101010');
-        drawRect(x + bw / 2 + 25, BUILDING_FLOOR - 14, 3, 6, '#101010');
-        drawRect(x + bw / 2 + 16, BUILDING_FLOOR - 6, 4, 7, '#101010');
-        drawRect(x + bw / 2 + 21, BUILDING_FLOOR - 6, 4, 7, '#101010');
+        // Windows with warm stage glow
+        drawRect(x + 6, by + 24, 14, 12, '#1a1008');
+        drawRect(x + 7, by + 25, 12, 10, '#2a1808');
+        var stageGlow = Math.sin(time * 0.003) * 0.06 + 0.12;
+        ctx.fillStyle = 'rgba(255, 200, 60, ' + stageGlow + ')';
+        ctx.fillRect(x + 7, by + 25, 12, 10);
+        drawRect(x + bw - 22, by + 24, 14, 12, '#1a1008');
+        drawRect(x + bw - 21, by + 25, 12, 10, '#2a1808');
+        ctx.fillStyle = 'rgba(255, 200, 60, ' + stageGlow + ')';
+        ctx.fillRect(x + bw - 21, by + 25, 12, 10);
+        // Door with awning
+        drawRect(x + bw / 2 - 8, by + bh - 26, 16, 26, '#1a1010');
+        drawRect(x + bw / 2 - 6, by + bh - 24, 12, 24, '#2a1818');
+        drawRect(x + bw / 2 + 4, by + bh - 14, 1, 2, '#c0a040');
+        drawRect(x + bw / 2 - 12, by + bh - 30, 24, 4, '#4a2030');
+        drawRect(x + bw / 2 - 12, by + bh - 28, 24, 2, '#3a1828');
+        // "OPEN MIC TONIGHT" small sign by door
+        drawRect(x + bw / 2 + 10, by + bh - 18, 20, 10, '#2a1808');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffcc44';
+        ctx.textAlign = 'center';
+        ctx.fillText('OPEN MIC', x + bw / 2 + 20, by + bh - 14);
+        ctx.fillText('TONIGHT', x + bw / 2 + 20, by + bh - 10);
+        // Spotlight beam from roof (animated sweep)
+        var spotAngle = Math.sin(time * 0.002) * 0.3;
+        ctx.save();
+        ctx.globalAlpha = 0.04;
+        ctx.fillStyle = '#ffdd44';
+        ctx.beginPath();
+        ctx.moveTo(x + bw / 2, by - 5);
+        ctx.lineTo(x + bw / 2 - 20 + spotAngle * 40, by - 30);
+        ctx.lineTo(x + bw / 2 + 20 + spotAngle * 40, by - 30);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        // Steps
+        drawRect(x + bw / 2 - 10, BUILDING_FLOOR - 3, 20, 3, '#3a2830');
+        drawRect(x + bw / 2 - 8, BUILDING_FLOOR, 16, 2, '#3a2830');
+        // A-frame sandwich board outside
+        drawRect(x - 6, BUILDING_FLOOR - 14, 12, 14, '#3a3020');
+        drawRect(x - 5, BUILDING_FLOOR - 13, 10, 12, '#4a4030');
+        ctx.font = '3px "Press Start 2P", monospace';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('LIVE', x, BUILDING_FLOOR - 9);
+        ctx.fillText('LAUGHS', x, BUILDING_FLOOR - 5);
     }
 
     function drawSupermarket(x, time) {
@@ -2100,7 +2149,7 @@ GAME.Systems.Renderer = (function() {
         if (isVisible(4500, 290)) drawScaledBuilding(drawVideoShop, 4500, time);
         if (isVisible(4750, 340)) drawScaledBuilding(drawSeedyArcade, 4750, time);
         if (isVisible(5050, 400)) drawScaledBuilding(drawSupermarket, 5050, time);
-        if (isVisible(5800, 300)) drawScaledBuilding(drawStripClub, 5800, time);
+        if (isVisible(5800, 300)) drawScaledBuilding(drawComedyClub, 5800, time);
 
         // Harbor zone
         if (isVisible(7580, 270)) drawScaledBuilding(drawGunShop, 7580, time);
@@ -2445,6 +2494,7 @@ GAME.Systems.Renderer = (function() {
         { id: 'reverend_james', x: 5450, name: 'Rev. James', portrait: { skinTone: '#f0d0a0', hairColor: '#505050', hairStyle: 'short', shirtColor: '#202020', glasses: true, beard: false } },
         { id: 'old_arthur', x: 7700, name: 'Arthur', portrait: { skinTone: '#e8c090', hairColor: '#c0c0c0', hairStyle: 'receding', shirtColor: '#606040', glasses: true, beard: true } },
         { id: 'frank_fisherman', x: 9800, name: 'Frank', portrait: { skinTone: '#d0a060', hairColor: '#888888', hairStyle: 'receding', shirtColor: '#404060', glasses: false, beard: true } },
+        { id: 'comedian_wright', x: 5870, name: 'Steven', portrait: { skinTone: '#e8c8a0', hairColor: '#8a7060', hairStyle: 'swept', shirtColor: '#404060', glasses: true, beard: false } },
     ];
 
     // =========================================================================

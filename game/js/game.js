@@ -376,6 +376,10 @@ window.GAME = window.GAME || {};
             showToast(quip.text, 'info');
         });
 
+        State.on('comedianJoke', function(joke) {
+            showToast('Steven Wright: "' + joke.text + '"', 'info');
+        });
+
         State.on('logAdded', function(entry) {
             var logEl = document.getElementById('log-entries');
             var div = document.createElement('div');

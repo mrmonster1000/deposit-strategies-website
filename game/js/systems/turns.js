@@ -9,6 +9,8 @@ GAME.Systems.Simulation = (function() {
     var TICK_INTERVAL = 2000; // ms per game tick at 1x speed
     var lastQuipTime = 0;
     var QUIP_INTERVAL = 25000; // advisor quip every 25 seconds real-time
+    var lastJokeTime = 0;
+    var JOKE_INTERVAL = 40000; // comedian joke every 40 seconds real-time
 
     function update(dt) {
         var state = State.get();
@@ -27,6 +29,13 @@ GAME.Systems.Simulation = (function() {
         if (lastQuipTime >= QUIP_INTERVAL) {
             lastQuipTime = 0;
             maybeShowQuip();
+        }
+
+        // Comedian jokes
+        lastJokeTime += dt;
+        if (lastJokeTime >= JOKE_INTERVAL) {
+            lastJokeTime = 0;
+            maybeShowJoke();
         }
     }
 
@@ -431,6 +440,17 @@ GAME.Systems.Simulation = (function() {
 
         var quip = quips[Math.floor(Math.random() * quips.length)];
         State.emit('advisorQuip', quip);
+    }
+
+    function maybeShowJoke() {
+        var state = State.get();
+        if (!state || state.paused) return;
+
+        var comedian = GAME.DATA.TOWN && GAME.DATA.TOWN.townsfolk && GAME.DATA.TOWN.townsfolk.comedian_wright;
+        if (!comedian || !comedian.quotes || comedian.quotes.length === 0) return;
+
+        var joke = comedian.quotes[Math.floor(Math.random() * comedian.quotes.length)];
+        State.emit('comedianJoke', { name: comedian.name, text: joke });
     }
 
     function setSpeed(speed) {
