@@ -126,8 +126,9 @@ window.GAME = window.GAME || {};
         comps.forEach(function(comp) {
             var row = document.createElement('div');
             row.className = 'competitor-row';
+            var safetyColor = comp.safety >= 60 ? '#88ff88' : comp.safety >= 40 ? '#ffaa44' : '#ff4444';
             row.innerHTML = '<span class="comp-name" style="color:' + comp.color + '">' + comp.shortName + '</span>' +
-                '<span class="comp-adp">ADP: ' + comp.adp + '</span>';
+                '<span class="comp-detail"><span class="comp-adp">ADP:' + comp.adp + '</span> <span style="color:' + safetyColor + '">S:' + comp.safety + '</span></span>';
             list.appendChild(row);
         });
     }

@@ -231,13 +231,13 @@ GAME.Systems.Simulation = (function() {
             var charData = GAME.DATA.CHARACTERS[id];
             if (!charData) continue;
 
-            // Competitors grow at their own pace
+            // Baseline passive growth (small — main growth comes from AI strategy actions)
             var growthRate = (charData.multipliers.capability + charData.multipliers.deployment) / 2;
-            comp.adp += 2 * growthRate * (1 + state.phase * 0.3);
-            comp.safety += (charData.multipliers.safety - 1) * 0.5;
+            comp.adp += 0.5 * growthRate * (1 + state.phase * 0.2);
+            comp.safety += (charData.multipliers.safety - 1) * 0.3;
             comp.safety = Math.max(20, Math.min(95, comp.safety));
 
-            // Relationship drift
+            // Relationship drift toward neutral
             if (comp.relationship > 50) comp.relationship -= 0.1;
             if (comp.relationship < 50) comp.relationship += 0.1;
         }
