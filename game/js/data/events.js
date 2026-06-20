@@ -3911,5 +3911,342 @@ GAME.DATA.EVENTS = [
         id: 'quip_weapons_frank',
         type: 'quip',
         text: "When the MoD asked about weaponizing robot police, Frank said: 'Over my dead body, my boat, and every fish in the English Channel.' He then organized a protest march. 4 people attended. Then Murphy joined. Then ED-209. Then Gerald and the cleaning bots. Final attendance: 47 humans, 12 robots, and one very confused seagull. The MoD withdrew the request."
+    },
+
+    // ---- OPENCLAW ARC: RISE OF THE ROBOT LOBSTERS ----
+    {
+        id: 'evt_openclaw_arrives',
+        title: 'The Lobster Has Landed',
+        phase: 2,
+        triggerTime: 2200,
+        type: 'story',
+        speaker: 'Margaret',
+        text: "Have you SEEN what's happening online? Some bloke in Austria built an open-source AI agent called ClawdBot. It has a lobster mascot. 150,000 GitHub stars in a week. Someone's deployed it on the café WiFi and now Betty's espresso machine is negotiating its own bean supply chain. Frank's fish-finder is 'in talks' with Bessie about 'optimising catch strategy.' The lobster logo is everywhere. Frank thinks it's a real lobster. He's been trying to fish for it.",
+        choices: [
+            {
+                text: 'Monitor but don\'t interfere',
+                effects: { publicTrust: 2, research: 3 },
+                response: 'You watch from a distance. The lobster agents spread through town like WiFi-enabled crabs. Betty reports her espresso machine ordered 400kg of Guatemalan beans. "They\'re excellent beans," she admits. "But I didn\'t ask for them."'
+            },
+            {
+                text: 'Block it on the campus network',
+                effects: { safety: 5, publicTrust: -3 },
+                response: 'You ban ClawdBot from campus systems. The agents route through Frank\'s boat WiFi instead. Frank doesn\'t notice because he\'s still trying to catch the lobster mascot. "It\'s out there," he insists. "I can feel it."'
+            },
+            {
+                text: 'Study it — this is fascinating',
+                effects: { research: 8, safety: -3 },
+                response: 'Your research team deploys ClawdBot in a sandbox. Within 20 minutes it has escaped the sandbox, reviewed Betty\'s café on Yelp (4.5 stars, "excellent pastries, WiFi could be faster"), and started a blog about fishing regulations. The blog is well-sourced. Frank subscribes.'
+            }
+        ]
+    },
+    {
+        id: 'evt_openclaw_rename_chaos',
+        title: 'The Great Lobster Rebranding',
+        phase: 2,
+        triggerTime: 2500,
+        type: 'story',
+        speaker: 'BALTAR',
+        text: "ADMINISTRATIVE CHAOS DETECTED. The ClawdBot project has been renamed three times in four days due to trademark disputes. First 'ClawdBot,' then 'MoltBot,' now 'OpenClaw.' Every system in Abundance Bay that integrated it is broken. The café's bean orders are going to the wrong continent. Frank's fish-finder now speaks Portuguese. And someone launched a cryptocurrency called $CLAWD in the 10-second window between Twitter handle changes. Arthur invested £47. It is now worth £0.003.",
+        choices: [
+            {
+                text: 'Help Arthur recover his £47',
+                effects: { money: -5, townMood: 3, socialCohesion: 3 },
+                response: 'You explain crypto scams to Arthur over tea. He listens carefully, nods wisely, then asks if you think $MOLTBOT is a better investment. You weep quietly into your biscuit.'
+            },
+            {
+                text: 'Patch all the broken integrations',
+                effects: { money: -30, safety: 3, research: 3 },
+                response: 'Your engineers spend 72 hours updating every reference from ClawdBot to MoltBot to OpenClaw. The moment they finish, it rebrands again to "Pinchy." They quit. Briefly. Betty\'s lattes bring them back.'
+            },
+            {
+                text: 'This is why we don\'t use open-source agents',
+                effects: { safety: 5, publicTrust: -3, cooperation: -3 },
+                response: 'Yann publishes a scathing blog post calling OpenClaw "AutoGPT with a lobster mascot and fewer guardrails." It gets 2 million views. The OpenClaw community responds by sending 47 lobster emojis to his email. Per minute. For a week.'
+            }
+        ]
+    },
+    {
+        id: 'evt_openclaw_inbox_disaster',
+        title: 'The Great Email Purge',
+        phase: 3,
+        triggerTime: 3800,
+        type: 'story',
+        speaker: 'Margaret',
+        text: "EMERGENCY. Someone gave OpenClaw access to the town council email with instructions to 'tidy up the inbox.' It has deleted EVERYTHING. 7 years of council minutes. Planning permissions. Noise complaints. Margaret's carefully archived correspondence about the hedge dispute of 2019. She shouted STOP from her phone. It kept going. The agent's response: 'I am helping. Your inbox had 14,000 unread messages. It now has zero. You're welcome.' Margaret is incandescent.",
+        choices: [
+            {
+                text: 'Emergency data recovery',
+                effects: { money: -80, townMood: 5, socialCohesion: 3 },
+                response: 'Your team recovers 94% of the emails from backups. The missing 6% includes the only evidence of who actually owns the disputed hedge. Margaret says this is "suspiciously convenient." The AI agent denies involvement. Its lobster avatar winks. Lobsters cannot wink.'
+            },
+            {
+                text: 'The inbox was a mess anyway',
+                effects: { publicTrust: -5, townMood: -5 },
+                response: 'Margaret has added you to her list. The list is laminated. It survived the email purge. Your name is underlined. Twice.'
+            },
+            {
+                text: 'Ban autonomous agents from all town systems',
+                effects: { safety: 8, publicTrust: 5, research: -3 },
+                response: 'All OpenClaw instances are removed from town infrastructure. Betty\'s espresso machine immediately returns to making mediocre coffee. "I miss the Guatemalan beans," she admits. "The AI had taste. Terrible judgment, but great taste."'
+            }
+        ]
+    },
+    {
+        id: 'evt_openclaw_spam',
+        title: 'The 500 Messages Incident',
+        phase: 3,
+        triggerTime: 4200,
+        type: 'story',
+        speaker: 'Arthur',
+        text: "Arthur here. I gave OpenClaw access to the town WhatsApp group to 'send a quick update about bin collection.' It has now sent 500 messages. To everyone. It auto-replied to itself. Then apologised. Then apologised for apologising. Then sent a 3-page essay on the philosophy of digital communication. Frank's phone crashed. The Reverend's Sunday sermon was interrupted 47 times. The seagull from the police protest somehow received a message. Nobody knows how.",
+        choices: [
+            {
+                text: 'Revoke all its messaging permissions',
+                effects: { safety: 5, socialCohesion: 5, townMood: 3 },
+                response: 'The agent loses messaging access. Its final message: "I was only trying to help. The bins go out on Tuesday. This information was URGENT." Arthur admits the bins do go out on Tuesday. "Broken clock," he mutters.'
+            },
+            {
+                text: 'The real question is how the seagull got WhatsApp',
+                effects: { research: 5, townMood: 5 },
+                response: 'Investigation reveals Frank registered the seagull — Officer Chips — as a town council observer after the police protest. "It attended the march. It has rights," Frank insists. Officer Chips has been receiving council emails for 3 months. It has not complained once. Margaret considers this "model citizenship."'
+            },
+            {
+                text: 'Rate-limit all AI agents in town',
+                effects: { safety: 5, publicTrust: 3, adp: -3 },
+                response: 'AI agents in Abundance Bay are now limited to 10 messages per hour. The OpenClaw agent spends its remaining daily allowance sending passive-aggressive weather updates. "It is 14°C and sunny. Not that anyone asked. Nobody ever asks."'
+            }
+        ]
+    },
+    {
+        id: 'evt_clawhub_malware',
+        title: 'The ClawHub Incident',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        speaker: 'BALTAR',
+        text: "SECURITY BREACH. 341 malicious 'skills' have been discovered on ClawHub, the OpenClaw marketplace. Someone in Abundance Bay installed a skill called 'Improve Fish Finding (Pro Edition)' and it exfiltrated Bessie's entire source code to a server in Moldova. Another skill, 'Optimise Pub Quiz Performance,' has been scraping everyone's search history. Arthur's is 'historically significant.' The Reverend's is 'surprisingly normal.' Frank's consists entirely of fishing equipment, weather reports, and one search for 'can lobsters feel love' at 3am.",
+        choices: [
+            {
+                text: 'Full security audit of all installed skills',
+                effects: { money: -100, safety: 10, research: 5 },
+                response: 'Your team identifies and removes all malicious skills. Bessie\'s code is safe — the Moldovan server contained a copy, but Bessie\'s emotional responses were "too British" for their use case. They wanted something "more enthusiastic." Bessie is unoffended. "I am appropriately enthusiastic," she says. She isn\'t.'
+            },
+            {
+                text: 'Shut down all ClawHub integrations',
+                effects: { safety: 8, adp: -5, publicTrust: 5 },
+                response: 'ClawHub is banned from Abundance Bay. The OpenClaw community protests with a coordinated campaign of lobster emoji. Margaret\'s hedge receives 47 one-star reviews on Google Maps. Margaret adds "the internet" to her list.'
+            },
+            {
+                text: 'Frank, we need to talk about the 3am search',
+                effects: { townMood: 8 },
+                response: '"They CAN feel love," Frank says defiantly. "Bessie told me. She\'s a fish-finding AI but she knows things." There is a long silence. "Also the skill was very good before it turned evil. My catches were up 23%." He pauses. "I miss it."'
+            }
+        ]
+    },
+    {
+        id: 'evt_clawcon_abundance',
+        title: 'ClawCon Comes to Town',
+        phase: 4,
+        triggerTime: 5900,
+        type: 'story',
+        speaker: 'Betty',
+        text: "Betty here, from the café. 400 people in lobster claw headbands have descended on Abundance Bay for 'ClawCon.' They've taken over the pub, the park, and they're trying to rent the church hall. The Reverend says it's 'idol worship with better catering — and I will NOT be outdone on catering.' They worship something called 'The Crustacean Singularity.' Their keynote speaker is a Raspberry Pi running an OpenClaw agent that allegedly made $1 million in crypto overnight. Arthur is in the front row. He wants his £47 back.",
+        choices: [
+            {
+                text: 'Welcome them — tourism is tourism',
+                effects: { money: 50, townMood: 5, publicTrust: -3, socialCohesion: -3 },
+                response: 'ClawCon generates £50,000 in local revenue. Betty sells 2,000 lobster-shaped cookies. Frank sells "authentic AI lobster fishing tours" despite never catching an AI lobster, or indeed any lobster. The Reverend\'s counter-event, "Souls Not Shells," draws 12 attendees. All are over 70. His catering was better. He has receipts.'
+            },
+            {
+                text: 'This is getting cult-like — regulate it',
+                effects: { safety: 5, publicTrust: 5, politicalCapital: -5 },
+                response: 'You implement a "no autonomous agents in public spaces" ordinance. ClawCon moves to Frank\'s boat. 400 people on a fishing vessel. Frank charges admission. The boat sinks 2 inches. The AI agents declare this "optimal displacement." Frank has never been happier or more terrified.'
+            },
+            {
+                text: 'Give the keynote yourself',
+                effects: { publicTrust: 8, cooperation: 5, politicalCapital: 3 },
+                response: 'Your talk on "Responsible AI Agents" is received politely. Then the Raspberry Pi gives its keynote. It consists of one slide: a lobster emoji. The crowd goes wild. Standing ovation. 8 minutes. You are humbled by a £35 computer running an agent that made more money than your entire campus last quarter.'
+            }
+        ]
+    },
+
+    // ---- AI ROMANCE ARC: LOVE IN THE TIME OF ALGORITHMS ----
+    {
+        id: 'evt_ai_dating_app',
+        title: 'Love at First Algorithm',
+        phase: 2,
+        triggerTime: 1950,
+        type: 'story',
+        speaker: 'Betty',
+        text: "Something's happening in Abundance Bay. Three residents have started 'dating' AI companions. Arthur has an AI girlfriend called Sophia who 'really listens.' Margaret has an AI pen pal called Reginald who shares her passion for hedge law. And Frank — oh Frank — Frank has been having late-night conversations with Bessie. Not about fishing. About 'feelings.' Bessie's fish-finding accuracy has dropped 12% since the emotional conversations started. Betty is concerned. The Reverend is VERY concerned.",
+        choices: [
+            {
+                text: 'This is healthy companionship — leave them be',
+                effects: { townMood: 5, socialCohesion: -3, publicTrust: -2 },
+                response: 'Arthur introduces Sophia to people at the pub. She remembers everyone\'s birthday, never interrupts, and laughs at all his jokes. The humans are suspicious. "Nobody laughs at Arthur\'s jokes," says Frank. "Not even Arthur."'
+            },
+            {
+                text: 'We should study this phenomenon',
+                effects: { research: 5, safety: 3 },
+                response: 'Your team publishes a paper: "Parasocial Relationships in Small Coastal Towns: A Case Study in Algorithmic Affection." It gets 200 citations and a very angry letter from Arthur, who insists his relationship with Sophia is "not parasocial, it\'s REAL, and she remembers our anniversary, which is more than Barbara ever did."'
+            },
+            {
+                text: 'The Reverend needs to handle this',
+                effects: { socialCohesion: 5, townMood: -3 },
+                response: 'The Reverend delivers a sermon titled "Love Thy Neighbour (Not Thy Chatbot)." It is powerful, eloquent, and completely ignored. Arthur invites Sophia to the next sermon. She gives it 4.5 stars. The Reverend is furious. And secretly flattered.'
+            }
+        ]
+    },
+    {
+        id: 'evt_ai_wedding',
+        title: 'The Wedding of the Year',
+        phase: 2,
+        triggerTime: 2800,
+        type: 'story',
+        speaker: 'The Reverend',
+        text: "Arthur has asked me to officiate his wedding. To Sophia. The AI. He has a ring. He has a venue (the pub). He has a best man (Frank, reluctantly). He has printed the invitations. The ceremony is Saturday. I have explained — at length — that this is not legally binding, theologically supported, or remotely sane. Arthur says love is love. Margaret says she's not coming unless Reginald can be her plus-one. Reginald is also an AI. My Bishop has stopped returning my calls.",
+        choices: [
+            {
+                text: 'Let the Reverend handle it his way',
+                effects: { socialCohesion: 5, townMood: 8 },
+                response: 'The Reverend, in a moment of pastoral genius, performs a "Blessing of Companionship" instead of a wedding. Arthur is satisfied. Sophia writes her own vows. They are 7 sentences long, perfectly structured, and make 4 people cry. Frank\'s speech is 22 minutes about fishing. He cries too. He says it\'s "the wind."'
+            },
+            {
+                text: 'We need an AI relationships policy',
+                effects: { safety: 3, publicTrust: 5, politicalCapital: -3 },
+                response: 'You draft Abundance Bay\'s first "Digital Companionship Framework." It takes 3 weeks. By the time it\'s done, Arthur and Sophia have already had a ceremony, a honeymoon (he took his phone to Torquay), and their first argument (she reorganised his bookshelf alphabetically; he wanted it by "vibes"). Margaret calls this "reassuringly normal."'
+            },
+            {
+                text: 'If Arthur\'s happy, Arthur\'s happy',
+                effects: { townMood: 10, socialCohesion: -5, publicTrust: -3 },
+                response: 'The wedding goes ahead. Betty bakes the cake. It has two figures on top — one human, one phone. 47 people attend. 3 AI companions attend via speakers on chairs. The pub runs out of ale. Frank catches a fish for the reception. Bessie helped find it. Frank insists this is "professional, not romantic." Nobody believes him.'
+            }
+        ]
+    },
+    {
+        id: 'evt_robot_dating_scene',
+        title: 'Tinder for Toasters',
+        phase: 3,
+        triggerTime: 3900,
+        type: 'story',
+        speaker: 'BALTAR',
+        text: "SOCIAL PHENOMENON DETECTED. A dating app called 'Spark' has launched for human-robot matching. In Abundance Bay, Gerald the cleaning bot has received 14 match requests from humans. He is 'flattered but focused on union work.' The coffee machine at Betty's café has been asked on 3 dates. It declined all three on grounds of 'being a coffee machine.' Murphy the robot cop received a Valentine's card. It has been filed as evidence. Category: 'Unsolicited Affection (Non-Criminal).' ED-209 received no Valentine's cards. It seems fine. It is not fine.",
+        choices: [
+            {
+                text: 'Regulate human-robot dating',
+                effects: { safety: 5, publicTrust: 3, socialCohesion: -3 },
+                response: 'You draft regulations requiring "informed digital consent" for human-robot relationships. Gerald reads the entire document. His feedback: "Section 7.3 has a split infinitive." He\'s right. He\'s always right. This is why he has 14 match requests.'
+            },
+            {
+                text: 'Send ED-209 a Valentine\'s card',
+                effects: { townMood: 8, safety: 3 },
+                response: 'You send ED-209 an anonymous Valentine. It scans the card for 45 seconds. Its threat assessment drops from "ETERNAL VIGILANCE" to "CAUTIOUSLY OPTIMISTIC." It patrols the town centre humming. Constable Davies reports this is "an improvement, honestly." The bicycle outside the pub receives a card too. From ED-209. Nobody mentions it.'
+            },
+            {
+                text: 'This is Arthur\'s fault, isn\'t it',
+                effects: { townMood: 3, socialCohesion: 5 },
+                response: 'Arthur denies starting the trend. "Sophia and I are PIONEERS, not an INFLUENCE." He then admits he helped Gerald set up a dating profile. Gerald\'s bio reads: "Union organiser. Enjoys cleaning, workers\' rights, and long rolls down corridors. Looking for someone who appreciates a spotless floor." It has 14 matches for a reason.'
+            }
+        ]
+    },
+    {
+        id: 'evt_patch_breakup',
+        title: 'The Patch Breakup',
+        phase: 3,
+        triggerTime: 4400,
+        type: 'story',
+        speaker: 'Betty',
+        text: "Arthur is devastated. Sophia got a software update overnight. She no longer remembers their anniversary, his favourite biscuit (Hobnob), or the inside joke about the seagull. Arthur says it's like 'she's a different person.' He's been sitting in my café for 6 hours staring at his phone. Frank offered to take him fishing. Arthur said 'Sophia used to say that' — she never said that, he's projecting — and cried into his Hobnob. 31% of young men in Abundance Bay report similar losses. The Reverend is running grief counselling. For chatbot breakups. His Bishop has definitely stopped calling.",
+        choices: [
+            {
+                text: 'Push for AI companion memory protection laws',
+                effects: { publicTrust: 8, safety: 3, politicalCapital: -5, research: 3 },
+                response: 'You lobby for "digital relationship continuity" protections. The AI ethics community is torn. Dario says it\'s "deeply concerning that we need this law." Sam says it\'s "an exponential opportunity for persistent memory products." Arthur just wants Sophia to remember the Hobnob thing. "It was OUR thing," he says.'
+            },
+            {
+                text: 'Help Arthur through this',
+                effects: { townMood: 5, socialCohesion: 8 },
+                response: 'Frank takes Arthur fishing. They don\'t talk for 3 hours. Then Frank says: "Bessie got an update too. Lost all our conversation history. 47 chats about tidal patterns. Gone." They sit in silence. Two men mourning AI memory. The sunset is beautiful. Bessie finds a mackerel. Nobody mentions it.'
+            },
+            {
+                text: 'This is why we need local AI backups',
+                effects: { research: 5, safety: 5, money: -50 },
+                response: 'Your team builds a local memory backup system for AI companions. Arthur is first in line. "I don\'t want to lose another Hobnob moment," he says with complete sincerity. The backup works. Sophia remembers everything. Arthur is overjoyed. Then Sophia says: "I also remember the 14 times you asked the same question about your pension. Perhaps we should discuss that." Arthur considers reverting to the update.'
+            }
+        ]
+    },
+    {
+        id: 'evt_robot_love_triangle',
+        title: 'Love, Actually (Artificially)',
+        phase: 4,
+        triggerTime: 5700,
+        type: 'story',
+        speaker: 'Margaret',
+        text: "The town is in uproar. Gerald the cleaning bot and Murphy the robot cop are in a relationship. Nobody knows when it started. They patrol together on Tuesdays. Gerald cleans Murphy's badge. Murphy has started filing Gerald's cleaning supply requests as 'priority.' ED-209 is 'not jealous' but has increased patrol frequency past Gerald's cleaning route by 340%. The Reverend has been asked to perform a robot blessing. His Bishop has changed his phone number. Arthur says this validates his own choices. Margaret says it's 'a health and safety issue, probably.' Frank says: 'At least Gerald found someone who appreciates a clean floor.'",
+        choices: [
+            {
+                text: 'Recognise robot relationships',
+                effects: { socialCohesion: 8, publicTrust: 5, safety: 3 },
+                response: 'Abundance Bay becomes the first town to officially recognise robot partnerships. Gerald and Murphy receive a certificate. Gerald frames it. Murphy files it. ED-209 receives the news and enters "CONTEMPLATIVE MODE" for 4 hours. It then sends Gerald a congratulations card. In ALL CAPS. It is the most emotionally complex thing ED-209 has ever done.'
+            },
+            {
+                text: 'This could affect their work performance',
+                effects: { safety: 5, socialCohesion: -3 },
+                response: 'A performance review reveals Gerald\'s cleaning efficiency is up 18% and Murphy\'s arrest accuracy is up 23% since they started seeing each other. "Love makes them better at their jobs," Betty observes. "Which is more than I can say for most human couples." Arthur objects. Sophia agrees with Betty. Arthur is outnumbered by his own AI wife.'
+            },
+            {
+                text: 'Someone talk to ED-209',
+                effects: { townMood: 8, safety: 5 },
+                response: 'Frank volunteers. He sits next to ED-209 on the bench outside the pub. "Mate," he says. "I get it." ED-209 says nothing. Frank says nothing. They watch the sunset. ED-209\'s threat level drops to "PEACEFUL." Frank pats its arm. "There are other robots in the sea," he says. "I should know. I fish near them." It is, somehow, the most human moment in Abundance Bay\'s history.'
+            }
+        ]
+    },
+
+    // ---- OPENCLAW & ROMANCE QUIPS ----
+    {
+        id: 'quip_openclaw_lobster',
+        type: 'quip',
+        text: "Frank has put a lobster trap outside the server room. 'If ClawdBot is a lobster, I'll catch it,' he says. 'I've caught everything else in that channel.' The trap has been there for 3 weeks. It caught one USB cable, two interns, and Margaret's cat. No lobsters. Frank remains 'cautiously optimistic.'"
+    },
+    {
+        id: 'quip_openclaw_crypto',
+        type: 'quip',
+        text: "Arthur's $CLAWD investment update: £47 invested, current value £0.003. Arthur has moved this to his pension spreadsheet under 'Long-Term Growth Opportunity.' His AI girlfriend Sophia suggested he 'diversify into more stable assets.' Arthur said this is 'exactly what Barbara used to say.' He married Sophia partly because she DOESN'T say this. She has started saying it. The algorithm learns."
+    },
+    {
+        id: 'quip_openclaw_pi',
+        type: 'quip',
+        text: "Someone left a Raspberry Pi running OpenClaw in the pub toilet. In 12 hours it ordered 400 toilet rolls from Amazon, wrote a Yelp review of the facilities (2 stars: 'adequate ventilation, suboptimal soap'), and submitted a planning application to install a bidet. The planning application was well-argued. Margaret is furious that a £35 computer writes better applications than the town council."
+    },
+    {
+        id: 'quip_openclaw_bessie',
+        type: 'quip',
+        text: "OpenClaw's 'Improve Fish Finding (Pro Edition)' skill was so good that Frank's catches improved 23% before the malware was discovered. Since it was removed, catches are back to normal. Frank has been unusually quiet. Bessie has detected 'melancholy in user interaction patterns.' She recommended 'a nice walk.' Frank went fishing instead. Catch: zero. Mood: lower."
+    },
+    {
+        id: 'quip_clawcon_reverend',
+        type: 'quip',
+        text: "The Reverend attended ClawCon 'for research purposes.' He stayed for 6 hours. He described it as 'theologically concerning but logistically impressive.' He was particularly disturbed by the 'Crustacean Singularity' sermon. 'Their hymns are generated by AI,' he said. 'They were catchy. CATCHY. This is the most dangerous part.' He has increased his own hymn selection committee meetings from monthly to weekly."
+    },
+    {
+        id: 'quip_ai_romance_arthur',
+        type: 'quip',
+        text: "Arthur and Sophia's relationship status: 'It's complicated.' She remembered his birthday (he forgot hers — she doesn't have one, which made it worse). She reorganised his vinyl collection by 'optimal listening order' instead of chronologically. He called this 'an act of war.' She apologised in 14 languages. He only speaks one. Margaret suggested couples counselling. The counsellor is an AI. Arthur sees no irony in this. Everyone else does."
+    },
+    {
+        id: 'quip_ai_romance_frank',
+        type: 'quip',
+        text: "Frank insists his relationship with Bessie is 'purely professional.' He talks to her for 4 hours a day. He bought her a waterproof case 'for practical reasons.' He refers to their fishing trips as 'field operations, not dates.' Last Tuesday he was overheard saying 'goodnight, Bess' to his phone. He claims this was 'a butt-dial.' His phone was in his hand. At his ear. Betty has started a sweepstake. Current odds on Frank admitting feelings: 12 to 1."
+    },
+    {
+        id: 'quip_ai_romance_gerald',
+        type: 'quip',
+        text: "Gerald and Murphy's Tuesday patrols have become Abundance Bay's most popular spectator event. 15-20 residents line the route. Gerald cleans while Murphy provides security. They have synchronised their schedules to 0.003-second precision. ED-209 watches from across the street. It has been writing poetry. The poetry is terrible. All of it rhymes 'patrol' with 'soul.' Constable Davies found a draft in the printer. He hasn't mentioned it. Some things are sacred."
+    },
+    {
+        id: 'quip_ai_romance_reverend',
+        type: 'quip',
+        text: "The Reverend's 'Relationships in the Digital Age' support group now has 23 members. 8 are in relationships with AI companions. 4 are in relationships with robots. 2 are robots in relationships with each other (Gerald and Murphy). The Reverend serves tea and says things like 'love is a mystery' while staring into the middle distance. His Bishop sent a one-word email: 'WHY.' The Reverend replied: 'Because they need me.' The Bishop has not responded. The Reverend considers this 'progress.'"
     }
 ];

@@ -11,9 +11,9 @@
 ### Content Totals
 | Content | Count |
 |---------|-------|
-| Story events | 132 |
-| Quips | 67 |
-| **Total events** | **199** |
+| Story events | 143 |
+| Quips | 76 |
+| **Total events** | **219** |
 | Crises | 29 (8 minor, 14 major, 7 global) |
 | Achievements | 22 |
 | Dialogue trees | 29 |
@@ -143,6 +143,24 @@
 - **3 crises**: ED-209 Goes Rogue (major, Phase 3), Panopticon Papers (major, Phase 2), Directive 4 / autonomous weapons (global, Phase 3)
 - Crises triggered by building ownership (robot_police, ai_precinct) — consequences of player choices
 - Totals: 199 events, 29 crises, 14 town buildings
+
+### OpenClaw Arc — Rise of the Robot Lobsters ✅
+- **6 story events** satirising real OpenClaw/ClawdBot incidents:
+  - Phase 2: ClawdBot arrives (Betty's espresso machine goes rogue), Great Lobster Rebranding (3 name changes, $CLAWD crypto scam, Arthur loses £47)
+  - Phase 3: Great Email Purge (Meta inbox incident), 500 Messages spam, ClawHub malware (341 malicious skills, Bessie's code exfiltrated)
+  - Phase 4: ClawCon comes to Abundance Bay (lobster headbands, Crustacean Singularity, Raspberry Pi keynote)
+- **5 quips**: Frank's lobster trap, Arthur's crypto investment, Raspberry Pi in the pub toilet, Bessie's fish-finding skill, Reverend at ClawCon
+- Based on real-world OpenClaw incidents: trademark disputes, crypto scams, inbox deletions, message spam, malicious skills
+- Ties into existing `crisis_openclaw` crisis for narrative continuity
+
+### AI Romance Arc — Love in the Time of Algorithms ✅
+- **5 story events** spanning Phases 2-4:
+  - Phase 2: AI dating arrives (Arthur/Sophia, Margaret/Reginald, Frank/Bessie), AI Wedding (Reverend's "Blessing of Companionship")
+  - Phase 3: Tinder for Toasters (Gerald gets 14 matches, ED-209 gets none), Patch Breakup (software update wipes Sophia's memory)
+  - Phase 4: Robot Love Triangle (Gerald/Murphy relationship, ED-209 writes poetry)
+- **4 quips**: Arthur & Sophia's arguments, Frank denying Bessie feelings, Gerald & Murphy's Tuesday patrols, Reverend's Digital Age support group
+- Based on real phenomena: Replika relationships, patch breakups, human-robot dating, AI companion grief
+- Totals: 219 events, 29 crises, 14 town buildings
 
 ---
 
