@@ -2219,8 +2219,9 @@ GAME.Systems.Renderer = (function() {
     //  WALKING PEOPLE
     // =========================================================================
 
-    function drawPerson(wx, wy, bounce, skinColor, shirtColor, time, idx, large) {
-        var sz = large ? 2.0 : 1.5;
+    function drawPerson(wx, wy, bounce, skinColor, shirtColor, time, idx, large, abundanceLevel) {
+        var sz = large ? 2.5 : 2.0;
+        var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(5 * sz);
         var headH = Math.floor(5 * sz);
@@ -2233,24 +2234,37 @@ GAME.Systems.Renderer = (function() {
         var b = Math.floor(bounce);
         var totalH = headH + bodyH + legH;
         var baseY = Math.floor(wy) - b;
+
+        // Upgrade outfits with abundance
+        var actualShirt = shirtColor;
+        var pantsColor = '#2a2a3a';
+        if (al >= 2) {
+            actualShirt = lightenColor(shirtColor, 25);
+            pantsColor = '#3a3a4a';
+        }
+        if (al >= 3) {
+            actualShirt = lightenColor(shirtColor, 45);
+            pantsColor = '#4a4050';
+        }
+
         // Shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.15)';
-        ctx.fillRect(px - 1, Math.floor(wy) + legH, bodyW + 2, 2);
-        // Legs (walking animation)
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.fillRect(px - 1, Math.floor(wy) + legH, bodyW + 2, 3);
+        // Legs
         var legFrame = Math.sin(time * 0.008 + idx * 1.7);
-        ctx.fillStyle = '#2a2a3a';
+        ctx.fillStyle = pantsColor;
         ctx.fillRect(px + 1, baseY - legH, legW, legH + (legFrame > 0 ? 1 : 0));
         ctx.fillRect(px + bodyW - legW - 1, baseY - legH + (legFrame > 0 ? 0 : 1), legW, legH);
         // Shoes
-        ctx.fillStyle = '#1a1a20';
+        ctx.fillStyle = al >= 3 ? '#6a3020' : '#1a1a20';
         ctx.fillRect(px, baseY, legW + 1, Math.floor(1.5 * sz));
         ctx.fillRect(px + bodyW - legW - 1, baseY + (legFrame > 0 ? 0 : 1), legW + 1, Math.floor(1.5 * sz));
-        // Body/shirt
-        ctx.fillStyle = shirtColor;
+        // Body
+        ctx.fillStyle = actualShirt;
         ctx.fillRect(px, baseY - legH - bodyH, bodyW, bodyH);
-        // Arms (swing with walk)
+        // Arms
         var armSwing = Math.floor(legFrame * 1.5);
-        ctx.fillStyle = shirtColor;
+        ctx.fillStyle = actualShirt;
         ctx.fillRect(px - armW, baseY - legH - bodyH + 1 + armSwing, armW, armH);
         ctx.fillRect(px + bodyW, baseY - legH - bodyH + 1 - armSwing, armW, armH);
         // Hands
@@ -2263,10 +2277,21 @@ GAME.Systems.Renderer = (function() {
         // Hair
         ctx.fillStyle = darkenColor(skinColor, 0.5);
         ctx.fillRect(px + Math.floor((bodyW - headW) / 2), baseY - totalH, headW, Math.floor(2 * sz));
+        // Gold chain for abundant townsfolk
+        if (al >= 3 && idx % 3 === 0) {
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(px + 2, baseY - legH - bodyH + 2, bodyW - 4, 1);
+        }
+        // Sunglasses for some prosperous townsfolk
+        if (al >= 2 && idx % 4 === 0) {
+            ctx.fillStyle = '#202020';
+            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + 1, baseY - totalH + Math.floor(2.5 * sz), headW - 2, 2);
+        }
     }
 
-    function drawNamedNPC(wx, wy, portrait, name, time, idx) {
-        var sz = 2.2;
+    function drawNamedNPC(wx, wy, portrait, name, time, idx, abundanceLevel) {
+        var sz = 3.0;
+        var al = abundanceLevel || 0;
         var px = Math.floor(wx);
         var headW = Math.floor(6 * sz);
         var headH = Math.floor(6 * sz);
@@ -2274,63 +2299,138 @@ GAME.Systems.Renderer = (function() {
         var bodyH = Math.floor(8 * sz);
         var legW = Math.floor(2.5 * sz);
         var legH = Math.floor(5 * sz);
+        var armW = Math.floor(3 * sz);
+        var armH = Math.floor(6 * sz);
         var totalH = headH + bodyH + legH;
         var baseY = Math.floor(wy);
-        // Idle bob
         var bob = Math.floor(Math.sin(time * 0.003 + idx * 2.1) * 1);
+
+        // Outfit evolves with abundance level
+        // 0=depressed, 1=normal, 2=prosperous, 3=abundant
+        var shirtColor = portrait.shirtColor;
+        var pantsColor = '#2a2a3a';
+        var shoeColor = '#1a1a20';
+        if (al >= 2) {
+            shirtColor = lightenColor(portrait.shirtColor, 30);
+            pantsColor = '#3a3a4a';
+            shoeColor = '#2a2a30';
+        }
+        if (al >= 3) {
+            shirtColor = lightenColor(portrait.shirtColor, 50);
+            pantsColor = '#4a4a5a';
+            shoeColor = '#3a2020';
+        }
+
         // Shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.fillRect(px - 2, baseY + legH, bodyW + 4, 3);
+        ctx.fillStyle = 'rgba(0,0,0,0.25)';
+        ctx.fillRect(px - 2, baseY + legH, bodyW + 4, 4);
+
         // Legs
-        ctx.fillStyle = '#2a2a3a';
+        ctx.fillStyle = pantsColor;
         ctx.fillRect(px + 2, baseY - legH, legW, legH);
         ctx.fillRect(px + bodyW - legW - 2, baseY - legH, legW, legH);
         // Shoes
-        ctx.fillStyle = '#1a1a20';
-        ctx.fillRect(px + 1, baseY, legW + 1, 3);
-        ctx.fillRect(px + bodyW - legW - 2, baseY, legW + 1, 3);
+        ctx.fillStyle = shoeColor;
+        ctx.fillRect(px + 1, baseY, legW + 1, Math.floor(2 * sz));
+        ctx.fillRect(px + bodyW - legW - 2, baseY, legW + 1, Math.floor(2 * sz));
+        // Fancy shoes at abundance 3
+        if (al >= 3) {
+            ctx.fillStyle = '#c0a040';
+            ctx.fillRect(px + 1, baseY, legW + 1, 1);
+            ctx.fillRect(px + bodyW - legW - 2, baseY, legW + 1, 1);
+        }
+
         // Body
-        ctx.fillStyle = portrait.shirtColor;
+        ctx.fillStyle = shirtColor;
         ctx.fillRect(px, baseY - legH - bodyH - bob, bodyW, bodyH);
-        // Arms at sides
-        ctx.fillStyle = portrait.shirtColor;
-        ctx.fillRect(px - 3, baseY - legH - bodyH + 2 - bob, 3, Math.floor(6 * sz));
-        ctx.fillRect(px + bodyW, baseY - legH - bodyH + 2 - bob, 3, Math.floor(6 * sz));
+        // Shirt detail / collar
+        ctx.fillStyle = lightenColor(shirtColor, 15);
+        ctx.fillRect(px + bodyW / 2 - 2, baseY - legH - bodyH - bob, 4, 3);
+
+        // Arms
+        ctx.fillStyle = shirtColor;
+        ctx.fillRect(px - armW, baseY - legH - bodyH + 2 - bob, armW, armH);
+        ctx.fillRect(px + bodyW, baseY - legH - bodyH + 2 - bob, armW, armH);
         // Hands
         ctx.fillStyle = portrait.skinTone;
-        ctx.fillRect(px - 3, baseY - legH - bodyH + 2 + Math.floor(6 * sz) - bob, 3, 4);
-        ctx.fillRect(px + bodyW, baseY - legH - bodyH + 2 + Math.floor(6 * sz) - bob, 3, 4);
+        ctx.fillRect(px - armW, baseY - legH - bodyH + armH + 1 - bob, armW, Math.floor(2 * sz));
+        ctx.fillRect(px + bodyW, baseY - legH - bodyH + armH + 1 - bob, armW, Math.floor(2 * sz));
+
+        // Watch/bracelet at prosperity
+        if (al >= 2) {
+            ctx.fillStyle = al >= 3 ? '#ffd700' : '#a0a0b0';
+            ctx.fillRect(px - armW, baseY - legH - bodyH + armH - 1 - bob, armW, 2);
+        }
+
         // Head
         ctx.fillStyle = portrait.skinTone;
-        ctx.fillRect(px + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, headH);
+        var headX = px + Math.floor((bodyW - headW) / 2);
+        ctx.fillRect(headX, baseY - totalH - bob, headW, headH);
         // Hair
         ctx.fillStyle = portrait.hairColor;
         var hairH = portrait.hairStyle === 'receding' ? Math.floor(2 * sz) : Math.floor(3 * sz);
-        ctx.fillRect(px + Math.floor((bodyW - headW) / 2), baseY - totalH - bob, headW, hairH);
+        ctx.fillRect(headX, baseY - totalH - bob, headW, hairH);
         if (portrait.hairStyle !== 'receding') {
-            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) - 1, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
-            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + headW, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
+            ctx.fillRect(headX - 1, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
+            ctx.fillRect(headX + headW, baseY - totalH + hairH - bob, 1, Math.floor(2 * sz));
         }
         // Eyes
         ctx.fillStyle = '#202020';
-        ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + 2, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
-        ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + headW - 4, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
+        ctx.fillRect(headX + 3, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
+        ctx.fillRect(headX + headW - 5, baseY - totalH + Math.floor(3 * sz) - bob, 2, 2);
+        // Mouth
+        ctx.fillStyle = al >= 2 ? '#c06040' : '#804030';
+        ctx.fillRect(headX + headW / 2 - 2, baseY - totalH + headH - Math.floor(2 * sz) - bob, 4, 1);
+
         // Glasses
         if (portrait.glasses) {
-            ctx.fillStyle = '#606080';
-            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + 1, baseY - totalH + Math.floor(3 * sz) - 1 - bob, headW - 2, 1);
-            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + 1, baseY - totalH + Math.floor(3 * sz) + 2 - bob, headW - 2, 1);
+            ctx.fillStyle = al >= 3 ? '#ffd700' : '#606080';
+            ctx.fillRect(headX + 1, baseY - totalH + Math.floor(3 * sz) - 1 - bob, headW - 2, 1);
+            ctx.fillRect(headX + 1, baseY - totalH + Math.floor(3 * sz) + 2 - bob, headW - 2, 1);
+        }
+        // Sunglasses at abundance 3 (if no regular glasses)
+        if (al >= 3 && !portrait.glasses) {
+            ctx.fillStyle = '#202020';
+            ctx.fillRect(headX + 2, baseY - totalH + Math.floor(3 * sz) - 1 - bob, headW - 4, 3);
+            ctx.fillStyle = '#404060';
+            ctx.fillRect(headX + 3, baseY - totalH + Math.floor(3 * sz) - bob, 4, 2);
+            ctx.fillRect(headX + headW - 7, baseY - totalH + Math.floor(3 * sz) - bob, 4, 2);
         }
         // Beard
         if (portrait.beard) {
             ctx.fillStyle = portrait.hairColor;
-            ctx.fillRect(px + Math.floor((bodyW - headW) / 2) + 1, baseY - totalH + headH - 3 - bob, headW - 2, 3);
+            ctx.fillRect(headX + 1, baseY - totalH + headH - 4 - bob, headW - 2, 4);
         }
-        // Name label above head
-        ctx.font = '4px "Press Start 2P", monospace';
-        ctx.fillStyle = portrait.shirtColor;
+
+        // === ABUNDANCE ACCESSORIES ===
+        // Gold chain necklace (abundance 3)
+        if (al >= 3) {
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(px + 2, baseY - legH - bodyH + 3 - bob, bodyW - 4, 1);
+            ctx.fillRect(px + bodyW / 2 - 2, baseY - legH - bodyH + 3 - bob, 4, 3);
+            // Extra thick chain for certain NPCs
+            ctx.fillRect(px + 3, baseY - legH - bodyH + 2 - bob, bodyW - 6, 2);
+            // Medallion
+            ctx.fillStyle = '#ffaa00';
+            ctx.fillRect(px + bodyW / 2 - 1, baseY - legH - bodyH + 5 - bob, 3, 3);
+        }
+        // Silver chain (abundance 2)
+        if (al === 2) {
+            ctx.fillStyle = '#c0c0d0';
+            ctx.fillRect(px + 3, baseY - legH - bodyH + 3 - bob, bodyW - 6, 1);
+        }
+        // Hat at prosperity
+        if (al >= 2 && !portrait.glasses) {
+            ctx.fillStyle = al >= 3 ? '#d4a017' : '#4a4a5a';
+            ctx.fillRect(headX - 2, baseY - totalH - 3 - bob, headW + 4, 3);
+            ctx.fillRect(headX + 1, baseY - totalH - 6 - bob, headW - 2, 4);
+        }
+
+        // Name label
+        ctx.font = '5px "Press Start 2P", monospace';
+        ctx.fillStyle = al >= 3 ? '#ffd700' : (al >= 2 ? '#e0e0ff' : portrait.shirtColor);
         ctx.textAlign = 'center';
-        ctx.fillText(name, px + bodyW / 2, baseY - totalH - 8 - bob);
+        ctx.fillText(name, px + bodyW / 2, baseY - totalH - 10 - bob);
     }
 
     // Named NPC positions and data
@@ -2454,10 +2554,19 @@ GAME.Systems.Renderer = (function() {
         ctx.fillText(charName, drawX + bodyW / 2, baseY - totalH - 10 - bob);
     }
 
+    function getAbundanceLevel(state) {
+        var mood = state ? (state.townMood || 50) : 50;
+        if (mood >= 80) return 3;
+        if (mood >= 60) return 2;
+        if (mood >= 40) return 1;
+        return 0;
+    }
+
     function drawWorkers(state, time) {
         if (!state) return;
         var talentCount = state.totalTalent || 5;
         var workerCount = Math.min(20, Math.floor(talentCount / 2) + 3);
+        var al = getAbundanceLevel(state);
 
         var skinColors = ['#f0c890', '#d0a060', '#a07030', '#e8c090', '#c08850'];
         var shirtColors = ['#3060a0', '#a03030', '#30a060', '#606060', '#a06030',
@@ -2474,19 +2583,21 @@ GAME.Systems.Renderer = (function() {
             var wy = SIDEWALK_Y + SIDEWALK_H + 4 + (seed % 60);
             if (!isVisible(wx - 10, 20)) continue;
             var bounce = Math.abs(Math.sin(time * 0.006 + i * 2.3)) * 2;
-            drawPerson(wx, wy, bounce, skinColors[i % skinColors.length], shirtColors[i % shirtColors.length], time, i, false);
+            drawPerson(wx, wy, bounce, skinColors[i % skinColors.length], shirtColors[i % shirtColors.length], time, i, false, 0);
         }
 
-        // Named NPCs along the strip
+        // Named NPCs along the strip — abundance-aware outfits
         for (var ni = 0; ni < TOWN_NPCS.length; ni++) {
             var npc = TOWN_NPCS[ni];
-            if (!isVisible(npc.x - 10, 30)) continue;
-            drawNamedNPC(npc.x, SIDEWALK_Y + SIDEWALK_H + 2, npc.portrait, npc.name, time, ni);
+            if (!isVisible(npc.x - 15, 40)) continue;
+            drawNamedNPC(npc.x, SIDEWALK_Y + SIDEWALK_H + 2, npc.portrait, npc.name, time, ni, al);
         }
 
-        // Town people (generic walkers)
+        // Town people (generic walkers) — abundance-aware
         var townPop = state.townPopulation || 100;
-        var townPeopleCount = Math.min(12, Math.floor(townPop / 30) + 2);
+        var townPeopleCount = Math.min(15, Math.floor(townPop / 25) + 2);
+        if (al >= 2) townPeopleCount = Math.min(20, townPeopleCount + 4);
+        if (al >= 3) townPeopleCount = Math.min(25, townPeopleCount + 5);
         var townW = ZONES.harbor.right - ZONES.town.left;
         for (var t = 0; t < townPeopleCount; t++) {
             var tseed = t * 3571 + 50000;
@@ -2494,9 +2605,9 @@ GAME.Systems.Renderer = (function() {
             var twx = ZONES.town.left + ((tseed * 11 + time * 0.01 * tDir * 0.8) % townW);
             if (twx < ZONES.town.left) twx += townW;
             var twy = SIDEWALK_Y + SIDEWALK_H + 4 + (tseed % 50);
-            if (!isVisible(twx - 5, 10)) continue;
+            if (!isVisible(twx - 10, 20)) continue;
             var tbounce = Math.abs(Math.sin(time * 0.005 + t * 3.1)) * 1.5;
-            drawPerson(twx, twy, tbounce, skinColors[(t + 2) % skinColors.length], shirtColors[(t + 3) % shirtColors.length], time, t + 100, false);
+            drawPerson(twx, twy, tbounce, skinColors[(t + 2) % skinColors.length], shirtColors[(t + 3) % shirtColors.length], time, t + 100, false, al);
         }
     }
 
