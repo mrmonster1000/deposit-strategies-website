@@ -200,6 +200,24 @@ GAME.DATA.TOWN = {
             ],
             mood: 75,
             concerns: ['beer_supply', 'ai_bartender_behavior', 'noise_complaints']
+        },
+        jensen_huang: {
+            id: 'jensen_huang',
+            name: 'Jensen Huang',
+            role: 'GPU Kingpin — Visiting Investor',
+            personality: 'Shows up unannounced in a leather jacket with a bag of GPUs. Nobody invited him. Everyone needs him.',
+            portrait: { skinTone: '#e0c080', hairColor: '#303030', hairStyle: 'short', shirtColor: '#202020', glasses: false, beard: false, features: 'confident' },
+            color: '#76b900',
+            quotes: [
+                "I brought GPUs. You need GPUs. Everyone needs GPUs. The leather jacket is non-negotiable.",
+                "Compute is the new oil. I am the new OPEC. You're welcome.",
+                "Your AI is only as good as your hardware. Your hardware is only as good as MY hardware.",
+                "I don't always wear a leather jacket. Sometimes I wear a DIFFERENT leather jacket.",
+                "Every AI lab on Earth is calling me. I'm the most popular man in tech and the least available.",
+                "This is not gaming. This is the future of humanity. Also, I brought GPUs."
+            ],
+            mood: 90,
+            concerns: ['gpu_supply', 'leather_jacket_integrity', 'compute_dominance']
         }
     },
 

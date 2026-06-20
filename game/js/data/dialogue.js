@@ -517,5 +517,45 @@ GAME.DATA.DIALOGUES = {
                 ]
             }
         ]
+    },
+
+    npc_jensen_compute: {
+        id: 'npc_jensen_compute',
+        nodes: [
+            {
+                speaker: 'jensen_huang',
+                text: "Let me explain something. Every breakthrough in AI — EVERY one — happened because someone had enough compute. Not enough ideas. Not enough data. Compute. And I control the compute.",
+                choices: null
+            },
+            {
+                speaker: 'jensen_huang',
+                text: "Right now, every AI lab on Earth is calling me. 'Jensen, we need more GPUs.' 'Jensen, can you prioritize our order?' I'm the most popular man in technology and the least available. It's like being the only plumber in a flooding city.",
+                choices: [
+                    { text: "We need a long-term GPU supply agreement.", effects: { research: 8, money: -60, cooperation: 5 }, response: "Done. I like you. You asked nicely. Sam just sends charts showing why he needs GPUs 'exponentially.' Demis sent an optimization proposal for my supply chain. It was actually quite good. Don't tell him I said that." },
+                    { text: "What happens when someone builds better chips?", effects: { research: 5, safety: 3, cooperation: 3 }, response: "Better chips? *laughs in leather jacket* I spend $10 billion a year on R&D. My chips have chips. But you're right to think about it. Monopolies are fragile. I'm not a monopoly, by the way. I'm a 'market leader with significant competitive advantages.' The lawyers insisted on that phrasing." },
+                    { text: "Is the leather jacket part of the deal?", effects: { townMood: 5, cooperation: 5 }, response: "The jacket is ALWAYS part of the deal. It's my brand. My armor. My... optimal outer garment. Elon has the rockets. Demis has the chess. I have the jacket. And the GPUs. Mostly the GPUs." }
+                ]
+            }
+        ]
+    },
+
+    npc_jensen_future: {
+        id: 'npc_jensen_future',
+        nodes: [
+            {
+                speaker: 'jensen_huang',
+                text: "People think I sell graphics cards. I used to. Now I sell the substrate of intelligence. Every thought your AI has, every prediction, every protein fold — it happens on my silicon. I'm not in the chip business. I'm in the thinking business.",
+                choices: null
+            },
+            {
+                speaker: 'jensen_huang',
+                text: "In 10 years, every hospital, every school, every fishing boat — yes Frank, even fishing boats — will have AI. And it will all run on GPUs. Not because I want it to. Because physics demands it. Parallel processing isn't a product. It's a law of nature. I just commercialized it.",
+                choices: [
+                    { text: "That's a lot of power for one company.", effects: { safety: 5, cooperation: -3, research: 3 }, response: "Power? I don't have power. I have RESPONSIBILITY. And 75% market share. But mostly responsibility. The jacket carries the weight of global compute. Literally. It's reinforced." },
+                    { text: "Frank's going to want a leather jacket too.", effects: { townMood: 5, cooperation: 3 }, response: "Frank can have one. I brought spares. I ALWAYS bring spares. There are 47 leather jackets in the boot of my car right now. Different sizes. Different occasions. One is fireproof. You don't want to know why." },
+                    { text: "What keeps you up at night?", effects: { safety: 5, research: 5 }, response: "Chip shortages. And the thought that I've given incredible power to people who might misuse it. I sell compute to everyone. Not everyone is Dario. Some of them are... less careful. The jacket doesn't protect against that." }
+                ]
+            }
+        ]
     }
 };

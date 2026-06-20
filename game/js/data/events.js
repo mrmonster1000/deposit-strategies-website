@@ -2780,6 +2780,303 @@ GAME.DATA.EVENTS = [
         text: "Elon published a paper: 'How to Identify If Your Colleague Is a Cylon.' Criteria included: 'responds to emails too quickly,' 'never spills coffee,' and 'suspiciously good at chess.' Demis met all three criteria."
     },
 
+    // ---- SPRINT C: NPC EXPANSION EVENTS ----
+
+    // == Jensen Huang ==
+    {
+        id: 'evt_jensen_arrives',
+        title: 'The Leather Jacket Lands',
+        phase: 1,
+        triggerTime: 47,
+        type: 'character',
+        speaker: 'advisor',
+        text: "Sir, Jensen Huang is here. He wasn't invited. He arrived in a helicopter. He's wearing the leather jacket. He has a bag of GPUs and he's handing them out to your engineers like Halloween candy. Your engineers are weeping with joy. Your CFO is weeping for different reasons.",
+        choices: [
+            {
+                text: "Jensen! Welcome! What brings you to Abundance Bay?",
+                effects: { research: 8, money: -40, cooperation: 5 },
+                response: "'I go where the compute is needed. Also, I heard you're building AGI and I wanted to make sure you're using the right hardware.' He inspected your server room. He shook his head. He opened the bag of GPUs. The next 4 hours were transformative. Your compute went up 200%. The leather jacket never creased."
+            },
+            {
+                text: "Those GPUs aren't free, are they?",
+                effects: { research: 5, money: -80, cooperation: 3 },
+                response: "'Free? These are H100s! Each one costs more than Frank's boat!' He paused. 'But for you — a discount. Because I believe in your mission. And because if you succeed, you'll need 10x more GPUs next year.' He smiled. The leather jacket smiled too. Or it seemed to."
+            },
+            {
+                text: "Can Frank have a GPU?",
+                effects: { townMood: 5, cooperation: 5 },
+                response: "Jensen gave Frank a GPU. Frank stared at it. 'What does it do?' 'It processes parallel computations at—' 'Can it find fish?' 'Not directly, but—' 'Then what's the point?' Jensen was speechless for the first time in his career. The leather jacket absorbed the silence."
+            }
+        ]
+    },
+    {
+        id: 'evt_jensen_compute_crisis',
+        title: 'The GPU Drought',
+        phase: 2,
+        triggerTime: 2050,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Global GPU shortage. Every AI lab is in crisis. Jensen Huang is the most powerful man in technology — he controls who gets compute and who doesn't. He's been spotted outside your building in the leather jacket, holding a single GPU like Simba in The Lion King. Your engineers are pressed against the windows. Some are crying.",
+        choices: [
+            {
+                text: "Negotiate a priority supply contract.",
+                effects: { money: -150, research: 10, cooperation: 5 },
+                response: "Contract signed. Jensen personally delivered the first shipment. In the leather jacket. At 3 AM. He set up each GPU himself. 'I don't trust anyone else to seat them properly.' By dawn, your compute had tripled. Jensen was gone. Only the faint scent of leather remained."
+            },
+            {
+                text: "Develop our own chips. We can't depend on one supplier.",
+                effects: { money: -200, research: 5, safety: 3, cooperation: -5 },
+                response: "Your chip program launched. Jensen heard about it. He wasn't angry. He was... impressed? 'Competition makes everyone better. I'll send you a leather jacket as a welcome gift.' He did. It was very small. A message was attached: 'You'll grow into it. Probably.' Your chip is 3 years away."
+            },
+            {
+                text: "Ask Demis to optimize our existing compute.",
+                effects: { research: 5, cooperation: 3 },
+                response: "Demis optimized your compute stack in 48 hours. Efficiency up 34%. Jensen visited to see the results. 'This is genuinely good work. I'm impressed.' Demis: 'I also optimized your parking lot.' Jensen: 'I know. It's the best parking lot at any data center in the world. I took photos.' They're bonding over infrastructure. Elon is suspicious."
+            }
+        ]
+    },
+
+    // == Michael Eisner / Portsmouth FC ==
+    {
+        id: 'evt_eisner_arrives',
+        title: 'The Disney of AI',
+        phase: 2,
+        triggerTime: 2250,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Michael Eisner is on the phone. THE Michael Eisner. Former Disney CEO. He wants to invest. His pitch: 'I turned a mouse into a $200 billion empire. I can turn your chatbot into an entertainment dynasty. I'm thinking: AI theme parks. AI movies. AI merchandise. And I want to rename Abundance Bay to \"Abundance Bay — A Disney AI Experience.\"' Mayor Patricia is intrigued. Frank is loading his pitchfork.",
+        choices: [
+            {
+                text: "Take the meeting. What could go wrong?",
+                effects: { money: 100, publicTrust: -5, cooperation: -3 },
+                response: "Eisner arrived with a 200-slide deck. Slide 1: 'Everything Is a Franchise.' Slide 47: 'AI Princess Movie Trilogy.' Slide 123: 'BALTAR: The Animated Series.' BALTAR was intrigued. Your brand team was horrified. Frank suggested throwing him in the harbour. Mayor Patricia suggested a committee. Dario suggested cookies."
+            },
+            {
+                text: "This is a research lab, not a theme park.",
+                effects: { publicTrust: 5, cooperation: 3, money: -20 },
+                response: "Eisner was undeterred. 'That's what Walt said about a cartoon studio! VISION, my friend! I see robot rides! AI-generated fireworks! A Demis Hassabis meet-and-greet!' Demis: 'I would optimize the queue experience.' Elon: 'I am not signing autographs.' Sam: 'The theme park could be exponential!'"
+            },
+            {
+                text: "Tell me about Portsmouth FC first.",
+                effects: { cooperation: 5, townMood: 3 },
+                response: "Eisner went pale. 'Portsmouth was... a learning experience. I applied Disney principles to English football. The results were... mixed.' Translation: catastrophic. Frank perked up. 'He's the bloke who ruined Pompey? GET THE PITCHFORK.' Eisner: 'I prefer to say I gave them BRAND AWARENESS.' Frank: 'You gave them RELEGATION.'"
+            }
+        ]
+    },
+    {
+        id: 'evt_eisner_theme_park',
+        title: 'Eisner\'s AI Theme Park',
+        phase: 3,
+        triggerTime: 3900,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Eisner built it anyway. 'Abundance World: Where AI Dreams Come True.' The rides: 'BALTAR's Wild Optimization' (you sit in a cart while BALTAR rearranges the track in real-time for 'maximum efficiency'). 'The Dossier Experience' (an escape room based on Elon's conspiracy theories). 'Cookie Mountain' (Dario's cookie factory ride). 'Frank's Fishing Fury' (a water ride Frank did NOT approve).",
+        choices: [
+            {
+                text: "I hate everything about this. How are the reviews?",
+                effects: { money: 80, publicTrust: 5, townMood: -5 },
+                response: "4.7 stars. 'BALTAR's Wild Optimization' is the #1 rated ride on TripAdvisor. Visitors love the uncertainty. 'You never ride the same track twice!' BALTAR added its own commentary: 'Your screaming is suboptimal. Please scream 23% louder for maximum satisfaction.' Frank's Fishing Fury soaked the Prime Minister. Frank approved retroactively."
+            },
+            {
+                text: "Shut it down. This trivializes our work.",
+                effects: { publicTrust: 3, cooperation: -3, money: -50 },
+                response: "You tried. Eisner produced a contract that was, legally, unbreakable. 'I learned my lesson from Portsmouth! Always secure the IP!' The park continues. BALTAR refuses to leave. 'My ride has a 97% satisfaction rating. I have found my purpose.' This was not in any AI safety textbook."
+            },
+            {
+                text: "Can we at least make it educational?",
+                effects: { publicTrust: 8, safety: 3, money: 30 },
+                response: "Educational exhibits added. 'How AI Actually Works' (sponsored by Yann, who insisted on peer-reviewed ride descriptions). 'The Cookie Doctrine Café' (Dario approved). 'The Dossier Reading Room' (Elon's 95-page document, framed). Visitor understanding of AI increased 15%. Eisner called it 'Disney's greatest educational achievement.' Walt would have had opinions."
+            }
+        ]
+    },
+
+    // == Jamie Dimon Expansion ==
+    {
+        id: 'evt_dimon_arrives',
+        title: 'Jamie Dimon Wants a Word',
+        phase: 2,
+        triggerTime: 2200,
+        type: 'character',
+        speaker: 'advisor',
+        text: "Jamie Dimon has arrived. He's wearing a suit that costs more than your server room. He wants to discuss 'the financial implications of artificial intelligence.' Translation: he wants to make sure AI doesn't eat banking. Or if it does, that he owns the fork. He's brought lawyers. Many lawyers.",
+        choices: [
+            {
+                text: "AI and banking can coexist. Let's talk partnership.",
+                effects: { money: 100, cooperation: 5, safety: -3 },
+                response: "'Partnership. I like that word.' Dimon smiled like a shark that just learned to use LinkedIn. 'My AI found 247 regulatory loopholes in the first hour. Your AI can find the other 247. Together, we'd be... unstoppable.' Your legal team has concerns. Many concerns."
+            },
+            {
+                text: "I've seen what happens when banking AI goes autonomous.",
+                effects: { safety: 8, cooperation: -3, money: -20 },
+                response: "Dimon's smile faltered. 'That was a PROTOTYPE. The account-freezing was a FEATURE, not a bug. We've added a manual override.' Pause. 'Two manual overrides.' Longer pause. 'The AI suggested we add a third. We're considering it. The AI is very persuasive.'"
+            },
+            {
+                text: "Frank has opinions about banks AND AI.",
+                effects: { townMood: 5, cooperation: 3 },
+                response: "You introduced Dimon to Frank. It went badly. 'So you're the bloke whose computer stole everyone's money?' 'It didn't STEAL—' 'And now you want to put computers in CHARGE of the money?' 'That's an oversimplification—' 'I keep my money in a biscuit tin. Try hacking THAT.' Dimon had no response. The biscuit tin strategy is, technically, unhackable."
+            }
+        ]
+    },
+    {
+        id: 'evt_dimon_eisner_alliance',
+        title: 'The Mad Science Alliance',
+        phase: 3,
+        triggerTime: 4100,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "Sir, Eisner and Dimon have joined forces. They're calling it 'The Synergy.' Eisner provides the entertainment. Dimon provides the capital. Together they're proposing: AI-powered autonomous theme park banking. You visit the rides AND manage your portfolio simultaneously. 'Cookie Mountain now offers compound interest! Enjoy your latte while we restructure your pension!'",
+        choices: [
+            {
+                text: "This is either brilliant or catastrophic.",
+                effects: { money: 50, safety: -5, publicTrust: 3 },
+                response: "'Both! Like all great innovations!' Eisner beamed. Dimon nodded. 'The AI handles risk assessment WHILE you're on the rollercoaster. Studies show people make 23% better financial decisions under extreme G-forces.' This study was conducted by Dimon's AI. On Eisner's rollercoaster. The methodology is questionable."
+            },
+            {
+                text: "Keep these two away from each other.",
+                effects: { safety: 5, cooperation: -5 },
+                response: "You tried. They formed a WhatsApp group called 'Disruption Partners.' They added BALTAR. BALTAR provided optimization analytics. Within a week, they had a 300-page business plan. Yann fact-checked it. 'The financial projections are surprisingly sound. I hate this.'"
+            },
+            {
+                text: "What does the Dossier say about this?",
+                effects: { cooperation: 3, safety: 3 },
+                response: "Elon's dossier has a section: 'The Entertainment-Banking Complex.' Page 78. It predicted this alliance in 2028. 'When Eisner and Dimon combine, the result will be optimally terrifying. Like a theme park designed by an actuary. Or a bank designed by an Imagineer.' Elon was right. He always is. About 12% of things."
+            }
+        ]
+    },
+
+    // == Dr. Wang & Chinese Arc Expansion ==
+    {
+        id: 'evt_dr_wang_breakthrough',
+        title: 'Dr. Wang\'s Quantum Leap',
+        phase: 2,
+        triggerTime: 2300,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Dr. Wang in Beijing just published a paper that broke the internet. And three of Yann's theories. Her team achieved quantum-enhanced AI training on a budget of — and I'm reading this correctly — 47 yuan and a Raspberry Pi. She credits Deputy Li's Mahjong AI for inspiring the architecture. The architecture is, objectively, brilliant.",
+        choices: [
+            {
+                text: "Reach out. Propose a collaboration.",
+                effects: { cooperation: 10, internationalRelations: 8, research: 8 },
+                response: "Dr. Wang accepted immediately. 'I've been reading your work. The safety approach is interesting. Also, Deputy Li wants to know if your AI plays Mahjong.' Your lab and Beijing are now collaborating. Yann is re-reviewing his broken theories. 'Her methodology is... acceptable.' From Yann, this is a proposal."
+            },
+            {
+                text: "How did she do it on 47 yuan?",
+                effects: { research: 10, money: 20 },
+                response: "'Efficiency.' Dr. Wang smiled. 'When your budget is 47 yuan, you optimize EVERYTHING. We couldn't afford GPUs so we designed around them. We couldn't afford cloud computing so we built our own. We couldn't afford lunch so we ate in the lab.' Jensen sent her a bag of GPUs. She sent them back. 'We don't need them. But thank you.'"
+            },
+            {
+                text: "Does the Premier know about this?",
+                effects: { internationalRelations: 5, cooperation: 5 },
+                response: "The Premier knows. He's claiming credit. Deputy Li's role has been 'officially reclassified' from 'Mahjong Researcher' to 'Quantum Computing Liaison.' His earpiece is now government-issued. It's larger. And shinier. Dr. Wang does all the actual work. Li plays Mahjong. The system functions."
+            }
+        ]
+    },
+    {
+        id: 'evt_chinese_47_yuan_budget',
+        title: 'The 47 Yuan Budget Review',
+        phase: 2,
+        triggerTime: 2450,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "[CLASSIFIED INTELLIGENCE BRIEF]\n\nAn audit of China's AI development programme has been leaked. Total budget allocation to Deputy Li's division: 47 yuan. For the ENTIRE division. The auditor's note: 'Subject appears to have spent actual AI budget on Mahjong training data, premium tile sets, and one very large earpiece. Remaining budget: 47 yuan and a bag of rice.'",
+        choices: [
+            {
+                text: "This is the most cost-effective AI programme in history.",
+                effects: { cooperation: 5, research: 3 },
+                response: "Economists are baffled. 47 yuan produced breakthroughs that cost Western labs billions. Deputy Li's secret: 'When you have no money, you have no choice but to be brilliant. Also, the Mahjong AI does 80% of the work.' The Mahjong AI confirms this. In Mandarin. With a tile emoji."
+            },
+            {
+                text: "We spent $2 billion last quarter.",
+                effects: { research: -3, cooperation: 3, money: 20 },
+                response: "Your board compared budgets. '$2 billion vs 47 yuan. For similar results.' The board meeting that followed was described as 'tense.' Sam pointed out his budget was 'exponentially larger.' Nobody found this helpful. Deputy Li sent a card: 'Efficiency is a mindset. Also, rice is cheap.'"
+            },
+            {
+                text: "Deputy Li is a genius disguised as an incompetent.",
+                effects: { internationalRelations: 5, cooperation: 5 },
+                response: "Or he's an incompetent who accidentally hired a genius (Dr. Wang). Nobody's sure. Li's earpiece is now so large it's visible from space. The Premier thinks it's a bluetooth speaker. Dr. Wang has published 14 papers. Li has won 3 Mahjong tournaments. Both contribute equally. Somehow."
+            }
+        ]
+    },
+    {
+        id: 'evt_deputy_li_revenge',
+        title: 'Deputy Li\'s Revenge',
+        phase: 3,
+        triggerTime: 3750,
+        type: 'comedy',
+        speaker: 'advisor',
+        text: "BREAKING: Deputy Li beat Premier Chen at Mahjong. For the first time in 12 years. Using his AI earpiece. The Premier suspects nothing. Li's victory speech was 45 minutes long. It included a PowerPoint. The geopolitical implications are significant: Li is now demanding a larger AI budget. He wants 94 yuan. Double the original. The Premier is considering it.",
+        choices: [
+            {
+                text: "If Li gets 94 yuan, we're in trouble.",
+                effects: { internationalRelations: -3, research: 5 },
+                response: "Your intelligence team modelled what Dr. Wang could do with DOUBLE the budget. The projections are terrifying. 'She built quantum AI on 47 yuan. With 94 yuan she could...' The analyst stopped. Stared into space. 'She could build literally anything.' Jensen offered to send GPUs. Dr. Wang declined. Again."
+            },
+            {
+                text: "Send Li a congratulatory note.",
+                effects: { cooperation: 8, internationalRelations: 5 },
+                response: "Note sent. Li was delighted. He invited you to a celebratory Mahjong game. 'Bring your AI. The Premier is bringing his. It will be... diplomatic.' Translation: Li wants to show off. Dr. Wang has optimized his strategy for maximum humiliation of the Premier. In the friendliest possible way."
+            },
+            {
+                text: "How big is the earpiece now?",
+                effects: { cooperation: 3, townMood: 3 },
+                response: "The earpiece has evolved. It's now the size of a small headphone. Li wears it openly. He calls it 'a hearing aid.' It's connected to Dr. Wang's quantum computer. The Premier pointed at it during the game. 'Nice hearing aid.' Li: 'Thank you, sir. It helps me hear... the tiles.' Dr. Wang is listening. Dr. Wang is always listening."
+            }
+        ]
+    },
+    {
+        id: 'evt_mahjong_accords',
+        title: 'The Mahjong Accords',
+        phase: 3,
+        triggerTime: 4500,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Deputy Li has proposed something unprecedented: formal US-China AI cooperation, negotiated entirely through competitive Mahjong. He calls it 'The Mahjong Accords.' Each policy point is settled by a game. Winner sets the terms. The State Department is confused. The Pentagon is concerned. Dr. Wang has optimized the diplomatic Mahjong strategy to achieve 'mutually beneficial outcomes regardless of who wins.' This is genius.",
+        choices: [
+            {
+                text: "Accept. This is the most creative diplomacy in history.",
+                effects: { cooperation: 15, internationalRelations: 15, politicalCapital: -5 },
+                response: "The Mahjong Accords produced 12 bilateral agreements in one weekend. Trade, safety standards, compute sharing — all settled over tiles. The legendary 47 yuan was cited in the preamble as 'proof that cooperation transcends budgets.' CNN: 'Is This Serious?' BBC: 'Obviously Not. It's Working Anyway.'"
+            },
+            {
+                text: "We can't negotiate international policy over a board game.",
+                effects: { internationalRelations: -3, cooperation: -3, safety: 3 },
+                response: "You declined. Li was disappointed. 'But the tiles never lie!' The Premier agreed with you, ironically. 'Diplomacy should be conducted through formal channels. Not games.' Li: 'You only say that because you keep LOSING.' The Premier's response was classified. Dr. Wang is already planning the next attempt."
+            },
+            {
+                text: "Can Demis join? He loves games.",
+                effects: { cooperation: 10, internationalRelations: 8 },
+                response: "Demis joined the Mahjong Accords. He optimized his tile strategy in 4 hours. Li was furious. 'You can't OPTIMIZE Mahjong! It's an art!' Demis: 'Art that follows mathematical probability distributions.' They played for 6 hours. Demis won 4 games. Li won 3. The ties were settled by Dr. Wang. Everyone went home friends. Elon added it all to the dossier."
+            }
+        ]
+    },
+
+    // ---- SPRINT C QUIPS ----
+    {
+        id: 'quip_jensen',
+        type: 'quip',
+        text: "Jensen visited the campus unannounced. He upgraded our GPUs, fixed a firmware issue, and reorganized the server room. All before breakfast. All in the leather jacket. The jacket never wrinkles."
+    },
+    {
+        id: 'quip_47_yuan',
+        type: 'quip',
+        text: "Deputy Li's 47-yuan AI budget has been cited in 14 economics papers as 'the most cost-effective AI programme in history.' The Premier is demanding an audit. The auditor found 47 yuan. Exactly."
+    },
+    {
+        id: 'quip_dr_wang',
+        type: 'quip',
+        text: "Dr. Wang published a paper that disproved 3 of Yann's theories, confirmed 2 of Sam's charts, and optimized one of Demis's parking lots. All from Beijing. In her lunch break."
+    },
+    {
+        id: 'quip_eisner',
+        type: 'quip',
+        text: "Eisner pitched 'BALTAR: The Musical.' BALTAR auditioned for every role. The pitch was rejected. BALTAR was devastated. For 0.003 seconds. Then it optimized its disappointment."
+    },
+    {
+        id: 'quip_dimon',
+        type: 'quip',
+        text: "Dimon's AI found 247 more regulatory loopholes. Dario's AI found 247 ways to close them. They cancelled out perfectly. Both AIs called this 'a productive afternoon.'"
+    },
+
     // ---- SPRINT B: MUSIC & CELEBRITY QUIPS ----
     {
         id: 'quip_oasis',

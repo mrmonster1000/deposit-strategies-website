@@ -902,7 +902,8 @@ window.GAME = window.GAME || {};
             'reverend_james': ['npc_reverend_consciousness', 'npc_reverend_meaning'],
             'teen_zara': ['npc_zara_openaccess', 'npc_zara_aisafety'],
             'old_arthur': ['npc_arthur_automation', 'npc_arthur_trust'],
-            'pub_landlord': ['npc_mick_aibias']
+            'pub_landlord': ['npc_mick_aibias'],
+            'jensen_huang': ['npc_jensen_compute', 'npc_jensen_future']
         };
 
         var options = dialogueOptions[npcId];
