@@ -51,6 +51,7 @@ GAME.Systems.Simulation = (function() {
         checkCrisisTriggers();
         checkUnlocks();
         checkVictoryDefeat();
+        if (GAME.Systems.Achievements) GAME.Systems.Achievements.check();
     }
 
     function advanceDate() {

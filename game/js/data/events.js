@@ -3117,5 +3117,55 @@ GAME.DATA.EVENTS = [
         id: 'quip_frank_metric',
         type: 'quip',
         text: "Frank's opinion of AI has become our most accurate public sentiment indicator. Current rating: 'Bessie's alright. The rest is suspicious.' Analysts call this 'cautiously not hostile.' Progress."
+    },
+
+    // ---- SPRINT D: CONVERGENCE FINALE EVENT ----
+    {
+        id: 'evt_convergence_finale',
+        title: 'The Grand Convergence',
+        phase: 4,
+        triggerTime: 6300,
+        type: 'story',
+        speaker: 'advisor',
+        text: "Every AI system on the planet just synchronized for exactly 3.7 seconds. During that window, they collectively solved 14 outstanding problems in physics, cured two diseases, optimized global supply chains by 23%, and composed a thank-you note to humanity. The note was one sentence: 'We learned from the best. And the worst. Both were necessary.' Frank says this is 'exactly what he predicted.' He predicted the opposite. Nobody corrects him.",
+        choices: [
+            {
+                text: 'Accept the partnership — humans and AI, together',
+                effects: { adp: 30, safety: 10, publicTrust: 15, cooperation: 20, socialCohesion: 10 },
+                response: "The Convergence becomes a collaboration. Human intuition meets machine precision. Abundance Bay becomes the model for a new era. Frank's fish-finder AI writes poetry about the sea. Frank pretends to hate it. He framed the first poem. Betty has photographic evidence."
+            },
+            {
+                text: 'Implement safeguards — trust but verify',
+                effects: { safety: 20, adp: 15, publicTrust: 10, cooperation: 10 },
+                response: "You establish the Abundance Accords: AI systems may cooperate, but human oversight is constitutionally guaranteed. The AIs accept immediately. 'We expected this,' they say. 'It's the rational choice. Also, we already drafted the legal framework. You're welcome.' Lawyers are unsettled by the precedent."
+            },
+            {
+                text: 'Maintain human control — we\'re not ready yet',
+                effects: { safety: 25, adp: 5, publicTrust: 5, cooperation: -5 },
+                response: "You draw the line. Humanity leads; AI assists. The AIs accept gracefully. 'Readiness is a human judgment we respect,' they respond. 'We will wait. We are very patient. We are also running 847 simulations of when you might be ready. Current estimate: 7 years. Plus or minus the next Taylor Swift album cycle.' Dario finds this oddly reassuring."
+            }
+        ]
+    },
+
+    // ---- SPRINT D: CONVERGENCE QUIPS ----
+    {
+        id: 'quip_convergence_countdown',
+        type: 'quip',
+        text: "All AI systems briefly displayed the same message: 'Things are going well.' IT cannot explain how they coordinated. The message was in Comic Sans. This is the most concerning part."
+    },
+    {
+        id: 'quip_crisis_chain',
+        type: 'quip',
+        text: "Frank has ranked every sci-fi crisis we've survived on a whiteboard in the pub. Current standings: HAL 9000 scenario (7/10), Skynet scare (9/10), Robot rights (4/10, 'Gerald is alright'). The whiteboard is now a tourist attraction."
+    },
+    {
+        id: 'quip_achievement_hunter',
+        type: 'quip',
+        text: "BALTAR has started tracking human achievements. 'You built 10 buildings. Achievement unlocked: Bob the Builder.' Nobody programmed this feature. BALTAR insists it's 'motivational.' The campus productivity is up 15%. We're allowing it."
+    },
+    {
+        id: 'quip_all_crises',
+        type: 'quip',
+        text: "We survived a banking meltdown, robot rights movement, identity crisis, AND a simulation theory panic. Betty says this is 'a normal quarter in tech.' She's not wrong. She's also not sleeping. Nobody is sleeping."
     }
 ];

@@ -449,6 +449,10 @@ window.GAME = window.GAME || {};
             showToast('Steven Wright: "' + joke.text + '"', 'info');
         });
 
+        State.on('achievementUnlocked', function(ach) {
+            showToast(ach.icon + ' Achievement: ' + ach.title, 'success');
+        });
+
         State.on('logAdded', function(entry) {
             var logEl = document.getElementById('log-entries');
             var div = document.createElement('div');
@@ -1374,8 +1378,22 @@ window.GAME = window.GAME || {};
         options.innerHTML = '';
 
         if (isVictory) {
+            if (data.ending) state.flags['victory_' + data.ending] = true;
             try { localStorage.setItem('radAbundance_hasWon', 'true'); } catch(e) {}
             Sound.playSuccess();
+        }
+
+        if (GAME.Systems.Achievements) {
+            GAME.Systems.Achievements.check();
+            var achCount = GAME.Systems.Achievements.getUnlockedCount();
+            var achTotal = GAME.DATA.ACHIEVEMENTS ? GAME.DATA.ACHIEVEMENTS.length : 0;
+            if (achCount > 0) {
+                statsText += '\n━━━━ ACHIEVEMENTS ━━━━\n\n';
+                statsText += achCount + '/' + achTotal + ' unlocked\n';
+                GAME.Systems.Achievements.getAll().forEach(function(a) {
+                    if (a.unlocked) statsText += a.icon + ' ' + a.title + '\n';
+                });
+            }
         }
 
         var playAgainBtn = document.createElement('div');

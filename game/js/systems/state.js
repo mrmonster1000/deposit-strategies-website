@@ -83,6 +83,9 @@ GAME.Systems.State = (function() {
             insightTokens: 0,
             safetyLockTurnsRemaining: 0,
 
+            // Achievements
+            achievements: {},
+
             // Stats for end game
             totalADPGenerated: 0,
             totalMoneySpent: 0,
