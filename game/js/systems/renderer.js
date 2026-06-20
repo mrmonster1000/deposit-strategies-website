@@ -3936,6 +3936,116 @@ GAME.Systems.Renderer = (function() {
     }
 
     // =========================================================================
+    //  FOREGROUND FOLIAGE LAYER
+    // =========================================================================
+
+    function drawForegroundFoliage(time) {
+        // Fence posts and railings in front of some buildings
+        // Chain-link fence at car factory yard
+        var factoryX = 7920;
+        if (isVisible(factoryX + 140, 100)) {
+            for (var fp = 0; fp < 4; fp++) {
+                var fpx = factoryX + 146 + fp * 24;
+                drawRect(fpx, BUILDING_FLOOR - 20, 2, 24, '#505058');
+                drawRect(fpx, BUILDING_FLOOR - 21, 4, 2, '#606068');
+            }
+            for (var fy = 0; fy < 5; fy++) {
+                drawRect(factoryX + 146, BUILDING_FLOOR - 19 + fy * 4, 72, 1, '#606068');
+            }
+        }
+
+        // Flower planters outside supermarket
+        var superX = 5350;
+        if (isVisible(superX - 10, 30)) {
+            // Left planter
+            drawRect(superX - 6, BUILDING_FLOOR - 10, 10, 10, '#5a4030');
+            drawRect(superX - 5, BUILDING_FLOOR - 9, 8, 2, '#6a5040');
+            drawRect(superX - 4, BUILDING_FLOOR - 14, 3, 5, '#40aa40');
+            drawRect(superX - 1, BUILDING_FLOOR - 16, 2, 7, '#30aa30');
+            drawRect(superX + 1, BUILDING_FLOOR - 12, 2, 3, '#50aa50');
+            // Flower
+            drawRect(superX - 3, BUILDING_FLOOR - 16, 2, 2, '#ff6080');
+            drawRect(superX, BUILDING_FLOOR - 18, 2, 2, '#ffaa40');
+        }
+        if (isVisible(superX + 520, 30)) {
+            // Right planter
+            drawRect(superX + 525, BUILDING_FLOOR - 10, 10, 10, '#5a4030');
+            drawRect(superX + 526, BUILDING_FLOOR - 9, 8, 2, '#6a5040');
+            drawRect(superX + 527, BUILDING_FLOOR - 14, 3, 5, '#40aa40');
+            drawRect(superX + 530, BUILDING_FLOOR - 12, 2, 4, '#30aa30');
+            drawRect(superX + 528, BUILDING_FLOOR - 16, 2, 2, '#ff8060');
+        }
+
+        // Scattered foreground grass blades (tall, slightly swaying)
+        var grassVisStart = Math.floor(camera.x / 200) * 200;
+        for (var gChunk = grassVisStart; gChunk < camera.x + W + 200; gChunk += 200) {
+            for (var gi = 0; gi < 3; gi++) {
+                var gSeed = gChunk * 41 + gi * 67 + 12345;
+                var grassX = gChunk + seededRandom(gSeed) * 200;
+                if (grassX >= WATER_X) continue;
+                // Only in grassy areas (not on sidewalk or road)
+                var inTown = grassX > 800 && grassX < WATER_X;
+                var grassBaseY = inTown ? SIDEWALK_Y + SIDEWALK_H + 8 : GROUND_Y + 6;
+                grassBaseY += seededRandom(gSeed + 1) * 10;
+                var sway = Math.sin(time * 0.002 + grassX * 0.1) * 1;
+                var bladeH = 6 + seededRandom(gSeed + 2) * 8;
+                var shade = 20 + Math.floor(seededRandom(gSeed + 3) * 25);
+                ctx.fillStyle = 'rgba(' + shade + ', ' + (shade + 40) + ', ' + shade + ', 0.5)';
+                ctx.fillRect(grassX + sway, grassBaseY - bladeH, 1, bladeH);
+                ctx.fillRect(grassX + 2 + sway * 0.8, grassBaseY - bladeH + 2, 1, bladeH - 2);
+                if (seededRandom(gSeed + 4) > 0.5) {
+                    ctx.fillRect(grassX - 1 + sway * 1.2, grassBaseY - bladeH + 3, 1, bladeH - 3);
+                }
+            }
+        }
+    }
+
+    function drawScreenEdgeFoliage(time) {
+        // Dense bush shapes at screen edges — dark, overlapping, creates depth frame
+        var sway1 = Math.sin(time * 0.0015) * 1.5;
+        var sway2 = Math.sin(time * 0.0012 + 2) * 1;
+
+        // Left edge bush cluster
+        ctx.fillStyle = '#0a200a';
+        ctx.fillRect(-4, H - 90, 30, 90);
+        ctx.fillStyle = '#0e280e';
+        ctx.fillRect(-2, H - 80, 24, 80);
+        ctx.fillStyle = '#0a2a0e';
+        ctx.fillRect(10, H - 70 + sway1, 22, 70);
+        ctx.fillStyle = '#0c240c';
+        ctx.fillRect(20, H - 55 + sway2, 18, 55);
+        // Leaf detail
+        ctx.fillStyle = '#122e12';
+        ctx.fillRect(5, H - 82, 8, 4);
+        ctx.fillRect(15, H - 65 + sway1, 6, 3);
+        ctx.fillRect(25, H - 50 + sway2, 5, 3);
+
+        // Right edge bush cluster
+        ctx.fillStyle = '#0a200a';
+        ctx.fillRect(W - 28, H - 85, 32, 85);
+        ctx.fillStyle = '#0e280e';
+        ctx.fillRect(W - 22, H - 75, 26, 75);
+        ctx.fillStyle = '#0a2a0e';
+        ctx.fillRect(W - 32, H - 60 + sway2, 20, 60);
+        ctx.fillStyle = '#0c240c';
+        ctx.fillRect(W - 38, H - 48 + sway1, 16, 48);
+        ctx.fillStyle = '#122e12';
+        ctx.fillRect(W - 20, H - 78, 7, 4);
+        ctx.fillRect(W - 30, H - 55 + sway2, 5, 3);
+
+        // Bottom edge grass fringe (subtle, across bottom 20px)
+        for (var i = 0; i < 40; i++) {
+            var bSeed = i * 31 + 9999;
+            var bx = i * (W / 40) + seededRandom(bSeed) * 10;
+            var bh = 4 + seededRandom(bSeed + 1) * 10;
+            var bSway = Math.sin(time * 0.002 + i * 0.3) * 1;
+            var bShade = 8 + Math.floor(seededRandom(bSeed + 2) * 15);
+            ctx.fillStyle = 'rgba(' + bShade + ', ' + (bShade + 20) + ', ' + bShade + ', 0.6)';
+            ctx.fillRect(bx + bSway, H - bh, 1, bh);
+        }
+    }
+
+    // =========================================================================
     //  MAIN GAME SCENE — THE BIG ONE
     // =========================================================================
 
@@ -4025,7 +4135,13 @@ GAME.Systems.Renderer = (function() {
             drawPlacementGhost(placementMode, time);
         }
 
+        // Foreground foliage (still in world coordinates)
+        drawForegroundFoliage(time);
+
         ctx.restore();
+
+        // PASS 2.5: Screen-edge foreground framing (screen-relative, over world)
+        drawScreenEdgeFoliage(time);
 
         // PASS 3: HUD (screen-relative, no translate)
         drawOverlay(state, time);
