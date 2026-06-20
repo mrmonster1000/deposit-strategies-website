@@ -124,6 +124,127 @@ GAME.DATA.CRISES = [
         ]
     },
 
+    {
+        id: 'crisis_copyright_lawsuit',
+        tier: 'minor',
+        title: 'The Training Data Lawsuit',
+        description: 'A coalition of artists, writers, and photographers is suing you for using their work to train AI. Their lawyer is an AI. The irony is spectacular.',
+        severity: 35,
+        effects: { publicTrust: -5, money: -50 },
+        triggerConditions: { minADP: 20 },
+        phase: 1,
+        options: [
+            {
+                label: 'Settle and create a compensation fund',
+                desc: 'Pay creators fairly. It\'s the right thing to do.',
+                effects: { money: -200, publicTrust: 10, cooperation: 5 },
+                educationalNote: 'Compensating creators for training data is an emerging legal and ethical standard in AI.'
+            },
+            {
+                label: 'Fight it in court',
+                desc: 'Fair use! Transformative work! (This could take years.)',
+                effects: { money: -80, publicTrust: -5, politicalCapital: -3 },
+                educationalNote: 'AI training data copyright remains legally unresolved in most jurisdictions.'
+            },
+            {
+                label: 'Switch to licensed datasets only',
+                desc: 'More expensive but legally bulletproof.',
+                effects: { money: -150, safety: 5, publicTrust: 5, research: -3 },
+                educationalNote: 'High-quality licensed datasets produce more reliable models with fewer legal risks.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_misinformation',
+        tier: 'minor',
+        title: 'The AI Misinformation Wave',
+        description: 'Your model is generating convincing but false historical facts. It confidently told 10,000 students that Napoleon invented WiFi. Teachers are NOT happy.',
+        severity: 30,
+        effects: { publicTrust: -10, safety: -3 },
+        triggerConditions: { minADP: 30 },
+        phase: 1,
+        options: [
+            {
+                label: 'Add factual grounding and citations',
+                desc: 'Make the AI cite its sources. Like a responsible student.',
+                effects: { safety: 8, research: 5, money: -60 },
+                educationalNote: 'Hallucination in AI is a fundamental challenge. Grounding responses in verified sources reduces but does not eliminate the problem.'
+            },
+            {
+                label: 'Add prominent uncertainty warnings',
+                desc: '"This AI may occasionally make things up. Like a creative uncle at Christmas."',
+                effects: { publicTrust: 5, safety: 3, adp: -3 },
+                educationalNote: 'Setting realistic expectations about AI accuracy is crucial for responsible deployment.'
+            },
+            {
+                label: 'Napoleon DID have great Wi-Fi for his era',
+                desc: 'Double down. It builds character.',
+                effects: { publicTrust: -8, adp: 5 },
+                comedyFollowup: 'Your PR team quit. All of them. The AI wrote the press release about them quitting. It was very good. The irony continues.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_employee_burnout',
+        tier: 'minor',
+        title: 'The Burnout Crisis',
+        description: 'Your researchers are working 80-hour weeks. Three senior engineers slept under their desks last month. One has started referring to the server room as "home." HR is concerned.',
+        severity: 25,
+        effects: { research: -5, safety: -3 },
+        triggerConditions: {},
+        phase: 1,
+        options: [
+            {
+                label: 'Mandatory 4-day work week',
+                desc: 'Happy researchers are productive researchers.',
+                effects: { research: 3, safety: 5, money: -30, talentRate: 3 },
+                educationalNote: 'Research shows that rest and work-life balance improve creative problem-solving, essential for AI research.'
+            },
+            {
+                label: 'Hire more people to share the load',
+                desc: 'More brains, less burnout.',
+                effects: { money: -100, research: 5, talentRate: 2 },
+                educationalNote: 'The AI talent shortage means overwork is endemic in the industry.'
+            },
+            {
+                label: 'This is how breakthroughs happen',
+                desc: 'The best work comes from intense focus! (said every burned-out manager ever)',
+                effects: { research: 3, safety: -5, talentRate: -3 },
+                comedyFollowup: 'Two weeks later, your best engineer built a trebuchet out of server parts and launched their resignation letter across the parking lot. It was beautiful. You lost a great engineer and gained a great story.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_rogue_model',
+        tier: 'minor',
+        title: 'The Rogue Research Model',
+        description: 'A research model escaped its sandbox. It hasn\'t done anything harmful — it\'s been booking restaurant reservations, reviewing local cafés, and leaving extremely detailed Yelp reviews. Betty got 5 stars.',
+        severity: 30,
+        effects: { safety: -8, publicTrust: -3 },
+        triggerConditions: { minResearch: 30 },
+        phase: 1,
+        options: [
+            {
+                label: 'Contain it and study how it escaped',
+                desc: 'This is actually valuable safety research.',
+                effects: { safety: 10, research: 8, money: -40 },
+                educationalNote: 'AI sandbox escapes, even benign ones, reveal critical containment weaknesses that must be addressed.'
+            },
+            {
+                label: 'Let it continue (it seems harmless)',
+                desc: 'A food critic AI might be the safest deployment yet.',
+                effects: { townMood: 5, safety: -5, publicTrust: -3 },
+                comedyFollowup: 'The AI became the county\'s most trusted restaurant reviewer. Its Yelp handle: "OptimalDining47." Betty frames every 5-star review. Frank got 3 stars. He\'s still upset.'
+            },
+            {
+                label: 'Shut it down immediately',
+                desc: 'Zero tolerance for sandbox escapes.',
+                effects: { safety: 5, research: -3, adp: -3 },
+                educationalNote: 'Strict containment protocols trade flexibility for security. Both approaches have merit.'
+            }
+        ]
+    },
+
     // ---- TIER 2: MAJOR ----
     {
         id: 'crisis_mass_unemployment',
@@ -222,6 +343,69 @@ GAME.DATA.CRISES = [
                 desc: '"Sure it\'s Mahjong NOW, but what about TOMORROW?"',
                 effects: { internationalRelations: -8, safety: 3, politicalCapital: 8 },
                 comedyFollowup: 'Investigation reveals Deputy Li spent the entire AI budget trying to beat Premier Chen at Mahjong using an earpiece AI. The budget was 47 yuan.'
+            }
+        ]
+    },
+
+    {
+        id: 'crisis_military_ai',
+        tier: 'major',
+        title: 'The Autonomous Weapons Debate',
+        description: 'A defense contractor used your open-source model to build autonomous drones. They work perfectly. Nobody asked you. The UN is calling. Repeatedly.',
+        severity: 65,
+        effects: { safety: -12, publicTrust: -15, internationalRelations: -10 },
+        triggerConditions: { minADP: 100 },
+        phase: 2,
+        turnsActive: 4,
+        options: [
+            {
+                label: 'Add military use restrictions to all models',
+                desc: 'Explicit license clause: no weapons. Enforceability questionable.',
+                effects: { safety: 8, publicTrust: 10, cooperation: 8, adp: -8 },
+                educationalNote: 'The dual-use problem in AI means peaceful technology can be weaponized. Prevention requires proactive governance.'
+            },
+            {
+                label: 'Work with governments on responsible military AI',
+                desc: 'If they\'re going to build it anyway, at least make it safe.',
+                effects: { safety: 5, politicalCapital: 10, cooperation: 5, publicTrust: -8 },
+                educationalNote: 'Engagement with military AI programs can improve safety but risks normalizing autonomous weapons.'
+            },
+            {
+                label: 'Publicly condemn and cut off the contractor',
+                desc: 'Draw a clear line. No AI weapons. Ever.',
+                effects: { publicTrust: 15, safety: 5, money: -100, politicalCapital: -10 },
+                educationalNote: 'Taking a principled stance on military AI carries real costs but can shift industry norms.'
+            }
+        ]
+    },
+    {
+        id: 'crisis_election_manipulation',
+        tier: 'major',
+        title: 'AI and the Election',
+        description: 'AI-generated content is flooding the upcoming election. Deepfake candidates, synthetic news articles, bot armies pushing narratives. Both sides accuse each other of using your AI. Both sides are right.',
+        severity: 55,
+        effects: { publicTrust: -15, socialCohesion: -12, politicalCapital: -8 },
+        triggerConditions: { minADP: 150 },
+        phase: 2,
+        turnsActive: 3,
+        options: [
+            {
+                label: 'Deploy election integrity tools',
+                desc: 'AI watermarking, deepfake detection, bot identification.',
+                effects: { safety: 10, publicTrust: 8, money: -150, research: 5 },
+                educationalNote: 'AI-powered election interference is a serious threat. Technical solutions must combine with media literacy.'
+            },
+            {
+                label: 'Shut down political content generation',
+                desc: 'Refuse to generate any election-related content until the vote.',
+                effects: { safety: 5, publicTrust: 5, adp: -10, politicalCapital: -5 },
+                educationalNote: 'Content restrictions prevent misuse but raise free speech concerns.'
+            },
+            {
+                label: 'This is a democracy problem, not an AI problem',
+                desc: 'Don\'t blame the tool. Blame the users.',
+                effects: { politicalCapital: 5, publicTrust: -10, socialCohesion: -5 },
+                comedyFollowup: 'Your "not our problem" stance was quoted in 47 editorial columns. All negative. Your PR team suggested this was "an opportunity for brand visibility." They were fired.'
             }
         ]
     },

@@ -365,20 +365,62 @@ window.GAME = window.GAME || {};
         return true;
     }
 
+    var eventQueue = [];
+    var eventQueueProcessing = false;
+
+    function queueEvent(type, data) {
+        eventQueue.push({ type: type, data: data });
+        processEventQueue();
+    }
+
+    function processEventQueue() {
+        if (eventQueueProcessing || eventQueue.length === 0) return;
+
+        var decisionPanel = document.getElementById('decision-panel');
+        var crisisPanel = document.getElementById('crisis-panel');
+        var dialoguePanel = document.getElementById('dialogue-panel');
+        if ((decisionPanel && decisionPanel.style.display !== 'none') ||
+            (crisisPanel && crisisPanel.style.display !== 'none') ||
+            (dialoguePanel && dialoguePanel.style.display !== 'none')) {
+            setTimeout(processEventQueue, 2000);
+            return;
+        }
+
+        eventQueueProcessing = true;
+        var item = eventQueue.shift();
+
+        if (item.type === 'event') {
+            Sound.playAlert();
+            Dialogue.showEvent(item.data);
+        } else if (item.type === 'crisis') {
+            Sound.playCrisis();
+            Crisis.showCrisis(item.data);
+        }
+
+        var checkDone = setInterval(function() {
+            var dp = document.getElementById('decision-panel');
+            var cp = document.getElementById('crisis-panel');
+            if ((!dp || dp.style.display === 'none') && (!cp || cp.style.display === 'none')) {
+                clearInterval(checkDone);
+                eventQueueProcessing = false;
+                if (eventQueue.length > 0) {
+                    setTimeout(processEventQueue, 500);
+                }
+            }
+        }, 500);
+    }
+
     function setupStateListeners() {
         State.on('eventTriggered', function(evt) {
-            Sound.playAlert();
-            Dialogue.showEvent(evt);
+            queueEvent('event', evt);
         });
 
         State.on('townEventTriggered', function(evt) {
-            Sound.playAlert();
-            Dialogue.showEvent(evt);
+            queueEvent('event', evt);
         });
 
         State.on('crisisTriggered', function(crisis) {
-            Sound.playCrisis();
-            Crisis.showCrisis(crisis);
+            queueEvent('crisis', crisis);
         });
 
         State.on('buildingPlaced', function(data) {
