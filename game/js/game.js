@@ -402,6 +402,11 @@ window.GAME = window.GAME || {};
             handleDialogueEffect(data.effect);
         });
 
+        State.on('pauseToggled', function(paused) {
+            if (!paused) Sound.playMusicLoop();
+            else Sound.stopMusic();
+        });
+
         State.on('phaseChange', function(data) {
             Sound.playSuccess();
             showToast('PHASE ' + data.phase + ' UNLOCKED! New buildings available!', 'warning');
@@ -560,6 +565,7 @@ window.GAME = window.GAME || {};
             '<button class="verb-btn speed-btn" data-action="speed-2" data-speed="2">2x</button>' +
             '<button class="verb-btn speed-btn" data-action="speed-5" data-speed="5">5x</button>' +
             '<button class="verb-btn" data-action="save" style="min-width:80px">SAVE</button>' +
+            '<button class="verb-btn" data-action="sound" id="btn-sound" style="min-width:40px" title="Toggle sound on/off">♪ ON</button>' +
             '</div>';
 
         // Re-bind verb buttons
@@ -631,6 +637,12 @@ window.GAME = window.GAME || {};
                 } else {
                     showToast('Save failed!', 'danger');
                 }
+                break;
+            case 'sound':
+                var soundOn = Sound.toggle();
+                var soundBtn = document.getElementById('btn-sound');
+                if (soundBtn) soundBtn.textContent = soundOn ? '♪ ON' : '♪ OFF';
+                if (soundOn) Sound.playClick();
                 break;
         }
     }

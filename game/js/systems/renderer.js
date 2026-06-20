@@ -2716,7 +2716,11 @@ GAME.Systems.Renderer = (function() {
         if (state.paused) {
             var pauseAlpha = 0.5 + Math.sin(time * 0.003) * 0.3;
             ctx.globalAlpha = pauseAlpha;
-            drawText('▶ CLICK PLAY TO START', W / 2, H / 2 - 40, { size: 10, color: '#ffdd44', align: 'center' });
+            if (state.gameTime === 0) {
+                drawText('▶ CLICK PLAY TO START', W / 2, H / 2 - 40, { size: 10, color: '#ffdd44', align: 'center' });
+            } else {
+                drawText('⏸ PAUSED', W / 2, H / 2 - 40, { size: 10, color: '#aaaacc', align: 'center' });
+            }
             ctx.globalAlpha = 1;
         }
 
