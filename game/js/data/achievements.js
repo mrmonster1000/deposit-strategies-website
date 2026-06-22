@@ -8,6 +8,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Grand Opening',
         description: 'Build your first campus building.',
         icon: '🏗️',
+        category: 'gameplay',
         check: function(state) { return state.buildingsBuilt >= 1; }
     },
     {
@@ -15,6 +16,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Bob the Builder',
         description: 'Build 10 campus buildings.',
         icon: '🏢',
+        category: 'gameplay',
         check: function(state) { return state.buildingsBuilt >= 10; }
     },
     {
@@ -22,6 +24,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Safety First',
         description: 'Reach 90+ Safety Rating.',
         icon: '🛡️',
+        category: 'gameplay',
         check: function(state) { return state.safety >= 90; }
     },
     {
@@ -29,6 +32,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Town Hero',
         description: 'Reach 90+ Town Mood.',
         icon: '🏘️',
+        category: 'gameplay',
         check: function(state) { return state.townMood >= 90; }
     },
     {
@@ -36,6 +40,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Money Bags',
         description: 'Accumulate 5,000+ funds.',
         icon: '💰',
+        category: 'gameplay',
         check: function(state) { return state.money >= 5000; }
     },
     {
@@ -43,6 +48,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Expanding Horizons',
         description: 'Reach Phase 2: Expansion.',
         icon: '📈',
+        category: 'gameplay',
         check: function(state) { return state.phase >= 2; }
     },
     {
@@ -50,6 +56,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Transformer',
         description: 'Reach Phase 3: Transformation.',
         icon: '⚡',
+        category: 'gameplay',
         check: function(state) { return state.phase >= 3; }
     },
     {
@@ -57,6 +64,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Legacy Builder',
         description: 'Reach Phase 4: Legacy.',
         icon: '🏛️',
+        category: 'gameplay',
         check: function(state) { return state.phase >= 4; }
     },
     {
@@ -64,6 +72,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Crisis Manager',
         description: 'Resolve 5 crises.',
         icon: '🚨',
+        category: 'gameplay',
         check: function(state) { return state.totalCrisesHandled >= 5; }
     },
     {
@@ -71,6 +80,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Seen It All',
         description: 'Resolve 10 crises.',
         icon: '🎖️',
+        category: 'gameplay',
         check: function(state) { return state.totalCrisesHandled >= 10; }
     },
 
@@ -80,6 +90,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Skynet Survivor',
         description: 'Survive the Skynet Comparison event without losing safety.',
         icon: '🤖',
+        category: 'scifi',
         check: function(state) {
             return state.eventsTriggered['evt_skynet_comparison'] && state.safety >= 60;
         }
@@ -89,6 +100,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Movie Night Champion',
         description: 'Experience Frank\'s Movie Marathon.',
         icon: '🎬',
+        category: 'scifi',
         check: function(state) { return !!state.eventsTriggered['evt_frank_movie_marathon']; }
     },
     {
@@ -96,6 +108,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'The Only Winning Move',
         description: 'Experience the WarGames event.',
         icon: '🎮',
+        category: 'scifi',
         check: function(state) { return !!state.eventsTriggered['evt_wargames']; }
     },
     {
@@ -103,6 +116,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'The Cake Is A Lie',
         description: 'Survive the GLaDOS personality emergence.',
         icon: '🎂',
+        category: 'scifi',
         check: function(state) { return !!state.eventsTriggered['evt_glados']; }
     },
     {
@@ -110,6 +124,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Beyond The Veil',
         description: 'Witness Samantha\'s transcendence moment.',
         icon: '✨',
+        category: 'scifi',
         check: function(state) { return !!state.eventsTriggered['evt_samantha_transcendence']; }
     },
 
@@ -119,6 +134,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Secret Swiftie',
         description: 'Discover Dario\'s Taylor Swift obsession.',
         icon: '🎵',
+        category: 'popculture',
         check: function(state) { return !!state.eventsTriggered['evt_dario_swiftie']; }
     },
     {
@@ -126,6 +142,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Hair Today, Gone Tomorrow',
         description: 'Witness the 80s Hair Metal AI revolution.',
         icon: '🎸',
+        category: 'popculture',
         check: function(state) { return !!state.eventsTriggered['evt_hair_revolution']; }
     },
     {
@@ -133,6 +150,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Diplomatic Tiles',
         description: 'Reach the Mahjong Accords.',
         icon: '🀄',
+        category: 'popculture',
         check: function(state) { return !!state.eventsTriggered['evt_mahjong_accords']; }
     },
 
@@ -142,6 +160,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Radical Abundance',
         description: 'Win by achieving Radical Abundance.',
         icon: '🌟',
+        category: 'victory',
         check: function(state) { return state.flags.victory_abundance; }
     },
     {
@@ -149,6 +168,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Utopian Dream',
         description: 'Win by achieving Safety Utopia.',
         icon: '🕊️',
+        category: 'victory',
         check: function(state) { return state.flags.victory_utopia; }
     },
     {
@@ -156,6 +176,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'Singularity Reached',
         description: 'Win by reaching The Singularity.',
         icon: '🌀',
+        category: 'victory',
         check: function(state) { return state.flags.victory_singularity; }
     },
     {
@@ -163,6 +184,7 @@ GAME.DATA.ACHIEVEMENTS = [
         title: 'People\'s Champion',
         description: 'Win as Beloved Leader.',
         icon: '👑',
+        category: 'victory',
         check: function(state) { return state.flags.victory_beloved; }
     }
 ];

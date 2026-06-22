@@ -73,7 +73,7 @@ GAME.Systems.Simulation = (function() {
     function calculateProduction() {
         var state = State.get();
         var production = {
-            money: 5, // base income (increased from 3 for better early game)
+            money: 5 + (state.incomeBonus || 0),
             research: 0,
             compute: 0,
             power: 0,
@@ -240,9 +240,8 @@ GAME.Systems.Simulation = (function() {
             var charData = GAME.DATA.CHARACTERS[id];
             if (!charData) continue;
 
-            // Baseline passive growth (small — main growth comes from AI strategy actions)
             var growthRate = (charData.multipliers.capability + charData.multipliers.deployment) / 2;
-            comp.adp += 0.5 * growthRate * (1 + state.phase * 0.2);
+            comp.adp += 0.5 * growthRate * (1 + state.phase * 0.2) * (state.aiAggression || 1);
             comp.safety += (charData.multipliers.safety - 1) * 0.3;
             comp.safety = Math.max(20, Math.min(95, comp.safety));
 
@@ -305,7 +304,7 @@ GAME.Systems.Simulation = (function() {
 
         // Modify by safety (lower safety = more crises)
         var safetyMod = (100 - state.safety) / 200;
-        var crisisChance = baseChance + safetyMod;
+        var crisisChance = (baseChance + safetyMod) * (state.crisisFrequency || 1);
 
         if (Math.random() > crisisChance) return;
         if (state.crisesActive.length >= 2) return; // max 2 simultaneous crises
@@ -328,6 +327,12 @@ GAME.Systems.Simulation = (function() {
                 if (cond.minADP !== undefined && state.adp < cond.minADP) return false;
                 if (cond.minResearch !== undefined && state.research < cond.minResearch) return false;
                 if (cond.minDataCenters !== undefined && (state.buildingCounts['data_center'] || 0) < cond.minDataCenters) return false;
+                for (var condKey in cond) {
+                    if (condKey.indexOf('minBuildingCount_') === 0) {
+                        var bId = condKey.replace('minBuildingCount_', '');
+                        if ((state.buildingCounts[bId] || 0) < cond[condKey]) return false;
+                    }
+                }
             }
             return true;
         });

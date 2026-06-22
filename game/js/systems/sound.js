@@ -60,6 +60,52 @@ GAME.Systems.Sound = (function() {
         { note: 175, dur: 0.6 }, { note: 131, dur: 0.6 }, { note: 0, dur: 0.6 }
     ];
 
+    // ---- PHASE 2: EXPANSION (G major, energetic, faster) ----
+    var PHASE2_MELODY = [
+        { note: 392, dur: 0.2 }, { note: 494, dur: 0.2 }, { note: 587, dur: 0.2 }, { note: 659, dur: 0.2 },
+        { note: 587, dur: 0.2 }, { note: 494, dur: 0.2 }, { note: 587, dur: 0.4 }, { note: 659, dur: 0.2 },
+        { note: 740, dur: 0.2 }, { note: 659, dur: 0.2 }, { note: 587, dur: 0.2 }, { note: 494, dur: 0.4 },
+        { note: 440, dur: 0.2 }, { note: 494, dur: 0.2 }, { note: 587, dur: 0.4 }, { note: 494, dur: 0.2 },
+        { note: 392, dur: 0.4 }, { note: 440, dur: 0.2 }, { note: 494, dur: 0.2 }, { note: 587, dur: 0.2 },
+        { note: 659, dur: 0.2 }, { note: 740, dur: 0.4 }, { note: 659, dur: 0.2 }, { note: 587, dur: 0.2 },
+        { note: 494, dur: 0.2 }, { note: 440, dur: 0.2 }, { note: 392, dur: 0.6 }, { note: 0, dur: 0.4 }
+    ];
+    var PHASE2_BASS = [
+        { note: 196, dur: 0.4 }, { note: 196, dur: 0.4 }, { note: 247, dur: 0.4 }, { note: 220, dur: 0.4 },
+        { note: 196, dur: 0.4 }, { note: 294, dur: 0.4 }, { note: 247, dur: 0.4 }, { note: 196, dur: 0.4 },
+        { note: 0, dur: 0.4 }
+    ];
+
+    // ---- PHASE 3: TRANSFORMATION (D minor, complex, mysterious) ----
+    var PHASE3_MELODY = [
+        { note: 294, dur: 0.4 }, { note: 349, dur: 0.3 }, { note: 440, dur: 0.3 }, { note: 523, dur: 0.5 },
+        { note: 494, dur: 0.2 }, { note: 440, dur: 0.3 }, { note: 349, dur: 0.3 }, { note: 330, dur: 0.5 },
+        { note: 294, dur: 0.3 }, { note: 262, dur: 0.3 }, { note: 294, dur: 0.4 }, { note: 349, dur: 0.3 },
+        { note: 440, dur: 0.5 }, { note: 523, dur: 0.3 }, { note: 494, dur: 0.3 }, { note: 440, dur: 0.5 },
+        { note: 523, dur: 0.3 }, { note: 587, dur: 0.4 }, { note: 523, dur: 0.3 }, { note: 440, dur: 0.3 },
+        { note: 349, dur: 0.5 }, { note: 330, dur: 0.3 }, { note: 294, dur: 0.6 }, { note: 0, dur: 0.5 }
+    ];
+    var PHASE3_BASS = [
+        { note: 147, dur: 0.5 }, { note: 175, dur: 0.5 }, { note: 131, dur: 0.5 }, { note: 147, dur: 0.5 },
+        { note: 175, dur: 0.5 }, { note: 220, dur: 0.5 }, { note: 175, dur: 0.5 }, { note: 147, dur: 0.5 },
+        { note: 0, dur: 0.5 }
+    ];
+
+    // ---- PHASE 4: LEGACY (Eb major, epic, wide intervals) ----
+    var PHASE4_MELODY = [
+        { note: 311, dur: 0.5 }, { note: 392, dur: 0.5 }, { note: 466, dur: 0.4 }, { note: 523, dur: 0.6 },
+        { note: 466, dur: 0.3 }, { note: 392, dur: 0.3 }, { note: 466, dur: 0.5 }, { note: 523, dur: 0.4 },
+        { note: 622, dur: 0.6 }, { note: 523, dur: 0.4 }, { note: 466, dur: 0.4 }, { note: 392, dur: 0.5 },
+        { note: 311, dur: 0.4 }, { note: 392, dur: 0.5 }, { note: 466, dur: 0.4 }, { note: 523, dur: 0.5 },
+        { note: 622, dur: 0.4 }, { note: 698, dur: 0.6 }, { note: 622, dur: 0.4 }, { note: 523, dur: 0.4 },
+        { note: 466, dur: 0.4 }, { note: 392, dur: 0.4 }, { note: 311, dur: 0.8 }, { note: 0, dur: 0.5 }
+    ];
+    var PHASE4_BASS = [
+        { note: 156, dur: 0.6 }, { note: 196, dur: 0.6 }, { note: 175, dur: 0.6 }, { note: 156, dur: 0.6 },
+        { note: 131, dur: 0.6 }, { note: 156, dur: 0.6 }, { note: 175, dur: 0.6 }, { note: 156, dur: 0.6 },
+        { note: 0, dur: 0.6 }
+    ];
+
     // ---- CRISIS THEME ----
     // Transcribed from piano score: F minor, 7/8 time, tempo 95
     // Arr. Anders Thue — brooding ostinato bass with building melody
@@ -252,11 +298,19 @@ GAME.Systems.Sound = (function() {
         if (!musicPlaying || !enabled || !audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        var melodyData = currentTheme === 'crisis' ? CRISIS_MELODY : MELODY;
-        var bassData = currentTheme === 'crisis' ? CRISIS_BASS : BASS;
-        var melodyWave = currentTheme === 'crisis' ? 'sawtooth' : 'triangle';
-        var melodyVol = currentTheme === 'crisis' ? 0.018 : 0.02;
-        var bassVol = currentTheme === 'crisis' ? 0.014 : 0.012;
+        var themeMap = {
+            normal: { melody: MELODY, bass: BASS, wave: 'triangle', mVol: 0.02, bVol: 0.012 },
+            crisis: { melody: CRISIS_MELODY, bass: CRISIS_BASS, wave: 'sawtooth', mVol: 0.018, bVol: 0.014 },
+            phase2: { melody: PHASE2_MELODY, bass: PHASE2_BASS, wave: 'triangle', mVol: 0.02, bVol: 0.012 },
+            phase3: { melody: PHASE3_MELODY, bass: PHASE3_BASS, wave: 'triangle', mVol: 0.018, bVol: 0.012 },
+            phase4: { melody: PHASE4_MELODY, bass: PHASE4_BASS, wave: 'triangle', mVol: 0.02, bVol: 0.014 }
+        };
+        var tm = themeMap[currentTheme] || themeMap.normal;
+        var melodyData = tm.melody;
+        var bassData = tm.bass;
+        var melodyWave = tm.wave;
+        var melodyVol = tm.mVol;
+        var bassVol = tm.bVol;
 
         var t = audioCtx.currentTime + 0.1;
 

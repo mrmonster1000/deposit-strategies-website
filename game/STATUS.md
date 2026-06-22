@@ -162,25 +162,42 @@
 - Based on real phenomena: Replika relationships, patch breakups, human-robot dating, AI companion grief
 - Totals: 219 events, 29 crises, 14 town buildings
 
+### Difficulty Levels ✅
+- **3 difficulty modes**: Easy, Normal, Hard — selectable on character select screen
+- Affects: starting money (Easy $400 / Normal $250 / Hard $150), crisis frequency (0.6x/1x/1.5x), AI opponent aggression (0.7x/1x/1.4x), income bonus (+3/0/-2 per tick)
+- Difficulty stored in game state, persists through save/load
+- Phase display shows difficulty label on Easy/Hard modes
+- UI: 3 pixel-art buttons between character bio and BEGIN/BACK
+
+### Phase-Specific Music ✅
+- **4 unique chiptune themes** matching game mood:
+  - Phase 1 (Foundation): C major, hopeful, moderate tempo — existing normal theme
+  - Phase 2 (Expansion): G major, energetic, faster eighth notes
+  - Phase 3 (Transformation): D minor, mysterious, complex intervals
+  - Phase 4 (Legacy): Eb major, epic, wide intervals and sustained notes
+  - Crisis theme: F minor 7/8, driving ostinato (existing)
+- Music auto-switches on phase transitions with 2s delay after success fanfare
+- Crisis/low-safety music correctly reverts to phase-appropriate theme when resolved
+
+### Bug Fixes ✅
+- Added `category` field to all 22 achievements (gameplay/scifi/popculture/victory) — was `undefined`
+- Added `minBuildingCount_*` trigger condition to crisis system — police/surveillance crises now correctly gate on building ownership
+
 ---
 
 ## Next Steps (Prioritized)
 
-### High Impact — Gameplay Depth
-1. **Difficulty Levels** — Easy/Normal/Hard affecting crisis frequency, starting money, AI aggression, victory thresholds. Low effort, high replayability.
-2. **Phase-Specific Music** — Different chiptune themes per game phase (Foundation=hopeful, Expansion=energetic, Transformation=complex, Legacy=epic). Crisis theme already exists.
-
 ### Medium Impact — Polish
-3. **Mobile Touch UX** — Touch input exists but building placement on mobile is awkward. Needs tap-to-select-then-tap-to-place flow.
-4. **Achievement Persistence** — Save unlocked achievements to localStorage so they persist across playthroughs. Add an achievements gallery on the title screen.
-5. **Art Quality Uplift** — Exterior props, character detail, building visual variety, final polish passes on the renderer.
+1. **Mobile Touch UX** — Touch input exists but building placement on mobile is awkward. Needs tap-to-select-then-tap-to-place flow.
+2. **Achievement Persistence** — Save unlocked achievements to localStorage so they persist across playthroughs. Add an achievements gallery on the title screen.
+3. **Art Quality Uplift** — Exterior props, character detail, building visual variety, final polish passes on the renderer.
 
 ### Nice-to-Have — Expansion Content
-6. **More NPCs** — Lisa Su (AMD counter to Jensen), additional townsfolk with dialogue trees.
-7. **Branching Crisis Outcomes** — Crisis resolution affects which future crises/events can trigger (e.g., siding with Gerald in robot rights unlocks a Gerald advisor event later).
-8. **New Game+ Mode** — After first win, start with bonus resources but harder crises. Synergizes with Trump unlock mechanic.
-9. **Mod Support** — Document the event/crisis/NPC data formats so players can add their own content via JSON injection.
+4. **More NPCs** — Lisa Su (AMD counter to Jensen), additional townsfolk with dialogue trees.
+5. **Branching Crisis Outcomes** — Crisis resolution affects which future crises/events can trigger (e.g., siding with Gerald in robot rights unlocks a Gerald advisor event later).
+6. **New Game+ Mode** — After first win, start with bonus resources but harder crises. Synergizes with Trump unlock mechanic.
+7. **Mod Support** — Document the event/crisis/NPC data formats so players can add their own content via JSON injection.
 
 ---
 
-*Last updated: 2026-06-20*
+*Last updated: 2026-06-22*

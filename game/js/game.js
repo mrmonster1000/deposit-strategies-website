@@ -14,6 +14,7 @@ window.GAME = window.GAME || {};
 
     var currentScreen = 'title';
     var selectedCharacter = null;
+    var selectedDifficulty = 'normal';
     var lastTimestamp = 0;
     var buildMode = null; // null or { buildingId, isTown }
     var nextGridX = 1;
@@ -84,7 +85,11 @@ window.GAME = window.GAME || {};
         // Top bar
         document.getElementById('turn-display').textContent = State.getDateString();
         document.getElementById('year-display').textContent = 'Year ' + state.year;
-        document.getElementById('phase-display').textContent = 'Phase ' + state.phase + ': ' + state.phaseName;
+        var phaseText = 'Phase ' + state.phase + ': ' + state.phaseName;
+        if (state.difficulty && state.difficulty !== 'normal') {
+            phaseText += ' [' + state.difficultyLabel + ']';
+        }
+        document.getElementById('phase-display').textContent = phaseText;
 
         // Meters
         updateMeter('banking', state.bankingStability);
@@ -427,7 +432,8 @@ window.GAME = window.GAME || {};
         State.on('crisisResolved', function() {
             var state = State.get();
             if (!state.crisesActive || state.crisesActive.length === 0) {
-                Sound.setTheme('normal');
+                var phaseThemes = { 1: 'normal', 2: 'phase2', 3: 'phase3', 4: 'phase4' };
+                Sound.setTheme(phaseThemes[state.phase] || 'normal');
             }
         });
 
@@ -491,6 +497,10 @@ window.GAME = window.GAME || {};
         State.on('phaseChange', function(data) {
             Sound.playSuccess();
             showToast('PHASE ' + data.phase + ' UNLOCKED! New buildings available!', 'warning');
+            var phaseThemes = { 2: 'phase2', 3: 'phase3', 4: 'phase4' };
+            if (phaseThemes[data.phase]) {
+                setTimeout(function() { Sound.setTheme(phaseThemes[data.phase]); }, 2000);
+            }
         });
 
         var lastMoney = null;
@@ -551,7 +561,8 @@ window.GAME = window.GAME || {};
                 if (data.newValue < 35 && st.crisesActive && st.crisesActive.length === 0) {
                     Sound.setTheme('crisis');
                 } else if (data.newValue >= 45 && st.crisesActive && st.crisesActive.length === 0) {
-                    Sound.setTheme('normal');
+                    var phaseThemes = { 1: 'normal', 2: 'phase2', 3: 'phase3', 4: 'phase4' };
+                    Sound.setTheme(phaseThemes[st.phase] || 'normal');
                 }
             }
         });
@@ -643,12 +654,36 @@ window.GAME = window.GAME || {};
             '</div>';
 
         document.getElementById('btn-start-game').disabled = false;
+
+        // Add difficulty selector if not already present
+        if (!document.getElementById('difficulty-selector')) {
+            var diffDiv = document.createElement('div');
+            diffDiv.id = 'difficulty-selector';
+            diffDiv.style.cssText = 'display:flex; gap:8px; justify-content:center; margin:8px 0;';
+            ['easy', 'normal', 'hard'].forEach(function(d) {
+                var btn = document.createElement('button');
+                btn.className = 'pixel-btn' + (d === selectedDifficulty ? '' : ' secondary');
+                btn.dataset.diff = d;
+                btn.textContent = d.toUpperCase();
+                btn.style.cssText = 'min-width:80px; font-size:10px; padding:4px 12px;';
+                btn.addEventListener('click', function() {
+                    selectedDifficulty = d;
+                    diffDiv.querySelectorAll('button').forEach(function(b) {
+                        b.className = 'pixel-btn' + (b.dataset.diff === d ? '' : ' secondary');
+                    });
+                    Sound.playClick();
+                });
+                diffDiv.appendChild(btn);
+            });
+            var actions = document.querySelector('.char-select-actions');
+            if (actions) actions.parentNode.insertBefore(diffDiv, actions);
+        }
     }
 
     // ---- GAME START ----
 
     function startNewGame(charId) {
-        State.createNew(charId);
+        State.createNew(charId, selectedDifficulty);
         showScreen('game');
         setupGameUI();
 

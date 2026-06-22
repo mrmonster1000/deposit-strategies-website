@@ -7,14 +7,30 @@ GAME.Systems.State = (function() {
     var state = null;
     var listeners = {};
 
-    function createNew(characterId) {
+    function createNew(characterId, difficulty) {
         var charData = GAME.DATA.CHARACTERS[characterId];
         if (!charData) return null;
+
+        var diff = difficulty || 'normal';
+        var diffSettings = {
+            easy:   { money: 400, crisisFreq: 0.6, aiAggression: 0.7, victoryMult: 0.8, incomeBonus: 3, label: 'Easy' },
+            normal: { money: 250, crisisFreq: 1.0, aiAggression: 1.0, victoryMult: 1.0, incomeBonus: 0, label: 'Normal' },
+            hard:   { money: 150, crisisFreq: 1.5, aiAggression: 1.4, victoryMult: 1.2, incomeBonus: -2, label: 'Hard' }
+        };
+        var ds = diffSettings[diff] || diffSettings.normal;
 
         state = {
             characterId: characterId,
             characterName: charData.name,
             characterOrg: charData.org,
+
+            // Difficulty
+            difficulty: diff,
+            difficultyLabel: ds.label,
+            crisisFrequency: ds.crisisFreq,
+            aiAggression: ds.aiAggression,
+            victoryMultiplier: ds.victoryMult,
+            incomeBonus: ds.incomeBonus,
 
             // Time
             gameTime: 0,
@@ -27,7 +43,7 @@ GAME.Systems.State = (function() {
             phaseName: 'Foundation',
 
             // Resources
-            money: 250,
+            money: ds.money,
             moneyPerTick: 0,
             adp: 0,
             research: charData.startingStats.research || 0,
